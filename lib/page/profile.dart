@@ -6,6 +6,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      body: const Text("This is Profile Page"),
     );
   }}

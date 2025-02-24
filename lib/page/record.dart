@@ -6,6 +6,6 @@ class RecordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      body: const Text("This is Record Page"),
     );
   }}

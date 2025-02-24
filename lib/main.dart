@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medigram_app/components/navigation.dart';
 import 'package:medigram_app/page/home.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Medigram',
-      home: const HomePage(),
+      home: const BottomNavigationMenu(),
     );
   }
 }
