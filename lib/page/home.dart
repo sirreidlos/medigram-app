@@ -33,13 +33,15 @@ class HomePage extends StatelessWidget {
                           Icons.notifications
                         )
                       ]
-                    ),
-                    ElevatedButton(
+                  ),
+                  SizedBox(
+                    height: 60,
+                    width: double.infinity,
+                    child: ElevatedButton(
                       onPressed: () {}, 
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xff53daf5),
                         padding: EdgeInsets.zero,
-                        fixedSize: Size(380, 60),
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -50,14 +52,16 @@ class HomePage extends StatelessWidget {
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)
                       ),
                     ),
-                    Row(
-                      children: [
-                        ElevatedButton(
+                  ),
+                  Row(
+                    spacing: 20,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
                           onPressed: () {}, 
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xff2ca58d),
-                            padding: EdgeInsets.zero,
-                            fixedSize: Size(165, 120),
+                            padding: EdgeInsets.only(top: 30, bottom: 30, left: 0, right: 0),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -69,13 +73,13 @@ class HomePage extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        Spacer(),
-                        ElevatedButton(
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
                           onPressed: () {}, 
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xff003e6b),
-                            padding: EdgeInsets.zero,
-                            fixedSize: Size(165, 120),
+                            padding: EdgeInsets.only(top: 30, bottom: 30, left: 0, right: 0),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -87,8 +91,9 @@ class HomePage extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                      ],
-                    )
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
