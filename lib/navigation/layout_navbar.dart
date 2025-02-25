@@ -31,19 +31,26 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
+        backgroundColor: Color(0xff003e6b),
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.white,
+        iconSize: 30,
         currentIndex: _currentIndex,
         onTap: onTapMenu,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded),
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home_filled),
             label: ""
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt_rounded),
+            icon: Icon(Icons.assignment_outlined),
+            activeIcon: Icon(Icons.assignment),
             label: ""
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_2_rounded),
+            icon: Icon(Icons.person_2_outlined),
+            activeIcon: Icon(Icons.person_2_rounded),
             label: ""
           ),
         ],

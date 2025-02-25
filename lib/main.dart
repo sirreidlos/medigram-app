@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medigram_app/components/navigation.dart';
-import 'package:medigram_app/page/home.dart';
+import 'package:medigram_app/navigation/layout_navbar.dart';
 
 void main() {
   runApp(const MyApp());
