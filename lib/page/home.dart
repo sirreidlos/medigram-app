@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medigram_app/components/record_card.dart';
+import 'package:medigram_app/utils/style.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,7 +13,7 @@ class HomePage extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(40),
               decoration: BoxDecoration(
-                color: Color(0xfff0f0f0),
+                color: Color(secondaryColor1),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(40), 
                   bottomRight: Radius.circular(40))
@@ -24,15 +26,15 @@ class HomePage extends StatelessWidget {
                       Text(
                         "Hello, Jane Doe",
                         style: TextStyle(fontSize: 18),
-                        ),
-                        Spacer(),
-                        Icon(
-                          Icons.swap_horiz_rounded
-                        ),
-                        Icon(
-                          Icons.notifications
-                        )
-                      ]
+                      ),
+                      Spacer(),
+                      Icon(
+                        Icons.swap_horiz_rounded
+                      ),
+                      Icon(
+                        Icons.notifications
+                      )
+                    ]
                   ),
                   SizedBox(
                     height: 60,
@@ -40,7 +42,7 @@ class HomePage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {}, 
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff53daf5),
+                        backgroundColor: Color(primaryColor1),
                         padding: EdgeInsets.zero,
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
@@ -60,7 +62,7 @@ class HomePage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {}, 
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xff2ca58d),
+                            backgroundColor: Color(primaryColor2),
                             padding: EdgeInsets.only(top: 30, bottom: 30, left: 0, right: 0),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -78,7 +80,7 @@ class HomePage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {}, 
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xff003e6b),
+                            backgroundColor: Color(secondaryColor2),
                             padding: EdgeInsets.only(top: 30, bottom: 30, left: 0, right: 0),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -97,6 +99,21 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
+            Container(
+              padding: EdgeInsets.all(40),
+              child: Column(
+                spacing: 10,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Recent Consultations",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  RecordCard(),
+                  RecordCard()
+                ],
+              ),
+            )
           ],
         ),
       );
