@@ -18,8 +18,8 @@ class RecordPage extends StatelessWidget {
               "Consultations History",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
-            RecordCard(),
-            RecordCard()
+            // RecordCard(),
+            // RecordCard()
           ],
         )
       )

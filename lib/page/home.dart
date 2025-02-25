@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/utils/style.dart';
 
@@ -109,11 +110,11 @@ class HomePage extends StatelessWidget {
                     "Recent Consultations",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
-                  RecordCard(),
-                  RecordCard()
+                  // RecordCard(),
+                  // RecordCard()
                 ],
               ),
-            )
+            ),
           ],
         ),
       );
