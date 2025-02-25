@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
       body: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(40),
+              padding: EdgeInsets.all(screenPadding),
               decoration: BoxDecoration(
                 color: Color(secondaryColor1),
                 borderRadius: BorderRadius.only(
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(40),
+              padding: EdgeInsets.all(screenPadding),
               child: Column(
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/page/profile.dart';
 import 'package:medigram_app/page/record.dart';
+import 'package:medigram_app/utils/style.dart';
 
 class BottomNavigationMenu extends StatefulWidget {
   const BottomNavigationMenu({super.key});
@@ -31,8 +32,8 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: Color(0xff003e6b),
-        unselectedItemColor: Colors.white,
+        backgroundColor: Color(secondaryColor2),
+        unselectedItemColor: Color(secondaryColor1),
         selectedItemColor: Colors.white,
         iconSize: 30,
         currentIndex: _currentIndex,
@@ -40,7 +41,7 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home_filled),
+            activeIcon: Icon(Icons.home),
             label: ""
           ),
           BottomNavigationBarItem(
