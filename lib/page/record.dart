@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medigram_app/components/record_card.dart';
 
 class RecordPage extends StatelessWidget {
   const RecordPage({super.key});
@@ -6,6 +7,20 @@ class RecordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Text("This is Record Page"),
+      body: Container(
+        padding: EdgeInsets.all(40),
+        child: Column(
+          spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Recent Consultations",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            RecordCard(),
+            RecordCard()
+          ],
+        )
+      )
     );
   }}
