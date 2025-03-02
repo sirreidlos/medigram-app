@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:medigram_app/utils/style.dart';
 
 class RecordCard extends StatelessWidget {
-  String name;
-  String location;
-  String time;
-  String date;
+  String title;
+  String subtitle;
+  String info1;
+  String info2;
 
   RecordCard({super.key, 
-    required this.name,
-    required this.location,
-    required this.time,
-    required this.date
+    required this.title,
+    required this.subtitle,
+    required this.info1,
+    required this.info2
   });
 
   @override
@@ -30,7 +30,7 @@ class RecordCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  title,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
@@ -38,7 +38,7 @@ class RecordCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  location,
+                  subtitle,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 14,
@@ -52,7 +52,7 @@ class RecordCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                time,
+                info1,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -60,7 +60,7 @@ class RecordCard extends StatelessWidget {
                 ),
               ),
               Text(
-                date,
+                info2,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
