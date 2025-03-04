@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   final String uniqueCode = "12345";
-  final bool isPatient = false;
+  final bool isPatient = true;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(screenPadding),
+              padding: EdgeInsets.fromLTRB(screenPadding, topScreenPadding, screenPadding, screenPadding),
               decoration: BoxDecoration(
                 color: Color(secondaryColor1),
                 borderRadius: BorderRadius.only(

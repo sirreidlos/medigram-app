@@ -14,7 +14,7 @@ class ScanQR extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(screenPadding), // TODO: Fix size
+              padding: EdgeInsets.fromLTRB(screenPadding, topScreenPadding, screenPadding, screenPadding),
               decoration: BoxDecoration(
                 color: Color(secondaryColor1),
                 borderRadius: BorderRadius.only(
@@ -44,7 +44,7 @@ class ScanQR extends StatelessWidget {
                   ),
                   Container(
                     padding: EdgeInsets.only(
-                      top: screenPadding,
+                      top: topScreenPadding,
                       bottom: screenPadding,
                     ),
                     child: SizedBox(
@@ -53,7 +53,7 @@ class ScanQR extends StatelessWidget {
                       child: MobileScanner(
                         scanWindow: Rect.fromLTWH(
                           screenPadding,
-                          screenPadding,
+                          topScreenPadding,
                           300,
                           300,
                         ),

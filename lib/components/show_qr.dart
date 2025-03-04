@@ -16,7 +16,7 @@ class ShowQr extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(screenPadding), // TODO: Fix size
+              padding: EdgeInsets.fromLTRB(screenPadding, topScreenPadding, screenPadding, screenPadding),
               decoration: BoxDecoration(
                 color: Color(secondaryColor1),
                 borderRadius: BorderRadius.only(

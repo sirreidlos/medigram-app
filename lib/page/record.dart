@@ -9,7 +9,7 @@ class RecordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(screenPadding),
+        padding: EdgeInsets.fromLTRB(screenPadding, topScreenPadding, screenPadding, screenPadding),
         child: Column(
           spacing: 10,
           crossAxisAlignment: CrossAxisAlignment.start,
