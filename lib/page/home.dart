@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:medigram_app/components/record_card.dart';
+import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/show_qr.dart';
 import 'package:medigram_app/utils/style.dart';
 
@@ -8,7 +9,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   final String uniqueCode = "12345";
-  final bool isPatient = true;
+  final bool isPatient = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +40,8 @@ class HomePage extends StatelessWidget {
                       Icon(Icons.notifications),
                     ],
                   ),
-                  isPatient ? patientConsult(context, uniqueCode) : Scaffold(),
-                  isPatient ? medsHandler(context, uniqueCode) : Scaffold(),
-
+                  mainFeature(context, uniqueCode, isPatient),
+                  isPatient ? medsHandler(context, uniqueCode) : Container(),
                 ],
               ),
             ),
@@ -85,6 +85,30 @@ class HomePage extends StatelessWidget {
                     info1: "00/00/00",
                     info2: "12:22",
                   ),
+                  RecordCard(
+                    title: "ABCDE",
+                    subtitle: "123 abcdefghjik",
+                    info1: "00/00/00",
+                    info2: "12:22",
+                  ),
+                  RecordCard(
+                    title: "ABCDE",
+                    subtitle: "123 abcdefghjik",
+                    info1: "00/00/00",
+                    info2: "12:22",
+                  ),
+                  RecordCard(
+                    title: "ABCDE",
+                    subtitle: "123 abcdefghjik",
+                    info1: "00/00/00",
+                    info2: "12:22",
+                  ),
+                  RecordCard(
+                    title: "ABCDE",
+                    subtitle: "123 abcdefghjik",
+                    info1: "00/00/00",
+                    info2: "12:22",
+                  ),
                 ],
               ),
             ),
@@ -95,23 +119,31 @@ class HomePage extends StatelessWidget {
   }
 }
 
-Widget doctorScan(){
-  return Scaffold();
-}
-
-Widget patientConsult(BuildContext context, String uniqueCode) {
+Widget mainFeature(BuildContext context, String uniqueCode, bool isPatient) {
   return SizedBox(
     width: double.infinity,
     child: ElevatedButton(
       onPressed: () async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: ((context) {
-              return ShowQr(uniqueCode, true);
-            }),
-          ),
-        );
+        if (isPatient) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: ((context) {
+                return ShowQr(uniqueCode, true);
+              }),
+            ),
+          );
+        }
+        else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: ((context) {
+                return ScanQR();
+              }),
+            ),
+          );
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(primaryColor1),
@@ -120,7 +152,7 @@ Widget patientConsult(BuildContext context, String uniqueCode) {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       child: Text(
-        "Start Consultation",
+        isPatient ? "Start Consultation" : "Scan Patient Data",
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
       ),
     ),

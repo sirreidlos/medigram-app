@@ -3,4 +3,5 @@ int primaryColor2 = 0xff2ca58d;
 int secondaryColor1 = 0xfff0f0f0;
 int secondaryColor2 = 0xff003e6b;
 
+// TODO: add top padding
 double screenPadding = 30;
