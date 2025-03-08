@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/show_qr.dart';
+import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/utils/style.dart';
 
 class HomePage extends StatelessWidget {
@@ -33,7 +35,7 @@ class HomePage extends StatelessWidget {
                     children: [
                       Text(
                         "Hello, ${isPatient ? "" : "Dr. "} Jane Doe",
-                        style: TextStyle(fontSize: 18),
+                        style: title,
                       ),
                       Spacer(),
                       Icon(Icons.swap_horiz_rounded),
@@ -53,7 +55,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text(
                     "Recent Consultations",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: header2,
                   ),
                   RecordCard(
                     title: "ABCDE",
@@ -139,7 +141,8 @@ Widget mainFeature(BuildContext context, String uniqueCode, bool isPatient) {
             context,
             MaterialPageRoute(
               builder: ((context) {
-                return ScanQR();
+                // return ScanQR();
+                return ConsultForm("123");
               }),
             ),
           );
@@ -153,7 +156,7 @@ Widget mainFeature(BuildContext context, String uniqueCode, bool isPatient) {
       ),
       child: Text(
         isPatient ? "Start Consultation" : "Scan Patient Data",
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        style: header1,
       ),
     ),
   );
@@ -170,7 +173,7 @@ Widget medsHandler(BuildContext context, String uniqueCode) {
               context,
               MaterialPageRoute(
                 builder: ((context) {
-                  return ShowQr(uniqueCode, false);
+                  return ShowQr(uniqueCode, false); //TODO: Change into button NOT qr code
                 }),
               ),
             );
@@ -185,7 +188,7 @@ Widget medsHandler(BuildContext context, String uniqueCode) {
           ),
           child: Text(
             "Meds Claim",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: header1,
             textAlign: TextAlign.center,
           ),
         ),
@@ -203,7 +206,7 @@ Widget medsHandler(BuildContext context, String uniqueCode) {
           ),
           child: Text(
             "Meds Regimen",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: header1,
             textAlign: TextAlign.center,
           ),
         ),

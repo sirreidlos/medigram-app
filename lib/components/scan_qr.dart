@@ -14,7 +14,12 @@ class ScanQR extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(screenPadding, topScreenPadding, screenPadding, screenPadding),
+              padding: EdgeInsets.fromLTRB(
+                screenPadding,
+                topScreenPadding,
+                screenPadding,
+                screenPadding,
+              ),
               decoration: BoxDecoration(
                 color: Color(secondaryColor1),
                 borderRadius: BorderRadius.only(
@@ -35,16 +40,13 @@ class ScanQR extends StatelessWidget {
                       ),
                       Text(
                         "Scan Patient Data",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: header2
                       ),
                     ],
                   ),
                   Container(
                     padding: EdgeInsets.only(
-                      top: topScreenPadding,
+                      top: screenPadding,
                       bottom: screenPadding,
                     ),
                     child: SizedBox(
@@ -53,7 +55,7 @@ class ScanQR extends StatelessWidget {
                       child: MobileScanner(
                         scanWindow: Rect.fromLTWH(
                           screenPadding,
-                          topScreenPadding,
+                          screenPadding,
                           300,
                           300,
                         ),

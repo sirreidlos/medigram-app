@@ -32,18 +32,12 @@ class RecordCard extends StatelessWidget {
                 Text(
                   title,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600
-                  ),
+                  style: body
                 ),
                 Text(
                   subtitle,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400
-                  ),
+                  style: content
                 ),
               ],
             ),
@@ -53,19 +47,11 @@ class RecordCard extends StatelessWidget {
             children: [
               Text(
                 info1,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Color(secondaryColor2)
-                ),
+                style: content,
               ),
               Text(
                 info2,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Color(secondaryColor2)
-                ),
+                style: content,
               ),
             ],
           )

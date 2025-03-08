@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/utils/qr_image.dart';
 import 'package:medigram_app/utils/style.dart';
@@ -37,10 +38,7 @@ class ShowQr extends StatelessWidget {
                       ),
                       Text(
                         isConsult ? "Consultation" : "Medicine Claim",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: header2
                       ),
                     ],
                   ),
@@ -54,13 +52,13 @@ class ShowQr extends StatelessWidget {
                       children: [
                         Text(
                           "QR code below will expire at ${(expiredTime().hour).toString().padLeft(2, '0')}:${(expiredTime().minute).toString().padLeft(2, '0')}",
-                          style: TextStyle(fontSize: 15),
+                          style: content,
                         ),
                         Center(child: QRImage(uniqueCode)),
                         Text(
                           "Regenarate QR Code",
-                          style: TextStyle(
-                            fontSize: 14,
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.w400,
                             color: Color(secondaryColor2),
@@ -82,10 +80,7 @@ class ShowQr extends StatelessWidget {
                     children: [
                       Text(
                         "Your ${isConsult ? "Profile" : "Consultation"}",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: header2
                       ),
                       RecordCard(
                         title: "ABCDE",
@@ -100,8 +95,8 @@ class ShowQr extends StatelessWidget {
                       children: [
                         Text(
                           "Attention!",
-                          style: TextStyle(
-                            fontSize: 18,
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Color(primaryColor2),
                           ),
@@ -111,7 +106,7 @@ class ShowQr extends StatelessWidget {
                               ? "Make sure your physician already asks for your information!"
                               : "You can only purchase this prescription once!",
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16),
+                          style: body
                         ),
                       ],
                     ),
