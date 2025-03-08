@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/utils/qr_image.dart';
 import 'package:medigram_app/utils/style.dart';
@@ -27,21 +28,7 @@ class ShowQr extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.arrow_back, color: Colors.black),
-                      ),
-                      Text(
-                        isConsult ? "Consultation" : "Medicine Claim",
-                        style: header2
-                      ),
-                    ],
-                  ),
+                  PopupHeader(context, isConsult ? "Consultation" : "Medicine Claim"),
                   Container(
                     padding: EdgeInsets.only(
                       top: screenPadding,

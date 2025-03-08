@@ -21,13 +21,14 @@ class Input extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       decoration: BoxDecoration(
         color: Color(secondaryColor1),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
         spacing: 10,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Column(
@@ -35,40 +36,36 @@ class Input extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               spacing: 0,
               children: [
-                SizedBox(
-                  height: 17,
-                  child: Text(
-                    header,
-                    style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400),
-                    
-                  ),
+                Container(
+                  height: 25,
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(header, style: body),
                 ),
-                SizedBox(
-                  height: 30,
-                  child: TextFormField(
-                    initialValue: initValue,
-                    maxLines: 1,
-                    readOnly: isDisabled ? true : false,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 0,
-                        vertical: 0,
-                      ),
-                      border: InputBorder.none,
-                      hintText: placeholder,
+                TextFormField(
+                  initialValue: initValue,
+                  maxLines: 1,
+                  readOnly: isDisabled ? true : false,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 0,
+                      vertical: 0,
                     ),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color:
-                          (isDisabled ? Color(secondaryColor2) : Colors.black),
-                    ),
+                    border: InputBorder.none,
+                    hintText: placeholder,
+                  ),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: (isDisabled ? Color(secondaryColor2) : Colors.black),
                   ),
                 ),
               ],
             ),
           ),
-          Container(child: checkIcon(iconVerified)),
+          Container(
+            padding: EdgeInsets.only(top: 0),
+            child: checkIcon(iconVerified),
+          ),
         ],
       ),
     );

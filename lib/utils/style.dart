@@ -10,7 +10,7 @@ double screenPadding = 30;
 double topScreenPadding = 60;
 
 TextStyle title = GoogleFonts.poppins(fontSize: 16);
-TextStyle header1 = GoogleFonts.poppins(fontSize: 17, fontWeight: FontWeight.w600);
-TextStyle header2 = GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600);
+TextStyle header1 = GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600);
+TextStyle header2 = GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600);
 TextStyle body = GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500);
 TextStyle content = GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w400);

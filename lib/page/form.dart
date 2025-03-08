@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medigram_app/components/input.dart';
+import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/utils/line.dart';
 import 'package:medigram_app/utils/style.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -22,21 +23,7 @@ class ConsultForm extends StatelessWidget {
         child: Column(
           spacing: 10,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back, color: Colors.black),
-                ),
-                Text(
-                  "Prescription Form",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
+            PopupHeader(context, "Prescription Form"),
             Input(
               header: "Name",
               placeholder: "Input your name",

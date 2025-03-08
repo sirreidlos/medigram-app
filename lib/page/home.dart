@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   final String uniqueCode = "12345";
-  final bool isPatient = true;
+  final bool isPatient = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Hello, ${isPatient ? "" : "Dr. "} Jane Doe",
+                        "Hello, ${isPatient ? "" : "Dr. "}Jane Doe",
                         style: title,
                       ),
                       Spacer(),

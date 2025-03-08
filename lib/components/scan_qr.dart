@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/page/record.dart';
 import 'package:medigram_app/utils/style.dart';
@@ -29,21 +30,7 @@ class ScanQR extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.arrow_back, color: Colors.black),
-                      ),
-                      Text(
-                        "Scan Patient Data",
-                        style: header2
-                      ),
-                    ],
-                  ),
+                  PopupHeader(context, "Scan Patient Data"),
                   Container(
                     padding: EdgeInsets.only(
                       top: screenPadding,
