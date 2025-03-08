@@ -6,12 +6,15 @@ class RecordCard extends StatelessWidget {
   String subtitle;
   String info1;
   String info2;
+  bool isMed;
 
-  RecordCard({super.key, 
+  RecordCard({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.info1,
-    required this.info2
+    required this.info2,
+    required this.isMed,
   });
 
   @override
@@ -20,7 +23,7 @@ class RecordCard extends StatelessWidget {
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Color(secondaryColor1),
-        borderRadius: BorderRadius.all(Radius.circular(10))
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
         spacing: 15,
@@ -29,32 +32,20 @@ class RecordCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  overflow: TextOverflow.ellipsis,
-                  style: body
-                ),
-                Text(
-                  subtitle,
-                  overflow: TextOverflow.ellipsis,
-                  style: content
-                ),
+                Text(title, overflow: TextOverflow.ellipsis, style: body),
+                Text(subtitle, overflow: TextOverflow.ellipsis, style: content),
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                info1,
-                style: content,
+          isMed
+              ? Text(info1, style: body)
+              : Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(info1, style: content),
+                  Text(info2, style: content),
+                ],
               ),
-              Text(
-                info2,
-                style: content,
-              ),
-            ],
-          )
         ],
       ),
     );

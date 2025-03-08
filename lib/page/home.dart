@@ -20,7 +20,12 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(screenPadding, topScreenPadding, screenPadding, screenPadding),
+              padding: EdgeInsets.fromLTRB(
+                screenPadding,
+                topScreenPadding,
+                screenPadding,
+                screenPadding,
+              ),
               decoration: BoxDecoration(
                 color: Color(secondaryColor1),
                 borderRadius: BorderRadius.only(
@@ -53,63 +58,55 @@ class HomePage extends StatelessWidget {
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Recent Consultations",
-                    style: header2,
+                  Text("Recent Consultations", style: header2),
+                  RecordCard(
+                    title: "ABCDE",
+                    subtitle: "123 abcdefghjik",
+                    info1: "00/00/00",
+                    info2: "12:22",
+                    isMed: false,
                   ),
                   RecordCard(
                     title: "ABCDE",
                     subtitle: "123 abcdefghjik",
                     info1: "00/00/00",
                     info2: "12:22",
+                    isMed: false,
                   ),
                   RecordCard(
                     title: "ABCDE",
                     subtitle: "123 abcdefghjik",
                     info1: "00/00/00",
                     info2: "12:22",
+                    isMed: false,
                   ),
                   RecordCard(
                     title: "ABCDE",
                     subtitle: "123 abcdefghjik",
                     info1: "00/00/00",
                     info2: "12:22",
+                    isMed: false,
                   ),
                   RecordCard(
                     title: "ABCDE",
                     subtitle: "123 abcdefghjik",
                     info1: "00/00/00",
                     info2: "12:22",
+                    isMed: false,
                   ),
                   RecordCard(
                     title: "ABCDE",
                     subtitle: "123 abcdefghjik",
                     info1: "00/00/00",
                     info2: "12:22",
+                    isMed: false,
                   ),
                   RecordCard(
                     title: "ABCDE",
                     subtitle: "123 abcdefghjik",
                     info1: "00/00/00",
                     info2: "12:22",
-                  ),
-                  RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
-                    info1: "00/00/00",
-                    info2: "12:22",
-                  ),
-                  RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
-                    info1: "00/00/00",
-                    info2: "12:22",
-                  ),
-                  RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
-                    info1: "00/00/00",
-                    info2: "12:22",
+                    isMed: false,
                   ),
                 ],
               ),
@@ -135,8 +132,7 @@ Widget mainFeature(BuildContext context, String uniqueCode, bool isPatient) {
               }),
             ),
           );
-        }
-        else {
+        } else {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -173,7 +169,10 @@ Widget medsHandler(BuildContext context, String uniqueCode) {
               context,
               MaterialPageRoute(
                 builder: ((context) {
-                  return ShowQr(uniqueCode, false); //TODO: Change into button NOT qr code
+                  return ShowQr(
+                    uniqueCode,
+                    false,
+                  ); //TODO: Change into button NOT qr code
                 }),
               ),
             );

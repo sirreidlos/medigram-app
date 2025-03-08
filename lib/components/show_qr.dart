@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
+import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/utils/qr_image.dart';
 import 'package:medigram_app/utils/style.dart';
 
@@ -18,7 +19,12 @@ class ShowQr extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(screenPadding, topScreenPadding, screenPadding, screenPadding),
+              padding: EdgeInsets.fromLTRB(
+                screenPadding,
+                topScreenPadding,
+                screenPadding,
+                screenPadding,
+              ),
               decoration: BoxDecoration(
                 color: Color(secondaryColor1),
                 borderRadius: BorderRadius.only(
@@ -28,7 +34,10 @@ class ShowQr extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  PopupHeader(context, isConsult ? "Consultation" : "Medicine Claim"),
+                  PopupHeader(
+                    context,
+                    isConsult ? "Consultation" : "Medicine Claim",
+                  ),
                   Container(
                     padding: EdgeInsets.only(
                       top: screenPadding,
@@ -67,36 +76,21 @@ class ShowQr extends StatelessWidget {
                     children: [
                       Text(
                         "Your ${isConsult ? "Profile" : "Consultation"}",
-                        style: header2
+                        style: header2,
                       ),
                       RecordCard(
                         title: "ABCDE",
                         subtitle: "Female | 21 years old",
                         info1: "123",
                         info2: "123",
+                        isMed: false,
                       ),
                     ],
                   ),
-                  Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          "Attention!",
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Color(primaryColor2),
-                          ),
-                        ),
-                        Text(
-                          isConsult
-                              ? "Make sure your physician already asks for your information!"
-                              : "You can only purchase this prescription once!",
-                          textAlign: TextAlign.center,
-                          style: body
-                        ),
-                      ],
-                    ),
+                  WarningCard(
+                    isConsult
+                        ? "Make sure your physician already asks for your information!"
+                        : "You can only purchase this prescription once!",
                   ),
                 ],
               ),

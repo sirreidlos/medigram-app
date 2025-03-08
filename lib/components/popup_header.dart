@@ -10,23 +10,22 @@ class PopupHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 10,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(prevPage);
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
-                  style: const ButtonStyle(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  icon: Icon(Icons.arrow_back, color: Colors.black),
-                ),
-                Text(header, style: header2),
-              ],
-            );
-
+      crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: 10,
+      children: [
+        IconButton(
+          onPressed: () {
+            Navigator.pop(prevPage);
+          },
+          padding: EdgeInsets.zero,
+          constraints: BoxConstraints(),
+          style: const ButtonStyle(
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+        ),
+        Text(header, style: header2),
+      ],
+    );
   }
 }
