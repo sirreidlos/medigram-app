@@ -1,13 +1,10 @@
 import 'dart:convert';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:medigram_app/constants/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:medigram_app/models/auth/login.dart';
+import 'package:medigram_app/services/secure_storage.dart';
 
 class AuthService {
-  final storage = FlutterSecureStorage();
-
   Future<http.Response> register(String email, String password) async {
     final String url = "${Api.API_BASE_URL}/register";
 
@@ -57,7 +54,7 @@ class AuthService {
       body: jsonEncode({"device_id": deviceID}),
     );
 
-    await storage.deleteAll();
+    await SecureStorageService().clear();
   }
 
   Future<void> saveAuthData({
@@ -68,22 +65,22 @@ class AuthService {
     required String deviceID,
     required String privateKey,
   }) async {
-    await storage.write(key: 'access_token', value: accessToken);
-    await storage.write(key: 'session_id', value: sessionID);
-    await storage.write(key: 'token_type', value: tokenType);
-    await storage.write(key: 'expires_in', value: expiresIn.toString());
-    await storage.write(key: 'device_id', value: deviceID);
-    await storage.write(key: 'private_key', value: privateKey);
+    await SecureStorageService().write('access_token', accessToken);
+    await SecureStorageService().write('session_id', sessionID);
+    await SecureStorageService().write('token_type', tokenType);
+    await SecureStorageService().write('expires_in', expiresIn.toString());
+    await SecureStorageService().write('device_id', deviceID);
+    await SecureStorageService().write('private_key', privateKey);
   }
 
   Future<Map<String, String?>> getAuthData() async {
     return {
-      'access_token': await storage.read(key: 'access_token'),
-      'session_id': await storage.read(key: 'session_id'),
-      'token_type': await storage.read(key: 'token_type'),
-      'expires_in': await storage.read(key: 'expires_in'),
-      'device_id': await storage.read(key: 'device_id'),
-      'private_key': await storage.read(key: 'private_key'),
+      'access_token': await SecureStorageService().read('access_token'),
+      'session_id': await SecureStorageService().read('session_id'),
+      'token_type': await SecureStorageService().read('token_type'),
+      'expires_in': await SecureStorageService().read('expires_in'),
+      'device_id': await SecureStorageService().read('device_id'),
+      'private_key': await SecureStorageService().read('private_key'),
     };
   }
 }
