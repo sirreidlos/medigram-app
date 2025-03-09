@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:medigram_app/constants/api.dart';
-import 'package:medigram_app/constants/style.dart';
-import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 
 class UserService {
