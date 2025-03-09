@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medigram_app/components/record_card.dart';
-import 'package:medigram_app/utils/style.dart';
+import 'package:medigram_app/constants/style.dart';
 
 class RecordPage extends StatelessWidget {
   const RecordPage({super.key});

@@ -5,7 +5,7 @@ import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/utils/line.dart';
-import 'package:medigram_app/utils/style.dart';
+import 'package:medigram_app/constants/style.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ConsultForm extends StatelessWidget {

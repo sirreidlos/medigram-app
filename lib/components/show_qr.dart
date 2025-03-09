@@ -4,7 +4,7 @@ import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/utils/qr_image.dart';
-import 'package:medigram_app/utils/style.dart';
+import 'package:medigram_app/constants/style.dart';
 
 class ShowQr extends StatelessWidget {
   const ShowQr(this.uniqueCode, this.isConsult, {super.key});

@@ -5,7 +5,7 @@ import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/show_qr.dart';
 import 'package:medigram_app/page/form.dart';
-import 'package:medigram_app/utils/style.dart';
+import 'package:medigram_app/constants/style.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/page/profile.dart';
 import 'package:medigram_app/page/record.dart';
-import 'package:medigram_app/utils/style.dart';
+import 'package:medigram_app/constants/style.dart';
 
 class BottomNavigationMenu extends StatefulWidget {
   const BottomNavigationMenu({super.key});

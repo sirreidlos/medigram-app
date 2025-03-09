@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medigram_app/utils/style.dart';
+import 'package:medigram_app/constants/style.dart';
 
 class RecordCard extends StatelessWidget {
   String title;
