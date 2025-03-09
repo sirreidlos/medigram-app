@@ -20,7 +20,7 @@ class Button extends StatelessWidget {
           backgroundColor:
               isSubmit ? Color(secondaryColor2) : Color(primaryColor2),
           foregroundColor: Colors.white,
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(10),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

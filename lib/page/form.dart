@@ -29,6 +29,10 @@ class ConsultForm extends StatelessWidget {
             spacing: 15,
             children: [
               PopupHeader(context, "Prescription Form"),
+              SizedBox(
+                width: double.infinity,
+                child: Text("Patient Profile", style: header2),
+              ),
               Input(
                 header: "Name",
                 placeholder: "Jane Doe",
@@ -62,13 +66,12 @@ class ConsultForm extends StatelessWidget {
                   ),
                 ],
               ),
-              LineDivider(),
               Row(
                 spacing: 20,
                 children: [
                   Expanded(
                     child: Input(
-                      header: "Body Height (cm)",
+                      header: "Height (cm)",
                       placeholder: "165",
                       initValue: "165",
                       isDisabled: true,
@@ -78,7 +81,7 @@ class ConsultForm extends StatelessWidget {
                   ),
                   Expanded(
                     child: Input(
-                      header: "Body Weight(kg)",
+                      header: "Weight (kg)",
                       placeholder: "65",
                       initValue: "65",
                       isDisabled: true,
@@ -105,35 +108,35 @@ class ConsultForm extends StatelessWidget {
                 inputType: TextInputType.text,
               ),
               LineDivider(),
+              SizedBox(
+                width: double.infinity,
+                child: Text("Consultation", style: header2),
+              ),
               Input(
                 header: "Diagnoses",
-                placeholder: "Low blood pressure, dehydrated, ear infection",
-                initValue: "Low blood pressure, dehydrated, ear infection",
+                placeholder: "Your patient diagnoses",
+                initValue: "",
                 isDisabled: false,
                 useIcon: Icon(null),
                 inputType: TextInputType.text,
               ),
               Input(
                 header: "Symptoms",
-                placeholder: "Mouth ulcers, chapped lips, ringing ear, fainted",
-                initValue: "Mouth ulcers, chapped lips, ringing ear, fainted",
+                placeholder: "Your patient symptoms",
+                initValue: "",
                 isDisabled: false,
                 useIcon: Icon(null),
                 inputType: TextInputType.text,
               ),
               LineDivider(),
-              Input(
-                header: "Medicine:",
-                placeholder: "",
-                initValue: "",
-                isDisabled: true,
-                useIcon: Icon(null),
-                inputType: TextInputType.text,
+              SizedBox(
+                width: double.infinity,
+                child: Text("Medicine", style: header2),
               ),
               Input(
                 header: "Drug Name",
-                placeholder: "Penicillin",
-                initValue: "Penicillin",
+                placeholder: "Medicine for your patient",
+                initValue: "",
                 isDisabled: false,
                 useIcon: Icon(null),
                 inputType: TextInputType.text,
@@ -144,8 +147,8 @@ class ConsultForm extends StatelessWidget {
                   Expanded(
                     child: Input(
                       header: "Doses (mg)",
-                      placeholder: "165",
-                      initValue: "165",
+                      placeholder: "Doses in mg",
+                      initValue: "",
                       isDisabled: false,
                       useIcon: Icon(null),
                       inputType: TextInputType.number,
@@ -153,9 +156,9 @@ class ConsultForm extends StatelessWidget {
                   ),
                   Expanded(
                     child: Input(
-                      header: "Regimen (per day)",
-                      placeholder: "3",
-                      initValue: "3",
+                      header: "Daily Regimen",
+                      placeholder: "Per day",
+                      initValue: "",
                       isDisabled: false,
                       useIcon: Icon(null),
                       inputType: TextInputType.number,
@@ -164,17 +167,17 @@ class ConsultForm extends StatelessWidget {
                 ],
               ),
               Input(
-                header: "Quantity (per dose)",
-                placeholder: "21",
-                initValue: "21",
+                header: "Quantity (/dose)",
+                placeholder: "Per dose",
+                initValue: "",
                 isDisabled: false,
                 useIcon: Icon(null),
                 inputType: TextInputType.number,
               ),
               Input(
-                header: "How to Consume",
-                placeholder: "After meal",
-                initValue: "After meal",
+                header: "Instruction",
+                placeholder: "How to consume",
+                initValue: "",
                 isDisabled: false,
                 useIcon: Icon(null),
                 inputType: TextInputType.text,
@@ -191,7 +194,7 @@ class ConsultForm extends StatelessWidget {
                 children: [
                   Expanded(
                     child: RecordCard(
-                      title: "Amoxicillin 500 mg",
+                      title: "Penicillin 165 mg",
                       subtitle: "3 times/day, after meal",
                       info1: "21x",
                       info2: "",
@@ -200,7 +203,9 @@ class ConsultForm extends StatelessWidget {
                   ),
                 ],
               ),
-              WarningCard("Make sure your diagnoses and prescription is suitable for the patient!")
+              WarningCard(
+                "Make sure your diagnoses and prescription are suitable for the patient!",
+              ),
             ],
           ),
         ),

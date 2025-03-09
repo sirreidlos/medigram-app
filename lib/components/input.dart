@@ -26,7 +26,7 @@ class Input extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Color(secondaryColor1),
+        color: Color(secondaryColor1).withValues(alpha: 0.65),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
@@ -39,7 +39,17 @@ class Input extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 0,
               children: [
-                SizedBox(height: 30, child: Text(header, style: placeholder != "" ? body : header2)),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    header,
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: isDisabled ? Colors.black.withValues(alpha: 0.75) : Colors.black,
+                    ),
+                  ),
+                ),
                 placeholder != ""
                     ? TextFormField(
                       initialValue: initValue,
@@ -54,13 +64,16 @@ class Input extends StatelessWidget {
                         isDense: true,
                         border: InputBorder.none,
                         hintText: placeholder,
+                        hintStyle: TextStyle(color: isDisabled
+                                ? Color(secondaryColor2).withValues(alpha: 0.5)
+                                : Colors.black.withValues(alpha: 0.5))
                       ),
                       style: GoogleFonts.poppins(
                         fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: isDisabled ? FontWeight.w600 : FontWeight.w500,
                         color:
                             (isDisabled
-                                ? Color(secondaryColor2)
+                                ? Color(secondaryColor2).withValues(alpha: 0.75)
                                 : Colors.black),
                       ),
                     )
@@ -68,12 +81,14 @@ class Input extends StatelessWidget {
               ],
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: useIcon,
-            iconSize: 20,
-            padding: EdgeInsets.zero,
-          ),
+          useIcon.icon != null
+              ? (IconButton(
+                onPressed: () {},
+                icon: useIcon,
+                iconSize: 20,
+                padding: EdgeInsets.zero,
+              ))
+              : Container(),
         ],
       ),
     );

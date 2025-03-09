@@ -38,7 +38,7 @@ class RecordCard extends StatelessWidget {
             ),
           ),
           isMed
-              ? Text(info1, style: body)
+              ? Text(info1, style: header2)
               : Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
