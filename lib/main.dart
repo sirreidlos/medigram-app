@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medigram_app/navigation/layout_navbar.dart';
+import 'package:medigram_app/page/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Medigram',
-      home: const BottomNavigationMenu(),
+      home: const SplashScreen(),
     );
   }
 }
