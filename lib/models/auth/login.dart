@@ -2,7 +2,7 @@ class Login {
   final String accessToken;
   final String sessionID;
   final String tokenType;
-  final DateTime expiresIn;
+  final int expiresIn;
   final String deviceID;
   final String privateKey;
 
@@ -18,7 +18,7 @@ class Login {
   factory Login.fromJson(Map<String, dynamic> json) {
     return Login(
       accessToken: json["access_token"],
-      sessionID: json["token_id"],
+      sessionID: json["session_id"],
       tokenType: json["token_type"],
       expiresIn: json["expires_in"],
       deviceID: json["device_id"],
