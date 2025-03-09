@@ -43,8 +43,7 @@ class AuthService {
   }
 
   Future<void> logout() async {
-    final authData = await getAuthData();
-    final deviceID = authData['device_id'];
+    final deviceID = await SecureStorageService().read('device_id');
 
     final String url = "${Api.API_BASE_URL}/logout";
 
@@ -71,16 +70,5 @@ class AuthService {
     await SecureStorageService().write('expires_in', expiresIn.toString());
     await SecureStorageService().write('device_id', deviceID);
     await SecureStorageService().write('private_key', privateKey);
-  }
-
-  Future<Map<String, String?>> getAuthData() async {
-    return {
-      'access_token': await SecureStorageService().read('access_token'),
-      'session_id': await SecureStorageService().read('session_id'),
-      'token_type': await SecureStorageService().read('token_type'),
-      'expires_in': await SecureStorageService().read('expires_in'),
-      'device_id': await SecureStorageService().read('device_id'),
-      'private_key': await SecureStorageService().read('private_key'),
-    };
   }
 }
