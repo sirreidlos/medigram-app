@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medigram_app/constants/style.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -6,6 +7,17 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Text("This is Profile Page"),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.fromLTRB(
+            screenPadding,
+            topScreenPadding,
+            screenPadding,
+            screenPadding,
+          ),
+          child: Text("This is Profile Page"),
+        ),
+      ),
     );
-  }}
+  }
+}

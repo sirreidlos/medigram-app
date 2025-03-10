@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   final String uniqueCode = "12345";
-  final bool isPatient = true;
+  final bool isPatient = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,49 +60,49 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text("Recent Consultations", style: header2),
                   RecordCard(
-                    title: "Dr. Heinz Doofenshmirtz",
+                    title: "Brian Wong",
                     subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "Dr. Heinz Doofenshmirtz",
+                    title: "Brian Wong",
                     subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "Dr. Heinz Doofenshmirtz",
+                    title: "Brian Wong",
                     subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "Dr. Heinz Doofenshmirtz",
+                    title: "Brian Wong",
                     subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "Dr. Heinz Doofenshmirtz",
+                    title: "Brian Wong",
                     subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "Dr. Heinz Doofenshmirtz",
+                    title: "Brian Wong",
                     subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "Dr. Heinz Doofenshmirtz",
+                    title: "Brian Wong",
                     subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",

@@ -8,20 +8,170 @@ class RecordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.fromLTRB(screenPadding, topScreenPadding, screenPadding, screenPadding),
-        child: Column(
-          spacing: 10,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Consultations History",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            // RecordCard(),
-            // RecordCard()
-          ],
-        )
-      )
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.fromLTRB(
+            screenPadding,
+            topScreenPadding,
+            screenPadding,
+            screenPadding,
+          ),
+          child: Column(
+            spacing: 10,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Consultations History", style: header2),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+              RecordCard(
+                title: "Brian Wong",
+                subtitle: "Doofenshmirtz Evil Incorporated",
+                info1: "00/00/00",
+                info2: "12:22",
+                isMed: false,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
-  }}
+  }
+}
