@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   final String uniqueCode = "12345";
-  final bool isPatient = false;
+  final bool isPatient = true;
 
   @override
   Widget build(BuildContext context) {
@@ -60,50 +60,50 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text("Recent Consultations", style: header2),
                   RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
+                    title: "Dr. Heinz Doofenshmirtz",
+                    subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
+                    title: "Dr. Heinz Doofenshmirtz",
+                    subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
+                    title: "Dr. Heinz Doofenshmirtz",
+                    subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
+                    title: "Dr. Heinz Doofenshmirtz",
+                    subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
+                    title: "Dr. Heinz Doofenshmirtz",
+                    subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
+                    title: "Dr. Heinz Doofenshmirtz",
+                    subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
                   ),
                   RecordCard(
-                    title: "ABCDE",
-                    subtitle: "123 abcdefghjik",
+                    title: "Dr. Heinz Doofenshmirtz",
+                    subtitle: "Doofenshmirtz Evil Incorporated",
                     info1: "00/00/00",
                     info2: "12:22",
                     isMed: false,
@@ -137,8 +137,7 @@ Widget mainFeature(BuildContext context, String uniqueCode, bool isPatient) {
             context,
             MaterialPageRoute(
               builder: ((context) {
-                // return ScanQR();
-                return ConsultForm("123");
+                return ScanQR();
               }),
             ),
           );
