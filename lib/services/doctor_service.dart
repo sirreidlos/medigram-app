@@ -4,7 +4,7 @@ import 'package:medigram_app/services/secure_storage.dart';
 
 class DoctorService {
   Future<http.Response> getDoctor(String doctorID) async {
-    final String url = "${Api.API_BASE_URL}/doctor-profile?doctor_id=$doctorID"; // TODO: Check in with backend
+    final String url = "${Api.API_BASE_URL}/doctor-profile/$doctorID";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.get(
