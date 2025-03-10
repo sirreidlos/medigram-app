@@ -4,6 +4,8 @@ import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
+import 'package:medigram_app/navigation/layout_navbar.dart';
+import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/utils/line.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -185,8 +187,8 @@ class ConsultForm extends StatelessWidget {
               Row(
                 spacing: 10,
                 children: [
-                  Expanded(child: Button("Cancel", () {}, false)),
-                  Expanded(child: Button("Add", () {}, true)),
+                  Expanded(child: Button("Reset", () {}, false, false)),
+                  Expanded(child: Button("Add", () {}, true, false)),
                 ],
               ),
               Row(
@@ -205,6 +207,13 @@ class ConsultForm extends StatelessWidget {
               ),
               WarningCard(
                 "Make sure your diagnoses and prescription are suitable for the patient!",
+              ),
+              Row(
+                spacing: 10,
+                children: [
+                  Expanded(child: Button("Cancel", () {}, false, true)),
+                  Expanded(child: Button("Prescribe", () {}, true, true)),
+                ],
               ),
             ],
           ),
