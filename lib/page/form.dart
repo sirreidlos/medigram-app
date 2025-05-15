@@ -187,8 +187,8 @@ class ConsultForm extends StatelessWidget {
               Row(
                 spacing: 10,
                 children: [
-                  Expanded(child: Button("Reset", () {}, false, false)),
-                  Expanded(child: Button("Add", () {}, true, false)),
+                  Expanded(child: Button("Reset", () {}, false, false, true)),
+                  Expanded(child: Button("Add", () {}, true, false, true)),
                 ],
               ),
               Row(
@@ -211,8 +211,8 @@ class ConsultForm extends StatelessWidget {
               Row(
                 spacing: 10,
                 children: [
-                  Expanded(child: Button("Cancel", () {}, false, true)),
-                  Expanded(child: Button("Prescribe", () {}, true, true)),
+                  Expanded(child: Button("Cancel", () {}, false, true, false)),
+                  Expanded(child: Button("Prescribe", () {}, true, true, false)),
                 ],
               ),
             ],

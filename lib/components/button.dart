@@ -6,7 +6,8 @@ class Button extends StatelessWidget {
     this.text,
     this.handler,
     this.isSubmit,
-    this.isPrimary, {
+    this.isPrimary,
+    this.useOutline, {
     super.key,
   });
 
@@ -14,6 +15,7 @@ class Button extends StatelessWidget {
   final VoidCallback handler;
   final bool isSubmit;
   final bool isPrimary;
+  final bool useOutline;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +25,13 @@ class Button extends StatelessWidget {
         onPressed: handler,
         style: ElevatedButton.styleFrom(
           backgroundColor:
-              isSubmit ? Color(secondaryColor2) : Color(primaryColor2),
-          foregroundColor: Colors.white,
+              useOutline ? Colors.white : isSubmit ? Color(secondaryColor2) : Color(primaryColor2),
+          foregroundColor: useOutline ? Colors.black : Colors.white,
           padding: EdgeInsets.all(isPrimary ? 15 : 10),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
+          side: BorderSide(color: Color(useOutline ? (isSubmit ? secondaryColor2 : primaryColor2) : (0xffffff))),
         ),
         child: Text(text, style: isPrimary ? header2 : body),
       ),

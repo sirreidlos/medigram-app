@@ -137,7 +137,8 @@ Widget mainFeature(BuildContext context, String uniqueCode, bool isPatient) {
             context,
             MaterialPageRoute(
               builder: ((context) {
-                return ScanQR();
+                // return ScanQR(); 
+                return ConsultForm("abcde"); // TODO: Dev only, uncomment above code
               }),
             ),
           );
