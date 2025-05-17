@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
+import 'package:medigram_app/models/nonce.dart';
 import 'package:medigram_app/utils/qr_image.dart';
 import 'package:medigram_app/constants/style.dart';
 
 class ShowQr extends StatelessWidget {
-  const ShowQr(this.uniqueCode, this.isConsult, {super.key});
+  const ShowQr(this.nonce, this.isConsult, {super.key});
 
-  final String uniqueCode;
+  final Nonce nonce;
   final bool isConsult;
 
   @override
@@ -47,10 +49,10 @@ class ShowQr extends StatelessWidget {
                       spacing: 15,
                       children: [
                         Text(
-                          "QR code below will expire at ${(expiredTime().hour).toString().padLeft(2, '0')}:${(expiredTime().minute).toString().padLeft(2, '0')}",
+                          "QR code below will expire at ${DateFormat.yMMMMEEEEd().add_jms().format(nonce.expirationDate.toLocal())}",
                           style: content,
                         ),
-                        Center(child: QRImage(uniqueCode)),
+                        Center(child: QRImage(nonce.nonce)),
                         Text(
                           "Regenarate QR Code",
                           style: GoogleFonts.poppins(

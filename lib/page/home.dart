@@ -1,17 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/show_qr.dart';
+import 'package:medigram_app/models/nonce.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/services/nonce_service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  final String uniqueCode = "12345";
-  final bool isPatient = false;
+  final bool isPatient = true;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +50,8 @@ class HomePage extends StatelessWidget {
                       Icon(Icons.notifications),
                     ],
                   ),
-                  mainFeature(context, uniqueCode, isPatient),
-                  isPatient ? medsHandler(context, uniqueCode) : Container(),
+                  mainFeature(context, isPatient),
+                  isPatient ? medsHandler(context) : Container(),
                 ],
               ),
             ),
@@ -118,17 +121,22 @@ class HomePage extends StatelessWidget {
   }
 }
 
-Widget mainFeature(BuildContext context, String uniqueCode, bool isPatient) {
+Widget mainFeature(BuildContext context, bool isPatient) {
   return SizedBox(
     width: double.infinity,
     child: ElevatedButton(
       onPressed: () async {
         if (isPatient) {
+          final response = await NonceService().requestNonce();
+          // TODO error handle, show toast or something if it's not 200 OK
+          Map<String, dynamic> data = jsonDecode(response.body);
+          Nonce nonce = Nonce.fromJson(data); // get code from data
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: ((context) {
-                return ShowQr(uniqueCode, true);
+
+                return ShowQr(nonce, true);
               }),
             ),
           );
@@ -158,19 +166,23 @@ Widget mainFeature(BuildContext context, String uniqueCode, bool isPatient) {
   );
 }
 
-Widget medsHandler(BuildContext context, String uniqueCode) {
+Widget medsHandler(BuildContext context) {
   return Row(
     spacing: 20,
     children: [
       Expanded(
         child: ElevatedButton(
           onPressed: () async {
+          final response = await NonceService().requestNonce();
+          // TODO error handle, show toast or something if it's not 200 OK
+          Map<String, dynamic> data = jsonDecode(response.body);
+          Nonce nonce = Nonce.fromJson(data); // get code from data
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: ((context) {
                   return ShowQr(
-                    uniqueCode,
+                    nonce,
                     false,
                   ); //TODO: Change into button NOT qr code
                 }),
