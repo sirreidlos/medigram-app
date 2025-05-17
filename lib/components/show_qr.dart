@@ -32,7 +32,7 @@ class ShowQr extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error AAAAA: ${snapshot.error}'));
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final signature = snapshot.data!;
             return SingleChildScrollView(
@@ -138,7 +138,8 @@ DateTime expiredTime() {
 
 Future<String> signConsent(String nonce) async {
   String? pk = await SecureStorageService().read('private_key');
-  if(pk == null) {
+  String? deviceId = await SecureStorageService().read('device_id');
+  if(pk == null || deviceId == null) {
     // TODO handle error better
     throw Exception("not signed in");
   }
@@ -147,9 +148,11 @@ Future<String> signConsent(String nonce) async {
 
   final algorithm = Ed25519();
   final keyPair = await algorithm.newKeyPairFromSeed(keyBytes.sublist(0, 32));
-  final nonceBytes = utf8.encode(nonce);
 
-  final signature = await algorithm.sign(nonceBytes, keyPair: keyPair);
+  final message = jsonEncode([deviceId, nonce]);
+  final messageBytes = utf8.encode(message);
+
+  final signature = await algorithm.sign(messageBytes, keyPair: keyPair);
   final base64Signature = base64.encode(signature.bytes);
 
   return base64Signature;
