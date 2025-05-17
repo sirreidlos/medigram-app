@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:cryptography/cryptography.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/models/nonce.dart';
+import 'package:medigram_app/services/auth_service.dart';
+import 'package:medigram_app/services/secure_storage.dart';
 import 'package:medigram_app/utils/qr_image.dart';
 import 'package:medigram_app/constants/style.dart';
 
@@ -17,88 +22,107 @@ class ShowQr extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(
-                screenPadding,
-                topScreenPadding,
-                screenPadding,
-                screenPadding,
-              ),
-              decoration: BoxDecoration(
-                color: Color(secondaryColor1),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(40),
-                  bottomRight: Radius.circular(40),
-                ),
-              ),
+      body: FutureBuilder<String>(
+        future: () async {
+            // TODO don't call login here, this is just provisional
+            await AuthService().login("test@example.com", "test");
+            return signConsent(nonce.nonce);
+          }(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error AAAAA: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final signature = snapshot.data!;
+            return SingleChildScrollView(
               child: Column(
                 children: [
-                  PopupHeader(
-                    context,
-                    isConsult ? "Consultation" : "Medicine Claim",
-                  ),
                   Container(
-                    padding: EdgeInsets.only(
-                      top: screenPadding,
-                      bottom: screenPadding,
+                    padding: EdgeInsets.fromLTRB(
+                      screenPadding,
+                      topScreenPadding,
+                      screenPadding,
+                      screenPadding,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Color(secondaryColor1),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(40),
+                        bottomRight: Radius.circular(40),
+                      ),
                     ),
                     child: Column(
-                      spacing: 15,
                       children: [
-                        Text(
-                          "QR code below will expire at ${DateFormat.yMMMMEEEEd().add_jms().format(nonce.expirationDate.toLocal())}",
-                          style: content,
+                        PopupHeader(
+                          context,
+                          isConsult ? "Consultation" : "Medicine Claim",
                         ),
-                        Center(child: QRImage(nonce.nonce)),
-                        Text(
-                          "Regenarate QR Code",
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w400,
-                            color: Color(secondaryColor2),
+                        Container(
+                          padding: EdgeInsets.only(
+                            top: screenPadding,
+                            bottom: screenPadding,
                           ),
+                          child: Column(
+                            spacing: 15,
+                            children: [
+                              Text(
+                                "QR code below will expire at ${DateFormat.yMMMMEEEEd().add_jms().format(nonce.expirationDate.toLocal())}",
+                                style: content,
+                              ),
+                              Center(child: QRImage(signature)),
+                              Text(
+                                "Regenerate QR Code",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(secondaryColor2),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(screenPadding),
+                    child: Column(
+                      spacing: 50,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Your ${isConsult ? "Profile" : "Consultation"}",
+                              style: header2,
+                            ),
+                            RecordCard(
+                              title: "ABCDE",
+                              subtitle: "Female | 21 years old",
+                              info1: "123",
+                              info2: "123",
+                              isMed: false,
+                            ),
+                          ],
+                        ),
+                        WarningCard(
+                          isConsult
+                              ? "Make sure your physician already asks for your information!"
+                              : "You can only purchase this prescription once!",
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-            ),
-            Container(
-              padding: EdgeInsets.all(screenPadding),
-              child: Column(
-                spacing: 50,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Your ${isConsult ? "Profile" : "Consultation"}",
-                        style: header2,
-                      ),
-                      RecordCard(
-                        title: "ABCDE",
-                        subtitle: "Female | 21 years old",
-                        info1: "123",
-                        info2: "123",
-                        isMed: false,
-                      ),
-                    ],
-                  ),
-                  WarningCard(
-                    isConsult
-                        ? "Make sure your physician already asks for your information!"
-                        : "You can only purchase this prescription once!",
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+            );
+          } else {
+            // no data (unlikely)
+            return Center(child: Text("No signature found"));
+          }
+        },
       ),
     );
   }
@@ -110,4 +134,23 @@ DateTime expiredTime() {
   DateTime expired = current.add(duration);
 
   return expired;
+}
+
+Future<String> signConsent(String nonce) async {
+  String? pk = await SecureStorageService().read('private_key');
+  if(pk == null) {
+    // TODO handle error better
+    throw Exception("not signed in");
+  }
+
+  final keyBytes = base64.decode(pk);
+
+  final algorithm = Ed25519();
+  final keyPair = await algorithm.newKeyPairFromSeed(keyBytes.sublist(0, 32));
+  final nonceBytes = utf8.encode(nonce);
+
+  final signature = await algorithm.sign(nonceBytes, keyPair: keyPair);
+  final base64Signature = base64.encode(signature.bytes);
+
+  return base64Signature;
 }

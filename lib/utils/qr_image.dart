@@ -17,7 +17,7 @@ class QRImage extends StatelessWidget {
       child: QrImageView(
       data: uniqueCode,
       size: 260,
-      version: 3,
+      version: 5,
     ),
     );
   }

@@ -29,11 +29,9 @@ class AuthService {
       final authInfo = jsonDecode(response.body) as Map<String, dynamic>;
       final auth = Login.fromJson(authInfo);
 
-      saveAuthData(
-        accessToken: auth.accessToken,
+      await saveAuthData(
         sessionID: auth.sessionID,
         tokenType: auth.tokenType,
-        expiresIn: auth.expiresIn,
         deviceID: auth.deviceID,
         privateKey: auth.privateKey,
       );
@@ -57,17 +55,13 @@ class AuthService {
   }
 
   Future<void> saveAuthData({
-    required String accessToken,
     required String sessionID,
     required String tokenType,
-    required int expiresIn,
     required String deviceID,
     required String privateKey,
   }) async {
-    await SecureStorageService().write('access_token', accessToken);
     await SecureStorageService().write('session_id', sessionID);
     await SecureStorageService().write('token_type', tokenType);
-    await SecureStorageService().write('expires_in', expiresIn.toString());
     await SecureStorageService().write('device_id', deviceID);
     await SecureStorageService().write('private_key', privateKey);
   }

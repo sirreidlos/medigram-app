@@ -1,3 +1,3 @@
 class Api {
-  static const String API_BASE_URL = "http://medigram-354o.shuttle.app";
+  static const String API_BASE_URL = "https://medigram-354o.shuttle.app";
 }
