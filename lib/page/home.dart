@@ -2,19 +2,27 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:medigram_app/components/history.dart';
 import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/show_qr.dart';
+import 'package:medigram_app/models/consultation/consultation.dart';
+import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/nonce.dart';
+import 'package:medigram_app/models/user/user.dart';
+import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/services/consultation_service.dart';
+import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/nonce_service.dart';
+import 'package:medigram_app/services/user_service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  final bool isPatient = true;
+  final bool isPatient = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,38 +63,12 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(screenPadding),
-              child: Column(
-                spacing: 10,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Recent Consultations", style: header2),
-                  showRecords(),
-                  // RecordCard(
-                  //   title: "Brian Wong",
-                  //   subtitle: "Doofenshmirtz Evil Incorporated",
-                  //   info1: "00/00/00",
-                  //   info2: "12:22",
-                  //   isMed: false,
-                  // ),
-                ],
-              ),
-            ),
+            RecordHistory(isPatient, true)
           ],
         ),
       ),
     );
   }
-}
-
-Widget showRecords(){
-  return Text("ok");
-  // return Column(
-  //   children: [
-
-  //   ],
-  // )
 }
 
 Widget mainFeature(BuildContext context, bool isPatient) {
@@ -112,8 +94,9 @@ Widget mainFeature(BuildContext context, bool isPatient) {
             context,
             MaterialPageRoute(
               builder: ((context) {
-                // return ScanQR(); 
-                return ConsultForm("abcde"); // TODO: Dev only, uncomment above code
+                // return ScanQR();
+                return ConsultForm(
+                    "abcde"); // TODO: Dev only, uncomment above code
               }),
             ),
           );
@@ -140,10 +123,10 @@ Widget medsHandler(BuildContext context) {
       Expanded(
         child: ElevatedButton(
           onPressed: () async {
-          final response = await NonceService().requestNonce();
-          // TODO error handle, show toast or something if it's not 200 OK
-          Map<String, dynamic> data = jsonDecode(response.body);
-          Nonce nonce = Nonce.fromJson(data); // get code from data
+            final response = await NonceService().requestNonce();
+            // TODO error handle, show toast or something if it's not 200 OK
+            Map<String, dynamic> data = jsonDecode(response.body);
+            Nonce nonce = Nonce.fromJson(data); // get code from data
             Navigator.push(
               context,
               MaterialPageRoute(
