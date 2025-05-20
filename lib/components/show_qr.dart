@@ -9,6 +9,7 @@ import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/models/nonce.dart';
 import 'package:medigram_app/services/auth_service.dart';
+import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 import 'package:medigram_app/utils/qr_image.dart';
 import 'package:medigram_app/constants/style.dart';
@@ -19,15 +20,22 @@ class ShowQr extends StatelessWidget {
   final Nonce nonce;
   final bool isConsult;
 
+  Future<void> regenerateQR(BuildContext context) async {
+    final response = await NonceService().requestNonce();
+    Map<String, dynamic> data = jsonDecode(response.body);
+    Nonce newNonce = Nonce.fromJson(data);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ShowQr(newNonce, isConsult)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<String>(
         future: () async {
-            // TODO don't call login here, this is just provisional
-            await AuthService().login("test@example.com", "test");
-            return signConsent(nonce.nonce);
-          }(),
+          // TODO don't call login here, this is just provisional
+          await AuthService().login("test@example.com", "test");
+          return signConsent(nonce.nonce);
+        }(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -71,14 +79,17 @@ class ShowQr extends StatelessWidget {
                                 style: content,
                               ),
                               Center(child: QRImage(signature)),
-                              Text(
-                                "Regenerate QR Code",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 13,
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(secondaryColor2),
+                              InkWell(
+                                child: Text(
+                                  "Regenerate QR Code",
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 13,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(secondaryColor2),
+                                  ),
                                 ),
+                                onTap: () => regenerateQR(context),
                               ),
                             ],
                           ),
@@ -139,7 +150,7 @@ DateTime expiredTime() {
 Future<String> signConsent(String nonce) async {
   String? pk = await SecureStorageService().read('private_key');
   String? deviceId = await SecureStorageService().read('device_id');
-  if(pk == null || deviceId == null) {
+  if (pk == null || deviceId == null) {
     // TODO handle error better
     throw Exception("not signed in");
   }

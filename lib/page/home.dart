@@ -62,55 +62,14 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Recent Consultations", style: header2),
-                  RecordCard(
-                    title: "Brian Wong",
-                    subtitle: "Doofenshmirtz Evil Incorporated",
-                    info1: "00/00/00",
-                    info2: "12:22",
-                    isMed: false,
-                  ),
-                  RecordCard(
-                    title: "Brian Wong",
-                    subtitle: "Doofenshmirtz Evil Incorporated",
-                    info1: "00/00/00",
-                    info2: "12:22",
-                    isMed: false,
-                  ),
-                  RecordCard(
-                    title: "Brian Wong",
-                    subtitle: "Doofenshmirtz Evil Incorporated",
-                    info1: "00/00/00",
-                    info2: "12:22",
-                    isMed: false,
-                  ),
-                  RecordCard(
-                    title: "Brian Wong",
-                    subtitle: "Doofenshmirtz Evil Incorporated",
-                    info1: "00/00/00",
-                    info2: "12:22",
-                    isMed: false,
-                  ),
-                  RecordCard(
-                    title: "Brian Wong",
-                    subtitle: "Doofenshmirtz Evil Incorporated",
-                    info1: "00/00/00",
-                    info2: "12:22",
-                    isMed: false,
-                  ),
-                  RecordCard(
-                    title: "Brian Wong",
-                    subtitle: "Doofenshmirtz Evil Incorporated",
-                    info1: "00/00/00",
-                    info2: "12:22",
-                    isMed: false,
-                  ),
-                  RecordCard(
-                    title: "Brian Wong",
-                    subtitle: "Doofenshmirtz Evil Incorporated",
-                    info1: "00/00/00",
-                    info2: "12:22",
-                    isMed: false,
-                  ),
+                  showRecords(),
+                  // RecordCard(
+                  //   title: "Brian Wong",
+                  //   subtitle: "Doofenshmirtz Evil Incorporated",
+                  //   info1: "00/00/00",
+                  //   info2: "12:22",
+                  //   isMed: false,
+                  // ),
                 ],
               ),
             ),
@@ -119,6 +78,15 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget showRecords(){
+  return Text("ok");
+  // return Column(
+  //   children: [
+
+  //   ],
+  // )
 }
 
 Widget mainFeature(BuildContext context, bool isPatient) {
@@ -135,7 +103,6 @@ Widget mainFeature(BuildContext context, bool isPatient) {
             context,
             MaterialPageRoute(
               builder: ((context) {
-
                 return ShowQr(nonce, true);
               }),
             ),
