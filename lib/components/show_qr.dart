@@ -33,7 +33,7 @@ class ShowQr extends StatelessWidget {
       body: FutureBuilder<String>(
         future: () async {
           // TODO don't call login here, this is just provisional
-          await AuthService().login("test@example.com", "test");
+          // await AuthService().login("test@example.com", "test");
           return signConsent(nonce.nonce);
         }(),
         builder: (context, snapshot) {
