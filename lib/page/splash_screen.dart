@@ -9,7 +9,7 @@ import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 
 /// The initial screen shown when the app starts.
-/// 
+///
 /// This screen handles the app's initial loading state and authentication flow.
 /// It attempts to auto-login users based on stored credentials or development mode settings.
 class SplashScreen extends StatefulWidget {
@@ -40,8 +40,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => const BottomNavigationMenu(true),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const BottomNavigationMenu(true),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
                       return FadeTransition(opacity: animation, child: child);
                     },
                   ),
@@ -53,8 +55,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
                       return FadeTransition(opacity: animation, child: child);
                     },
                   ),
@@ -67,8 +71,10 @@ class _SplashScreenState extends State<SplashScreen> {
               Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const LoginPage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
                     return FadeTransition(opacity: animation, child: child);
                   },
                 ),
@@ -84,8 +90,10 @@ class _SplashScreenState extends State<SplashScreen> {
           if (sessionID != null && deviceID != null && privateKey != null) {
             // We have stored credentials, try to validate them
             try {
-              final storedCredentials = await AuthService().getStoredCredentials();
-              if (storedCredentials['email'] != null && storedCredentials['password'] != null) {
+              final storedCredentials =
+                  await AuthService().getStoredCredentials();
+              if (storedCredentials['email'] != null &&
+                  storedCredentials['password'] != null) {
                 final response = await AuthService().login(
                   storedCredentials['email']!,
                   storedCredentials['password']!,
@@ -96,9 +104,12 @@ class _SplashScreenState extends State<SplashScreen> {
                     Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) => const BottomNavigationMenu(true),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          return FadeTransition(opacity: animation, child: child);
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const BottomNavigationMenu(true),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                              opacity: animation, child: child);
                         },
                       ),
                     );
@@ -110,9 +121,12 @@ class _SplashScreenState extends State<SplashScreen> {
                     Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          return FadeTransition(opacity: animation, child: child);
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const LoginPage(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                              opacity: animation, child: child);
                         },
                       ),
                     );
@@ -125,8 +139,10 @@ class _SplashScreenState extends State<SplashScreen> {
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const LoginPage(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
                         return FadeTransition(opacity: animation, child: child);
                       },
                     ),
@@ -140,8 +156,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
                       return FadeTransition(opacity: animation, child: child);
                     },
                   ),
@@ -153,8 +171,10 @@ class _SplashScreenState extends State<SplashScreen> {
             Navigator.pushReplacement(
               context,
               PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const LoginPage(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
                   return FadeTransition(opacity: animation, child: child);
                 },
               ),
@@ -169,10 +189,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          "Medigram",
-          style: GoogleFonts.playfairDisplay(fontSize: 40),
+        child: Image.asset(
+          'assets/icons/medigram.png',
+          // width: 50,
         ),
+        // Text(
+        //   "Medigram",
+        //   style: GoogleFonts.montserratAlternates(fontSize: 40, fontWeight: FontWeight.bold),
+        // ),
       ),
     );
   }

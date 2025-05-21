@@ -8,9 +8,12 @@ import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/models/nonce.dart';
+import 'package:medigram_app/models/user/user_detail.dart';
+import 'package:medigram_app/models/user/user_measurement.dart';
 import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
+import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/utils/qr_image.dart';
 import 'package:medigram_app/constants/style.dart';
 
@@ -24,7 +27,8 @@ class ShowQr extends StatelessWidget {
     final response = await NonceService().requestNonce();
     Map<String, dynamic> data = jsonDecode(response.body);
     Nonce newNonce = Nonce.fromJson(data);
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ShowQr(newNonce, isConsult)));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (_) => ShowQr(newNonce, isConsult)));
   }
 
   @override
@@ -109,13 +113,7 @@ class ShowQr extends StatelessWidget {
                               "Your ${isConsult ? "Profile" : "Consultation"}",
                               style: header2,
                             ),
-                            RecordCard(
-                              title: "ABCDE",
-                              subtitle: "Female | 21 years old",
-                              info1: "123",
-                              info2: "123",
-                              isMed: false,
-                            ),
+                            showProfile(),
                           ],
                         ),
                         WarningCard(
@@ -167,4 +165,30 @@ Future<String> signConsent(String nonce) async {
   final base64Signature = base64.encode(signature.bytes);
 
   return base64Signature;
+}
+
+Widget showProfile() {
+  UserDetail user = getUserDetail() as UserDetail;
+  UserMeasurement userDetail = getUserMeasurement() as UserMeasurement;
+  return RecordCard(
+    title: user.name,
+    subtitle:  "${user.gender} | ${user.dob} years old",
+    info1: "${userDetail.heightInCm} cm",
+    info2: "${userDetail.weightInKg} kg",
+    isMed: false,
+  );
+}
+
+Future<UserDetail> getUserDetail() async {
+  final response = await UserService().getUserDetail();
+  Map<String, dynamic> data = jsonDecode(response.body);
+  UserDetail user = UserDetail.fromJson(data);
+  return user;
+}
+
+Future<UserMeasurement> getUserMeasurement() async {
+  final response = await UserService().getMeasure();
+  Map<String, dynamic> data = jsonDecode(response.body);
+  UserMeasurement user = UserMeasurement.fromJson(data);
+  return user;
 }
