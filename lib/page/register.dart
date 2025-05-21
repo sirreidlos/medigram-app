@@ -51,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
             if (loginResponse.statusCode == 200) {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const BottomNavigationMenu()),
+                MaterialPageRoute(builder: (context) => const BottomNavigationMenu(true)),
               );
             } else {
               if (mounted) {

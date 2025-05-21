@@ -12,6 +12,7 @@ import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/nonce.dart';
 import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
+import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/services/consultation_service.dart';
@@ -20,9 +21,9 @@ import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/user_service.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage(this.isPatient, {super.key});
 
-  final bool isPatient = false;
+  final bool isPatient;
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +51,19 @@ class HomePage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Hello, ${isPatient ? "" : "Dr. "}Jane Doe",
+                        "Hello, ${isPatient ? "" : "Dr. "}Jane Doe", //TODO Change to dynamic data
                         style: title,
                       ),
                       Spacer(),
-                      Icon(Icons.swap_horiz_rounded),
+                      IconButton(
+                        icon: Icon(Icons.swap_horiz_rounded),
+                        onPressed: () => {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => BottomNavigationMenu(!isPatient)))
+                        },
+                      ),
                       Icon(Icons.notifications),
                     ],
                   ),
@@ -63,7 +72,17 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            RecordHistory(isPatient, true)
+            Container(
+              padding: EdgeInsets.all(screenPadding),
+              child: Column(
+                spacing: 10,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Recent Consultations", style: header2),
+                  RecordHistory(isPatient, true)
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -72,47 +91,72 @@ class HomePage extends StatelessWidget {
 }
 
 Widget mainFeature(BuildContext context, bool isPatient) {
-  return SizedBox(
-    width: double.infinity,
-    child: ElevatedButton(
-      onPressed: () async {
-        if (isPatient) {
-          final response = await NonceService().requestNonce();
-          // TODO error handle, show toast or something if it's not 200 OK
-          Map<String, dynamic> data = jsonDecode(response.body);
-          Nonce nonce = Nonce.fromJson(data); // get code from data
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: ((context) {
-                return ShowQr(nonce, true);
-              }),
-            ),
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: ((context) {
-                // return ScanQR();
-                return ConsultForm(
-                    "abcde"); // TODO: Dev only, uncomment above code
-              }),
-            ),
-          );
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(primaryColor1),
-        padding: EdgeInsets.only(top: 30, bottom: 30, left: 0, right: 0),
-        foregroundColor: Colors.black,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-      child: Text(
-        isPatient ? "Start Consultation" : "Scan Patient Data",
-        style: header1,
-      ),
-    ),
+  return Column(
+    spacing: isPatient ? 0 : 10,
+    children: [
+      isPatient
+          ? SizedBox(
+              height: 0,
+            )
+          : Row(children: [
+              Icon(Icons.location_on),
+              Text("Practice Address",
+                  style: title) //TODO Change to dynamic data
+            ]),
+      SizedBox(
+        width: double.infinity,
+        height: 80,
+        child: ElevatedButton(
+          onPressed: () async {
+            if (isPatient) {
+              final response = await NonceService().requestNonce();
+              // TODO error handle, show toast or something if it's not 200 OK
+              Map<String, dynamic> data = jsonDecode(response.body);
+              Nonce nonce = Nonce.fromJson(data); // get code from data
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) {
+                    return ShowQr(nonce, true);
+                  }),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) {
+                    // return ScanQR();
+                    return ConsultForm(
+                        "abcde"); // TODO: Dev only, uncomment above code
+                  }),
+                ),
+              );
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(primaryColor1),
+            padding: EdgeInsets.all(screenPadding),
+            foregroundColor: Colors.black,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          child: Row(
+            spacing: screenPadding,
+            children: [
+              Image.asset(
+                'assets/icons/start-consultation.png',
+                width: 50,
+              ),
+              Text(
+                isPatient ? "Start Consultation" : "Scan Patient Data",
+                style: header1,
+              ),
+            ],
+          ),
+        ),
+      )
+    ],
   );
 }
 
@@ -141,16 +185,25 @@ Widget medsHandler(BuildContext context) {
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(primaryColor2),
-            padding: EdgeInsets.only(top: 30, bottom: 30, left: 0, right: 0),
+            padding: EdgeInsets.all(screenPadding),
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: Text(
-            "Meds Claim",
-            style: header1,
-            textAlign: TextAlign.center,
+          child: Column(
+            spacing: 10,
+            children: [
+              Image.asset(
+                'assets/icons/meds-claim.png',
+                width: 50,
+              ),
+              Text(
+                "Meds Claim",
+                style: header1,
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ),
@@ -159,16 +212,29 @@ Widget medsHandler(BuildContext context) {
           onPressed: () {},
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(secondaryColor2),
-            padding: EdgeInsets.only(top: 30, bottom: 30, left: 0, right: 0),
+            padding: EdgeInsets.only(
+                left: screenPadding - 5,
+                right: screenPadding - 5,
+                top: screenPadding,
+                bottom: screenPadding),
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: Text(
-            "Meds Regimen",
-            style: header1,
-            textAlign: TextAlign.center,
+          child: Column(
+            spacing: 10,
+            children: [
+              Image.asset(
+                'assets/icons/meds-regiment.png',
+                width: 50,
+              ),
+              Text(
+                "Meds Regiment",
+                style: header1,
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ),

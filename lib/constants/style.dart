@@ -6,7 +6,7 @@ int primaryColor2 = 0xff2ca58d;
 int secondaryColor1 = 0xfff0f0f0;
 int secondaryColor2 = 0xff003e6b;
 
-double screenPadding = 30;
+double screenPadding = 20;
 double topScreenPadding = 60;
 
 TextStyle title = GoogleFonts.poppins(fontSize: 16);

@@ -5,7 +5,9 @@ import 'package:medigram_app/page/record.dart';
 import 'package:medigram_app/constants/style.dart';
 
 class BottomNavigationMenu extends StatefulWidget {
-  const BottomNavigationMenu({super.key});
+  const BottomNavigationMenu(this.isPatient, {super.key});
+
+  final bool isPatient;
 
   @override
   State<BottomNavigationMenu> createState() => _BottomNavigationMenuState();
@@ -13,11 +15,6 @@ class BottomNavigationMenu extends StatefulWidget {
 
 class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [
-    HomePage(),
-    RecordPage(),
-    ProfilePage()
-  ];
 
   void onTapMenu(int index) {
     setState(() {
@@ -27,6 +24,11 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      HomePage(widget.isPatient),
+      RecordPage(),
+      ProfilePage()
+    ];
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -40,20 +42,17 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
         onTap: onTapMenu,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: ""
-          ),
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: ""),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_outlined),
-            activeIcon: Icon(Icons.assignment),
-            label: ""
-          ),
+              icon: Icon(Icons.assignment_outlined),
+              activeIcon: Icon(Icons.assignment),
+              label: ""),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_2_outlined),
-            activeIcon: Icon(Icons.person_2_rounded),
-            label: ""
-          ),
+              icon: Icon(Icons.person_2_outlined),
+              activeIcon: Icon(Icons.person_2_rounded),
+              label: ""),
         ],
       ),
     );

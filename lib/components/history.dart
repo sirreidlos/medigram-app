@@ -19,15 +19,7 @@ class RecordHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(screenPadding),
-      child: Column(
-        spacing: 10,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(topN ? "Recent Consultations" : "Consultations History", style: header2),
-          showRecords(isPatient),
-        ],
-      ),
+      child: showRecords(isPatient),
     );
   }
 
@@ -41,12 +33,20 @@ class RecordHistory extends StatelessWidget {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final listConsult = snapshot.data;
+            if (listConsult!.isEmpty) {
+              return SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    "No consultations yet!",
+                    style: body,
+                  ));
+            }
             return ListView.builder(
-                itemCount: listConsult == null
-                    ? 0
-                    : (topN
-                        ? (listConsult.length < 3 ? listConsult.length : 3)
-                        : listConsult.length),
+                itemCount: topN
+                    ? (listConsult.length < 3 ? listConsult.length : 3)
+                    : listConsult.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return RecordCard(
                     title: isPatient
@@ -67,20 +67,25 @@ class RecordHistory extends StatelessWidget {
                   );
                 });
           } else {
-            return Center(child: Text("No consultations yet!"));
+            return SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "No consultations yet!",
+                  style: body,
+                ));
           }
         });
   }
 
   Future<List<Consultation>> getConsultation(bool isPatient) async {
     // if (isPatient == true) {
-      final response = await ConsultationService().getConsultation();
-      final List data = jsonDecode(response.body);
-      return data.map((e) => Consultation.fromJson(e)).toList();
+    final response = await ConsultationService().getConsultation();
+    final List data = jsonDecode(response.body);
+    return data.map((e) => Consultation.fromJson(e)).toList();
     // } else {
-      // final response = await ConsultationService().getConsultationDoctor(); // TODO Add route
-      // final List data = jsonDecode(response.body);
-      // return data.map((e) => Consultation.fromJson(e)).toList();
+    // final response = await ConsultationService().getConsultationDoctor(); // TODO Add route
+    // final List data = jsonDecode(response.body);
+    // return data.map((e) => Consultation.fromJson(e)).toList();
     // }
   }
 
