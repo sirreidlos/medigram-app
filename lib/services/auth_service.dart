@@ -56,6 +56,7 @@ class AuthService {
       developer.log('Login successful, saving auth data');
 
       await saveAuthData(
+        userID: auth.userID,
         sessionID: auth.sessionID,
         tokenType: auth.tokenType,
         deviceID: auth.deviceID,
@@ -103,6 +104,7 @@ class AuthService {
   /// [email] - The user's email address
   /// [password] - The user's password
   Future<void> saveAuthData({
+    required String userID,
     required String sessionID,
     required String tokenType,
     required String deviceID,
@@ -111,6 +113,7 @@ class AuthService {
     required String password,
   }) async {
     developer.log('Saving auth data - Session ID: $sessionID');
+    await SecureStorageService().write('user_id', userID);
     await SecureStorageService().write('session_id', sessionID);
     await SecureStorageService().write('token_type', tokenType);
     await SecureStorageService().write('device_id', deviceID);
