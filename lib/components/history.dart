@@ -79,7 +79,7 @@ class RecordHistory extends StatelessWidget {
 
   Future<List<Consultation>> getConsultation(bool isPatient) async {
     // if (isPatient == true) {
-    final response = await ConsultationService().getConsultation();
+    final response = await ConsultationService().getOwnConsultation();
     final List data = jsonDecode(response.body);
     return data.map((e) => Consultation.fromJson(e)).toList();
     // } else {
@@ -91,14 +91,14 @@ class RecordHistory extends StatelessWidget {
 
   Future<UserDetail> getUserDetail(String userID) async {
     // final response = await UserService().getUserDetail(userID); //TODO Add route
-    final response = await UserService().getUserDetail();
+    final response = await UserService().getOwnDetail();
     Map<String, dynamic> data = jsonDecode(response.body);
     UserDetail user = UserDetail.fromJson(data);
     return user;
   }
 
   Future<Doctor> getDoctor(String doctorID) async {
-    final response = await DoctorService().getDoctor(doctorID);
+    final response = await DoctorService().getDoctorByID(doctorID);
     Map<String, dynamic> data = jsonDecode(response.body);
     Doctor doctor = Doctor.fromJson(data);
     return doctor;

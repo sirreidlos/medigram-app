@@ -5,8 +5,8 @@ import 'package:medigram_app/constants/api.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 
 class UserService {
-  Future<http.Response> getUser() async {
-    final String url = "${Api.API_BASE_URL}/user";
+  Future<http.Response> getOwnInfo() async {
+    final String url = "${Api.API_BASE_URL}/me";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.get(
@@ -20,8 +20,8 @@ class UserService {
     return response;
   }
 
-  Future<http.Response> getUserDetail() async {
-    final String url = "${Api.API_BASE_URL}/user-detail";
+  Future<http.Response> getOwnDetail() async {
+    final String url = "${Api.API_BASE_URL}/me/details";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.get(
@@ -35,13 +35,13 @@ class UserService {
     return response;
   }
 
-  Future<http.Response> putUserDetail(
+  Future<http.Response> putOwnDetail(
     String nik,
     String name,
     DateTime dob,
     String gender,
   ) async {
-    final String url = "${Api.API_BASE_URL}/user-detail";
+    final String url = "${Api.API_BASE_URL}/me/details";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.put(
@@ -61,8 +61,8 @@ class UserService {
     return response;
   }
 
-  Future<http.Response> getAllergy() async {
-    final String url = "${Api.API_BASE_URL}/allergy";
+  Future<http.Response> getOwnAllergy() async {
+    final String url = "${Api.API_BASE_URL}/me/allergies";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.get(
@@ -76,8 +76,8 @@ class UserService {
     return response;
   }
 
-  Future<http.Response> postAllergy(String allergen, String severity) async {
-    final String url = "${Api.API_BASE_URL}/allergy";
+  Future<http.Response> postOwnAllergy(String allergen, String severity) async {
+    final String url = "${Api.API_BASE_URL}/me/allergies";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.post(
@@ -93,7 +93,7 @@ class UserService {
   }
 
   Future<http.Response> deleteAllergy(String allergyID) async {
-    final String url = "${Api.API_BASE_URL}/allergy";
+    final String url = "${Api.API_BASE_URL}/me/allergies/$allergyID";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.delete(
@@ -102,14 +102,13 @@ class UserService {
         "Content-Type": "application/json",
         "Authorization": "Bearer $sessionID",
       },
-      body: jsonEncode({"allergy_id": allergyID}),
     );
 
     return response;
   }
 
-  Future<http.Response> getMeasure() async {
-    final String url = "${Api.API_BASE_URL}/user-measurement";
+  Future<http.Response> getOwnMeasurements() async {
+    final String url = "${Api.API_BASE_URL}/me/measurements";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.get(
@@ -123,11 +122,11 @@ class UserService {
     return response;
   }
 
-  Future<http.Response> postMeasure(
+  Future<http.Response> postOwnMeasurements(
     double weightInKg,
     double heightInCm,
   ) async {
-    final String url = "${Api.API_BASE_URL}/user-measurement";
+    final String url = "${Api.API_BASE_URL}/me/measurements";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.post(

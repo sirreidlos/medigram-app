@@ -180,14 +180,14 @@ Widget showProfile() {
 }
 
 Future<UserDetail> getUserDetail() async {
-  final response = await UserService().getUserDetail();
+  final response = await UserService().getOwnDetail();
   Map<String, dynamic> data = jsonDecode(response.body);
   UserDetail user = UserDetail.fromJson(data);
   return user;
 }
 
 Future<UserMeasurement> getUserMeasurement() async {
-  final response = await UserService().getMeasure();
+  final response = await UserService().getOwnMeasurements();
   Map<String, dynamic> data = jsonDecode(response.body);
   UserMeasurement user = UserMeasurement.fromJson(data);
   return user;

@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _loadUserData() async {
     try {
-      final userResponse = await UserService().getUser();
+      final userResponse = await UserService().getOwnInfo();
       if (userResponse.statusCode == 200) {
         final userData = jsonDecode(userResponse.body);
         setState(() {
@@ -36,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
 
         // Load user details
-        final detailResponse = await UserService().getUserDetail();
+        final detailResponse = await UserService().getOwnDetail();
         if (detailResponse.statusCode == 200) {
           final detailData = jsonDecode(detailResponse.body);
           setState(() {
