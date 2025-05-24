@@ -9,24 +9,28 @@ class Input extends StatelessWidget {
     required this.isDisabled,
     required this.useIcon,
     required this.inputType,
-    this.initValue,
+    required this.controller,
+    // this.initValue,
     super.key,
   });
 
   final String header;
   final String placeholder;
   final bool isDisabled;
-  final String? initValue;
+  // final String? initValue;
   final Icon useIcon;
   final TextInputType inputType;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(10),
+      padding: isDisabled ? EdgeInsets.zero : EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Color(secondaryColor1).withValues(alpha: 0.65),
+        color: isDisabled
+            ? Colors.transparent
+            : Color(secondaryColor1).withValues(alpha: 0.65),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(
@@ -46,48 +50,49 @@ class Input extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: isDisabled ? Colors.black.withValues(alpha: 0.75) : Colors.black,
+                      color: Colors.black,
                     ),
                   ),
                 ),
                 placeholder != ""
                     ? TextFormField(
-                      initialValue: initValue,
-                      keyboardType: inputType,
-                      maxLines: 1,
-                      readOnly: isDisabled ? true : false,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 0,
-                          vertical: 0,
+                        keyboardType: inputType,
+                        maxLines: null,
+                        readOnly: isDisabled ? true : false,
+                        controller: controller,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 0,
+                            ),
+                            isDense: true,
+                            border: InputBorder.none,
+                            hintText: placeholder,
+                            hintStyle: TextStyle(
+                                color: isDisabled
+                                    ? Color(secondaryColor2)
+                                    : Colors.black.withValues(alpha: 0.5))),
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight:
+                              isDisabled ? FontWeight.w600 : FontWeight.w500,
+                          color: (isDisabled
+                              ? Color(secondaryColor2)
+                              : Colors.black),
+                              
                         ),
-                        isDense: true,
-                        border: InputBorder.none,
-                        hintText: placeholder,
-                        hintStyle: TextStyle(color: isDisabled
-                                ? Color(secondaryColor2).withValues(alpha: 0.5)
-                                : Colors.black.withValues(alpha: 0.5))
-                      ),
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: isDisabled ? FontWeight.w600 : FontWeight.w500,
-                        color:
-                            (isDisabled
-                                ? Color(secondaryColor2).withValues(alpha: 0.75)
-                                : Colors.black),
-                      ),
-                    )
+                      )
                     : Container(),
               ],
             ),
           ),
           useIcon.icon != null
               ? (IconButton(
-                onPressed: () {},
-                icon: useIcon,
-                iconSize: 20,
-                padding: EdgeInsets.zero,
-              ))
+                  onPressed: () {},
+                  icon: useIcon,
+                  iconSize: 20,
+                  padding: EdgeInsets.zero,
+                ))
               : Container(),
         ],
       ),

@@ -72,7 +72,10 @@ class HomePage extends StatelessWidget {
                               snapshot.data != null;
 
                           return IconButton(
-                            icon: Icon(Icons.swap_horiz_rounded),
+                            icon: Icon(
+                              Icons.swap_horiz_rounded,
+                              color: Colors.black,
+                            ),
                             onPressed: isEnabled
                                 ? () async {
                                     await SharedPrefsHelper.saveUserRole(
@@ -124,24 +127,27 @@ Widget mainFeature(BuildContext context, bool isPatient) {
               height: 0,
             )
           : Row(children: [
-              Icon(Icons.location_on),
-              FutureBuilder(
-                  future: getDoctor(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (snapshot.hasData) {
-                      return Text(
-                        snapshot.data!.practiceAddress,
-                        style: title,
-                      );
-                    } else {
-                      return Center(child: Text("No data found"));
-                    }
-                  }),
-            ]),
+                Icon(Icons.location_on),
+                FutureBuilder(
+                    future: getDoctor(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.hasData) {
+                        return Expanded(
+                          child: Text(
+                            snapshot.data!.practiceAddress,
+                            style: title,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        );
+                      } else {
+                        return Center(child: Text("No data found"));
+                      }
+                    }),
+              ]),
       SizedBox(
         width: double.infinity,
         height: 80,
@@ -265,11 +271,11 @@ Widget medsHandler(BuildContext context) {
             spacing: 10,
             children: [
               Image.asset(
-                'assets/icons/meds-regiment.png',
+                'assets/icons/meds-regimen.png',
                 width: 50,
               ),
               Text(
-                "Meds Regiment",
+                "Meds Regimen",
                 style: header1,
                 textAlign: TextAlign.center,
               ),
