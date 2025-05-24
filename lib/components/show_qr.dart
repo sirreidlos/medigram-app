@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:medigram_app/components/popup_header.dart';
+import 'package:medigram_app/components/qr_profile.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/models/nonce.dart';
@@ -36,8 +37,6 @@ class ShowQr extends StatelessWidget {
     return Scaffold(
       body: FutureBuilder<String>(
         future: () async {
-          // TODO don't call login here, this is just provisional
-          // await AuthService().login("test@example.com", "test");
           return signConsent(nonce.nonce);
         }(),
         builder: (context, snapshot) {
@@ -101,34 +100,11 @@ class ShowQr extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(screenPadding),
-                    child: Column(
-                      spacing: 50,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Your ${isConsult ? "Profile" : "Consultation"}",
-                              style: header2,
-                            ),
-                            showProfile(),
-                          ],
-                        ),
-                        WarningCard(
-                          isConsult
-                              ? "Make sure your physician already asks for your information!"
-                              : "You can only purchase this prescription once!",
-                        ),
-                      ],
-                    ),
-                  ),
+                  QRProfile(isConsult)
                 ],
               ),
             );
           } else {
-            // no data (unlikely)
             return Center(child: Text("No signature found"));
           }
         },
@@ -167,28 +143,3 @@ Future<String> signConsent(String nonce) async {
   return base64Signature;
 }
 
-Widget showProfile() {
-  UserDetail user = getUserDetail() as UserDetail;
-  UserMeasurement userDetail = getUserMeasurement() as UserMeasurement;
-  return RecordCard(
-    title: user.name,
-    subtitle:  "${user.gender} | ${user.dob} years old",
-    info1: "${userDetail.heightInCm} cm",
-    info2: "${userDetail.weightInKg} kg",
-    isMed: false,
-  );
-}
-
-Future<UserDetail> getUserDetail() async {
-  final response = await UserService().getOwnDetail();
-  Map<String, dynamic> data = jsonDecode(response.body);
-  UserDetail user = UserDetail.fromJson(data);
-  return user;
-}
-
-Future<UserMeasurement> getUserMeasurement() async {
-  final response = await UserService().getOwnMeasurements();
-  Map<String, dynamic> data = jsonDecode(response.body);
-  UserMeasurement user = UserMeasurement.fromJson(data);
-  return user;
-}
