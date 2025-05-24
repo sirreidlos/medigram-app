@@ -4,11 +4,8 @@ import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
-import 'package:medigram_app/navigation/layout_navbar.dart';
-import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/utils/line.dart';
 import 'package:medigram_app/constants/style.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ConsultForm extends StatelessWidget {
   const ConsultForm(this.barcode, {super.key});

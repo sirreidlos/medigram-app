@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/constants/style.dart';
-import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/models/user/user_measurement.dart';
 import 'package:medigram_app/services/user_service.dart';

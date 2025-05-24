@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/page/form.dart';
-import 'package:medigram_app/page/record.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 

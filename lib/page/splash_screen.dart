@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:medigram_app/constants/dev_config.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/login.dart';

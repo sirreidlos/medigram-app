@@ -1,20 +1,13 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/qr_profile.dart';
-import 'package:medigram_app/components/record_card.dart';
-import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/models/nonce.dart';
-import 'package:medigram_app/models/user/user_detail.dart';
-import 'package:medigram_app/models/user/user_measurement.dart';
-import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
-import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/utils/qr_image.dart';
 import 'package:medigram_app/constants/style.dart';
 

@@ -1,21 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:medigram_app/components/history.dart';
-import 'package:medigram_app/components/input.dart';
-import 'package:medigram_app/components/record_card.dart';
-import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/show_qr.dart';
-import 'package:medigram_app/models/consultation/consultation.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/nonce.dart';
-import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
-import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/user_service.dart';
@@ -50,18 +43,47 @@ class HomePage extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        "Hello, ${isPatient ? "" : "Dr. "}Jane Doe", //TODO Change to dynamic data
-                        style: title,
-                      ),
+                      FutureBuilder(
+                          future: getUser(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            } else if (snapshot.hasData) {
+                              return Text(
+                                "Hello, ${isPatient ? "" : "Dr. "}${snapshot.data!.name}",
+                                style: title,
+                              );
+                            } else {
+                              return Center(child: Text("No data found"));
+                            }
+                          }),
                       Spacer(),
-                      IconButton(
-                        icon: Icon(Icons.swap_horiz_rounded),
-                        onPressed: () => {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => BottomNavigationMenu(!isPatient)))
+                      FutureBuilder(
+                        future: isPatient ? getDoctor() : Future.value(true),
+                        builder: (context, snapshot) {
+                          bool isEnabled = snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              snapshot.hasData &&
+                              snapshot.data != null;
+
+                          return IconButton(
+                            icon: Icon(Icons.swap_horiz_rounded),
+                            onPressed: isEnabled
+                                ? () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            BottomNavigationMenu(!isPatient),
+                                      ),
+                                    );
+                                  }
+                                : null,
+                          );
                         },
                       ),
                       Icon(Icons.notifications),
@@ -100,8 +122,22 @@ Widget mainFeature(BuildContext context, bool isPatient) {
             )
           : Row(children: [
               Icon(Icons.location_on),
-              Text("Practice Address",
-                  style: title) //TODO Change to dynamic data
+              FutureBuilder(
+                  future: getDoctor(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      return Text(
+                        snapshot.data!.practiceAddress,
+                        style: title,
+                      );
+                    } else {
+                      return Center(child: Text("No data found"));
+                    }
+                  }),
             ]),
       SizedBox(
         width: double.infinity,
@@ -240,4 +276,21 @@ Widget medsHandler(BuildContext context) {
       ),
     ],
   );
+}
+
+Future<UserDetail> getUser() async {
+  final response = await UserService().getOwnDetail();
+  Map<String, dynamic> data = jsonDecode(response.body);
+  UserDetail user = UserDetail.fromJson(data);
+  return user;
+}
+
+Future<Doctor> getDoctor() async {
+  UserDetail user = await getUser();
+  String userID = user.userID;
+
+  final response = await DoctorService().getDoctorByUserID(userID);
+  Map<String, dynamic> data = jsonDecode(response.body);
+  Doctor doctor = Doctor.fromJson(data);
+  return doctor;
 }
