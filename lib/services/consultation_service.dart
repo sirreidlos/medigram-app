@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:medigram_app/constants/api.dart';
 import 'package:medigram_app/models/consultation/post_consult.dart';
@@ -11,7 +13,7 @@ class ConsultationService {
     final response = await http.post(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
-      body: body.toJson(),
+      body: jsonEncode(body),
     );
     return response;
   }

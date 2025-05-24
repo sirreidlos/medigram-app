@@ -41,11 +41,11 @@ class CPrescription {
 }
 
 class PostConsult {
-  final Consent consent;
+  final String consent;
   final String userID;
-  final CDiagnosis diagnosis;
+  final List<CDiagnosis> diagnosis;
   final List<String> symptoms;
-  final CPrescription prescription;
+  final List<CPrescription> prescription;
 
   PostConsult({
     required this.consent,
@@ -57,15 +57,11 @@ class PostConsult {
 
   Map<String, dynamic> toJson() {
     return {
-      'consent': consent.toJson(),
+      'consent': consent,
       'user_id': userID,
-      'diagnoses': [
-        diagnosis.toJson(),
-      ], // Assuming it's a single diagnosis wrapped in a list
+      'diagnoses':  diagnosis,
       'symptoms': symptoms,
-      'prescriptions': [
-        prescription.toJson(),
-      ], // Assuming it's a single prescription wrapped in a list
+      'prescriptions': prescription
     };
   }
 }
