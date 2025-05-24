@@ -22,7 +22,7 @@ class Doctor {
       praticePermit: json["practice_permit"],
       practiceAddress: json["practice_address"],
       approved: json["approved"],
-      approvedAt: json["approved_at"],
+      approvedAt: DateTime.parse(json["approved_at"]),
     );
   }
 }

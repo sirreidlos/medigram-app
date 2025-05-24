@@ -20,8 +20,38 @@ class UserService {
     return response;
   }
 
+  Future<http.Response> getUserInfo(String userID) async {
+    final String url = "${Api.API_BASE_URL}/users/$userID";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
+    );
+
+    return response;
+  }
+
   Future<http.Response> getOwnDetail() async {
     final String url = "${Api.API_BASE_URL}/me/details";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
+    );
+
+    return response;
+  }
+
+  Future<http.Response> getUserDetail(String userID) async {
+    final String url = "${Api.API_BASE_URL}/users/$userID/details";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.get(
