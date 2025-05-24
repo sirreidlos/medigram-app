@@ -7,6 +7,7 @@ import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/models/user/user_measurement.dart';
 import 'package:medigram_app/services/user_service.dart';
+import 'package:medigram_app/utils/dob_age.dart';
 
 class QRProfile extends StatelessWidget {
   const QRProfile(this.isConsult, {super.key});
@@ -53,7 +54,7 @@ class QRProfile extends StatelessWidget {
             UserMeasurement userDetail = snapshot.data![1] as UserMeasurement;
             return RecordCard(
               title: user.name,
-              subtitle: "${user.gender} | ${user.dob} years old",
+              subtitle: "${user.gender} | ${dobToAge(user.dob)[2]} years and ${dobToAge(user.dob)[1]} months old",
               info1: "${userDetail.heightInCm} cm",
               info2: "${userDetail.weightInKg} kg",
               isMed: false,
