@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:medigram_app/components/history.dart';
 import 'package:medigram_app/components/show_qr.dart';
+import 'package:medigram_app/constants/user_status.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/nonce.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
@@ -73,7 +74,9 @@ class HomePage extends StatelessWidget {
                           return IconButton(
                             icon: Icon(Icons.swap_horiz_rounded),
                             onPressed: isEnabled
-                                ? () {
+                                ? () async {
+                                    await SharedPrefsHelper.saveUserRole(
+                                        !isPatient);
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
