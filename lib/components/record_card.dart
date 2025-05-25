@@ -7,6 +7,7 @@ class RecordCard extends StatelessWidget {
   String info1;
   String info2;
   bool isMed;
+  VoidCallback? onPressed;
 
   RecordCard({
     super.key,
@@ -15,6 +16,7 @@ class RecordCard extends StatelessWidget {
     required this.info1,
     required this.info2,
     required this.isMed,
+    this.onPressed,
   });
 
   @override

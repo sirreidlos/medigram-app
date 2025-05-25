@@ -115,7 +115,7 @@ class HomePage extends StatelessWidget {
                         "Recent Consultations",
                         style: header2,
                       ),
-                      RecordHistory(isPatient, true)
+                      RecordHistory(isPatient: isPatient, topN: true)
                     ],
                   ),
                 ],

@@ -8,26 +8,33 @@ import 'package:medigram_app/models/consultation/consultation.dart';
 import 'package:medigram_app/models/consultation/consultation_card.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
+import 'package:medigram_app/page/consultation_info.dart';
+import 'package:medigram_app/page/setup_reminder.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/user_service.dart';
 
 class RecordHistory extends StatelessWidget {
-  const RecordHistory(this.isPatient, this.topN, {super.key});
+  const RecordHistory(
+      {required this.isPatient,
+      required this.topN,
+      this.isReminder,
+      super.key});
 
   final bool isPatient;
   final bool topN;
+  final bool? isReminder;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: showRecords(isPatient),
+      child: showRecords(isPatient, context),
     );
   }
 
-  Widget showRecords(bool isPatient) {
+  Widget showRecords(bool isPatient, BuildContext context) {
     return FutureBuilder(
-        future: getConsultation(isPatient),
+        future: getConsultation(isPatient, context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -74,12 +81,20 @@ class RecordHistory extends StatelessWidget {
         });
   }
 
-  Future<List<ConsultationDetail>> getConsultation(bool isPatient) async {
+  Future<List<ConsultationDetail>> getConsultation(
+      bool isPatient, BuildContext context) async {
     List<Consultation> listConsult;
     if (isPatient == true) {
       final response = await ConsultationService().getOwnConsultation();
       final List data = jsonDecode(response.body);
       listConsult = data.map((e) => Consultation.fromJson(e)).toList();
+
+      if (isReminder != null) {
+        listConsult = data
+            .where((e) => e['reminded'] == (isReminder! ? false : true))
+            .map((e) => Consultation.fromJson(e))
+            .toList();
+      }
     } else {
       final response = await ConsultationService().getDoctorConsultation();
       final List data = jsonDecode(response.body);
@@ -93,9 +108,23 @@ class RecordHistory extends StatelessWidget {
       String title = "DOCTOR OR PATIENT NAME";
       // String title = isPatient ? "Dr. ${doctor.name}" : patient.name; //TODO Update
       listDetail.add(ConsultationDetail(
-          consultation: consult,
-          title: title,
-          practiceAddress: doctor.practiceAddress));
+        consultation: consult,
+        title: title,
+        practiceAddress: doctor.practiceAddress,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: ((context) {
+                if (isReminder != null) {
+                  return SetupReminder(consult.consultationID);
+                }
+                return ConsultationInfo(consult.consultationID);
+              }),
+            ),
+          );
+        },
+      ));
     }
     return listDetail;
   }

@@ -30,7 +30,8 @@ class RecordPage extends StatelessWidget {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
-                      return RecordHistory(snapshot.data!, false);
+                      return RecordHistory(
+                          isPatient: snapshot.data!, topN: false);
                     } else {
                       return Center(child: Text("No data found"));
                     }

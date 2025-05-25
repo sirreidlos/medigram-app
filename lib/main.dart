@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:medigram_app/page/splash_screen.dart';
+import 'package:medigram_app/services/reminder_service.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
+  await ReminderService().initNotifications();
   runApp(const MyApp());
 }
 
@@ -16,4 +21,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
