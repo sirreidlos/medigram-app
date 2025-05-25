@@ -137,6 +137,52 @@ class UserService {
     return response;
   }
 
+  Future<http.Response> getOwnConditions() async {
+    final String url = "${Api.API_BASE_URL}/me/medical-conditions";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
+    );
+
+    return response;
+  }
+
+  Future<http.Response> postOwnConditions(String conditions) async {
+    final String url = "${Api.API_BASE_URL}/me/medical-conditions";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
+      body: jsonEncode({"conditions": conditions}),
+    );
+
+    return response;
+  }
+
+  Future<http.Response> deleteConditions(String conditionsID) async {
+    final String url = "${Api.API_BASE_URL}/me/medical-conditions/$conditionsID";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.delete(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
+    );
+
+    return response;
+  }
+
   Future<http.Response> getOwnMeasurements() async {
     final String url = "${Api.API_BASE_URL}/me/measurements";
     final sessionID = await SecureStorageService().read('session_id');
@@ -192,6 +238,21 @@ class UserService {
 
   Future<http.Response> getUserMeasurement(String userID) async {
     final String url = "${Api.API_BASE_URL}/users/$userID/measurements";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
+    );
+
+    return response;
+  }
+
+  Future<http.Response> getUserConditions(String userID) async {
+    final String url = "${Api.API_BASE_URL}/users/$userID/medical-conditions";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.get(

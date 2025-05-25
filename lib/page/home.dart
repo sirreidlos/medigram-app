@@ -5,14 +5,11 @@ import 'package:medigram_app/components/history.dart';
 import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/show_qr.dart';
 import 'package:medigram_app/constants/user_status.dart';
-import 'package:medigram_app/models/consultation/consent.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/nonce.dart';
-import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/constants/style.dart';
-import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/user_service.dart';
@@ -175,33 +172,6 @@ Widget mainFeature(BuildContext context, bool isPatient) {
                 MaterialPageRoute(
                   builder: ((context) {
                     return ScanQR();
-
-                    // TODO: Dev only, uncomment above code
-                    // return ConsultForm(QrData(
-                    //     consent: Consent(
-                    //         signerDeviceID:
-                    //             "75f6c55b-6451-4977-b1d7-e5f9ab795c23",
-                    //         nonce: [
-                    //           81,
-                    //           51,
-                    //           102,
-                    //           104,
-                    //           115,
-                    //           103,
-                    //           71,
-                    //           74,
-                    //           116,
-                    //           57,
-                    //           89,
-                    //           115,
-                    //           53,
-                    //           121,
-                    //           51,
-                    //           100
-                    //         ],
-                    //         signature:
-                    //             "UhoAKhWFNvHlzmT96ZfaY4ZX0X4G84nZX9wctZ9QNEI+K0T4xNj2nW1mGpLgeXXUwBsuvVVg6eqB1cEtyAKdBg=="),
-                    //     userID: "41490144-e4e1-4d1f-9eb7-f90af81c12ce"));
                   }),
                 ),
               );

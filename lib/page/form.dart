@@ -9,10 +9,10 @@ import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/models/consultation/post_consult.dart';
 import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/models/user/allery.dart';
+import 'package:medigram_app/models/user/medical_conditions.dart';
 import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/models/user/user_measurement.dart';
-import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/utils/dob_age.dart';
 import 'package:medigram_app/utils/line.dart';
@@ -148,6 +148,7 @@ class _ConsultFormState extends State<ConsultForm> {
                   getUserDetail(widget.qrData.userID),
                   getUserMeasurement(widget.qrData.userID),
                   getUserAllergy(widget.qrData.userID),
+                  getUserConditions(widget.qrData.userID),
                 ]),
                 builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -159,6 +160,7 @@ class _ConsultFormState extends State<ConsultForm> {
                     UserMeasurement userDetail =
                         snapshot.data![1] as UserMeasurement;
                     List<Allergy> allergy = snapshot.data![2] as List<Allergy>;
+                    List<MedicalConditions> conditions = snapshot.data![3] as List<MedicalConditions>;
                     return Column(
                       spacing: 15,
                       children: [
@@ -255,8 +257,13 @@ class _ConsultFormState extends State<ConsultForm> {
                           ],
                         ),
                         Input(
-                          header: "Medical Conditions", //TODO Add field
-                          placeholder: "ADHD AUTISM",
+                          header: "Medical Conditions",
+                          placeholder: conditions.isEmpty
+                                  ? "-"
+                                  : conditions
+                                      .map((c) =>
+                                          "${c.conditions}")
+                                      .join(", "),
                           isDisabled: true,
                           useIcon: Icon(null),
                           controller: TextEditingController(),
@@ -516,6 +523,13 @@ Future<List<Allergy>> getUserAllergy(String userID) async {
   List<dynamic> data = jsonDecode(response.body);
   List<Allergy> allergies = data.map((e) => Allergy.fromJson(e)).toList();
   return allergies;
+}
+
+Future<List<MedicalConditions>> getUserConditions(String userID) async {
+  final response = await UserService().getUserConditions(userID);
+  List<dynamic> data = jsonDecode(response.body);
+  List<MedicalConditions> conditions = data.map((e) => MedicalConditions.fromJson(e)).toList();
+  return conditions;
 }
 
 String getSeverity(String severity) {
