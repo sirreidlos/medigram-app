@@ -14,23 +14,23 @@ class BottomNavigationMenu extends StatefulWidget {
 }
 
 class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
-  int _currentIndex = 0;
+  int currentIndex = 0;
 
   void onTapMenu(int index) {
     setState(() {
-      _currentIndex = index;
+      currentIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       HomePage(widget.isPatient),
       RecordPage(),
       ProfilePage()
     ];
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
@@ -38,7 +38,7 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
         unselectedItemColor: Color(secondaryColor1),
         selectedItemColor: Colors.white,
         iconSize: 30,
-        currentIndex: _currentIndex,
+        currentIndex: currentIndex,
         onTap: onTapMenu,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

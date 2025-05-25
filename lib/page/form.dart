@@ -13,6 +13,7 @@ import 'package:medigram_app/models/user/medical_conditions.dart';
 import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/models/user/user_measurement.dart';
+import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/utils/dob_age.dart';
 import 'package:medigram_app/utils/line.dart';
@@ -114,8 +115,8 @@ class _ConsultFormState extends State<ConsultForm> {
         symptoms: symptomsController.text,
         prescription: listPrescription);
         
-    // final response =
-    //     await ConsultationService().postConsultation(userID, consultData);
+    final response =
+        await ConsultationService().postConsultation(userID, consultData);
 
     return AlertDialog(
       title: const Text('Consultation Finished!'),

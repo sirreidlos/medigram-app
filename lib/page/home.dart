@@ -64,8 +64,9 @@ class HomePage extends StatelessWidget {
                           }),
                       Spacer(),
                       FutureBuilder(
-                        future: isPatient ? getDoctor() : Future.value(true),
+                        future: getDoctor(),
                         builder: (context, snapshot) {
+                          print(snapshot.data);
                           bool isEnabled = snapshot.connectionState ==
                                   ConnectionState.done &&
                               snapshot.hasData &&
@@ -74,7 +75,6 @@ class HomePage extends StatelessWidget {
                           return IconButton(
                             icon: Icon(
                               Icons.swap_horiz_rounded,
-                              color: Colors.black,
                             ),
                             onPressed: isEnabled
                                 ? () async {
@@ -103,11 +103,21 @@ class HomePage extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(screenPadding),
               child: Column(
-                spacing: 10,
+                spacing: 30,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Recent Consultations", style: header2),
-                  RecordHistory(isPatient, true)
+                  isPatient ? medsReminder() : Container(),
+                  Column(
+                    spacing: 10,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Recent Consultations",
+                        style: header2,
+                      ),
+                      RecordHistory(isPatient, true)
+                    ],
+                  ),
                 ],
               ),
             )
@@ -221,7 +231,7 @@ Widget medsHandler(BuildContext context) {
                   return ShowQr(
                     nonce,
                     false,
-                  ); //TODO: Change into button NOT qr code
+                  );
                 }),
               ),
             );
@@ -282,6 +292,35 @@ Widget medsHandler(BuildContext context) {
         ),
       ),
     ],
+  );
+}
+
+Widget medsReminder() {
+  return SizedBox(
+    width: double.infinity,
+    height: 60,
+    child: ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color(secondaryColor2),
+        padding: EdgeInsets.all(screenPadding),
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      child: Row(
+        spacing: screenPadding,
+        children: [
+          Image.asset(
+            'assets/icons/meds-reminder.png',
+            width: 50,
+          ),
+          Text(
+            "Medication Reminder",
+            style: header1,
+          ),
+        ],
+      ),
+    ),
   );
 }
 

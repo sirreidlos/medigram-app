@@ -90,7 +90,8 @@ class RecordHistory extends StatelessWidget {
     for (var consult in listConsult) {
       Doctor doctor = await getDoctor(consult.doctorID);
       UserDetail patient = await getUserByID(consult.userID);
-      String title = isPatient ? doctor.name : patient.name;
+      String title = "DOCTOR OR PATIENT NAME";
+      // String title = isPatient ? "Dr. ${doctor.name}" : patient.name; //TODO Update
       listDetail.add(ConsultationDetail(
           consultation: consult,
           title: title,

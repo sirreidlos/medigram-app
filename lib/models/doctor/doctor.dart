@@ -1,7 +1,7 @@
 class Doctor {
   final String doctorID;
   final String userID;
-  final String name;
+  // final String name;
   final String praticePermit;
   final String practiceAddress;
   final bool approved;
@@ -10,7 +10,7 @@ class Doctor {
   Doctor({
     required this.doctorID,
     required this.userID,
-    required this.name,
+    // required this.name,
     required this.praticePermit,
     required this.practiceAddress,
     required this.approved,
@@ -21,7 +21,7 @@ class Doctor {
     return Doctor(
       doctorID: json["doctor_id"],
       userID: json["user_id"],
-      name: json["name"],
+      // name: json["name"],
       praticePermit: json["practice_permit"],
       practiceAddress: json["practice_address"],
       approved: json["approved"],
