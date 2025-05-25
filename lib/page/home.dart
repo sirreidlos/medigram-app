@@ -10,6 +10,7 @@ import 'package:medigram_app/models/nonce.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/page/reminder.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/user_service.dart';
@@ -66,7 +67,6 @@ class HomePage extends StatelessWidget {
                       FutureBuilder(
                         future: getDoctor(),
                         builder: (context, snapshot) {
-                          print(snapshot.data);
                           bool isEnabled = snapshot.connectionState ==
                                   ConnectionState.done &&
                               snapshot.hasData &&
@@ -106,7 +106,7 @@ class HomePage extends StatelessWidget {
                 spacing: 30,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  isPatient ? medsReminder() : Container(),
+                  // isPatient ? medsReminder() : Container(), //TODO Notification only
                   Column(
                     spacing: 10,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,7 +262,11 @@ Widget medsHandler(BuildContext context) {
       ),
       Expanded(
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: ((context) {
+              return ReminderPage();
+            })));
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(secondaryColor2),
             padding: EdgeInsets.only(

@@ -68,6 +68,7 @@ class RecordHistory extends StatelessWidget {
                     info2: DateFormat('HH:mm')
                         .format(consult.consultation.createdAt),
                     isMed: false,
+                    onPressed: consult.onPressed,
                   );
                 });
           } else {
@@ -105,8 +106,7 @@ class RecordHistory extends StatelessWidget {
     for (var consult in listConsult) {
       Doctor doctor = await getDoctor(consult.doctorID);
       UserDetail patient = await getUserByID(consult.userID);
-      String title = "DOCTOR OR PATIENT NAME";
-      // String title = isPatient ? "Dr. ${doctor.name}" : patient.name; //TODO Update
+      String title = isPatient ? "Dr. ${doctor.name}" : patient.name;
       listDetail.add(ConsultationDetail(
         consultation: consult,
         title: title,
@@ -117,9 +117,9 @@ class RecordHistory extends StatelessWidget {
             MaterialPageRoute(
               builder: ((context) {
                 if (isReminder != null) {
-                  return SetupReminder(consult.consultationID);
+                  return SetupReminder(consult);
                 }
-                return ConsultationInfo(consult.consultationID);
+                return ConsultationInfo(consult);
               }),
             ),
           );

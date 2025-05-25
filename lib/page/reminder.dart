@@ -23,6 +23,8 @@ class _ReminderPageState extends State<ReminderPage> {
             screenPadding,
           ),
           child: Column(
+            spacing: screenPadding,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               PopupHeader(context, "Medication Reminder"),
               Text(

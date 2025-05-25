@@ -35,42 +35,42 @@ class ReminderService {
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
+  }
 
-    List<DateTime> generateReminderSchedule(
-      DateTime startDate,
-      Prescription prescription,
-    ) {
-      List<DateTime> reminders = [];
+  List<DateTime> generateReminderSchedule(
+    DateTime startDate,
+    Prescription prescription,
+  ) {
+    List<DateTime> reminders = [];
 
-      int totalDays =
-          (prescription.quantityPerDose / prescription.regimenPerDay).ceil();
+    int totalDays =
+        (prescription.quantityPerDose / prescription.regimenPerDay).ceil();
 
-      for (int day = 0; day < totalDays; day++) {
-        for (int i = 0; i < prescription.regimenPerDay; i++) {
-          DateTime reminderTime = startDate.add(Duration(
-            days: day,
-            hours: (24 ~/ prescription.regimenPerDay) * i,
-          ));
-          reminders.add(reminderTime);
-        }
+    for (int day = 0; day < totalDays; day++) {
+      for (int i = 0; i < prescription.regimenPerDay; i++) {
+        DateTime reminderTime = startDate.add(Duration(
+          days: day,
+          hours: (24 ~/ prescription.regimenPerDay) * i,
+        ));
+        reminders.add(reminderTime);
       }
-
-      return reminders;
     }
 
-    void scheduleAllReminders(
-        DateTime startTime, List<Prescription> prescriptions) async {
-      int notificationId = 0;
-      for (final prescription in prescriptions) {
-        final schedule = generateReminderSchedule(startTime, prescription);
-        for (final time in schedule) {
-          await scheduleNotification(
-            notificationId++,
-            'Take ${prescription.drugName}',
-            '${prescription.dosesInMg} mg - ${prescription.instruction}',
-            time,
-          );
-        }
+    return reminders;
+  }
+
+  Future<void> scheduleAllReminders(
+      DateTime startTime, List<Prescription> prescriptions) async {
+    int notificationId = 0;
+    for (final prescription in prescriptions) {
+      final schedule = generateReminderSchedule(startTime, prescription);
+      for (final time in schedule) {
+        await scheduleNotification(
+          notificationId++,
+          'Take ${prescription.drugName}',
+          '${prescription.dosesInMg} mg - ${prescription.instruction}',
+          time,
+        );
       }
     }
   }

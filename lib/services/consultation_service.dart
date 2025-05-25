@@ -67,9 +67,9 @@ class ConsultationService {
     return response;
   }
 
-  Future<http.Response> getDiagnosis(String consultationID) async {
+  Future<http.Response> getDiagnosis(String userID, String consultationID) async {
     final String url =
-        "${Api.API_BASE_URL}/consultations/$consultationID/diagnoses";
+        "${Api.API_BASE_URL}/users/$userID/diagnoses/$consultationID";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.get(
@@ -83,25 +83,25 @@ class ConsultationService {
     return response;
   }
 
-  Future<http.Response> getSymptom(String consultationID) async {
+  // Future<http.Response> getSymptom(String userID, String consultationID) async {
+  //   final String url =
+  //       "${Api.API_BASE_URL}/consultations/$consultationID/symptoms";
+  //   final sessionID = await SecureStorageService().read('session_id');
+
+  //   final response = await http.get(
+  //     Uri.parse(url),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Bearer $sessionID",
+  //     },
+  //   );
+
+  //   return response;
+  // }
+
+  Future<http.Response> getPrescription(String userID, String consultationID) async {
     final String url =
-        "${Api.API_BASE_URL}/consultations/$consultationID/symptoms";
-    final sessionID = await SecureStorageService().read('session_id');
-
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $sessionID",
-      },
-    );
-
-    return response;
-  }
-
-  Future<http.Response> getPrescription(String consultationID) async {
-    final String url =
-        "${Api.API_BASE_URL}/consultations/$consultationID/prescriptions";
+        "${Api.API_BASE_URL}/users/$userID/prescriptions/$consultationID";
     final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.get(
