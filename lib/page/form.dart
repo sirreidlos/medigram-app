@@ -1,15 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
-import 'package:medigram_app/models/consultation/consent.dart';
 import 'package:medigram_app/models/consultation/post_consult.dart';
-import 'package:medigram_app/models/consultation/prescription.dart';
+import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/models/user/allery.dart';
 import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
@@ -21,8 +19,8 @@ import 'package:medigram_app/utils/line.dart';
 import 'package:medigram_app/constants/style.dart';
 
 class ConsultForm extends StatefulWidget {
-  const ConsultForm(this.consent, {super.key});
-  final String consent;
+  const ConsultForm(this.qrData, {super.key});
+  final QrData qrData;
 
   @override
   State<ConsultForm> createState() => _ConsultFormState();
@@ -91,7 +89,6 @@ class _ConsultFormState extends State<ConsultForm> {
     setState(() {
       diagnosesController.clear();
       severitySelected = "Mild (M)";
-      // symptomsController.clear();
     });
   }
 
@@ -108,17 +105,17 @@ class _ConsultFormState extends State<ConsultForm> {
   }
 
   Future<Widget> saveConsultation() async {
-    final String userID = (await getUser()).userID;
+    String userID = widget.qrData.userID;
 
     PostConsult consultData = PostConsult(
-        consent: widget.consent,
+        consent: widget.qrData.consent,
         userID: userID,
         diagnosis: listDiagnosis,
-        symptoms: [symptomsController.text],
+        symptoms: symptomsController.text,
         prescription: listPrescription);
-
-    final response =
-        await ConsultationService().postConsultation(userID, consultData);
+        
+    // final response =
+    //     await ConsultationService().postConsultation(userID, consultData);
 
     return AlertDialog(
       title: const Text('Consultation Finished!'),
@@ -148,9 +145,9 @@ class _ConsultFormState extends State<ConsultForm> {
             ),
             child: FutureBuilder(
                 future: Future.wait([
-                  getUserDetail(),
-                  getUserMeasurement(),
-                  getUserAllergy(),
+                  getUserDetail(widget.qrData.userID),
+                  getUserMeasurement(widget.qrData.userID),
+                  getUserAllergy(widget.qrData.userID),
                 ]),
                 builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -488,22 +485,22 @@ class _ConsultFormState extends State<ConsultForm> {
   }
 }
 
-Future<User> getUser() async {
-  final response = await UserService().getOwnInfo();
+Future<User> getUser(String userID) async {
+  final response = await UserService().getUserInfo(userID);
   Map<String, dynamic> data = jsonDecode(response.body);
   User user = User.fromJson(data);
   return user;
 }
 
-Future<UserDetail> getUserDetail() async {
-  final response = await UserService().getOwnDetail();
+Future<UserDetail> getUserDetail(String userID) async {
+  final response = await UserService().getUserDetail(userID);
   Map<String, dynamic> data = jsonDecode(response.body);
   UserDetail user = UserDetail.fromJson(data);
   return user;
 }
 
-Future<UserMeasurement> getUserMeasurement() async {
-  final response = await UserService().getOwnMeasurements();
+Future<UserMeasurement> getUserMeasurement(String userID) async {
+  final response = await UserService().getUserMeasurement(userID);
   List<dynamic> dataList = jsonDecode(response.body);
 
   dataList.sort((a, b) => DateTime.parse(a['measured_at'])
@@ -514,8 +511,8 @@ Future<UserMeasurement> getUserMeasurement() async {
   return userDetail;
 }
 
-Future<List<Allergy>> getUserAllergy() async {
-  final response = await UserService().getOwnAllergy();
+Future<List<Allergy>> getUserAllergy(String userID) async {
+  final response = await UserService().getUserAllergy(userID);
   List<dynamic> data = jsonDecode(response.body);
   List<Allergy> allergies = data.map((e) => Allergy.fromJson(e)).toList();
   return allergies;

@@ -2,14 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:medigram_app/components/history.dart';
+import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/show_qr.dart';
 import 'package:medigram_app/constants/user_status.dart';
+import 'package:medigram_app/models/consultation/consent.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/nonce.dart';
+import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
-import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/user_service.dart';
@@ -127,27 +130,27 @@ Widget mainFeature(BuildContext context, bool isPatient) {
               height: 0,
             )
           : Row(children: [
-                Icon(Icons.location_on),
-                FutureBuilder(
-                    future: getDoctor(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (snapshot.hasData) {
-                        return Expanded(
-                          child: Text(
-                            snapshot.data!.practiceAddress,
-                            style: title,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        );
-                      } else {
-                        return Center(child: Text("No data found"));
-                      }
-                    }),
-              ]),
+              Icon(Icons.location_on),
+              FutureBuilder(
+                  future: getDoctor(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      return Expanded(
+                        child: Text(
+                          snapshot.data!.practiceAddress,
+                          style: title,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    } else {
+                      return Center(child: Text("No data found"));
+                    }
+                  }),
+            ]),
       SizedBox(
         width: double.infinity,
         height: 80,
@@ -171,9 +174,34 @@ Widget mainFeature(BuildContext context, bool isPatient) {
                 context,
                 MaterialPageRoute(
                   builder: ((context) {
-                    // return ScanQR();
-                    return ConsultForm(
-                        "6qdYTIX0whJAJF60UCG2L8UFS6eOxeva1iVwiOnPh13BFNA0a3n2Hd8elSmPepRM2ZnClb8Z/fmM1bG52VaWBw=="); // TODO: Dev only, uncomment above code
+                    return ScanQR();
+
+                    // TODO: Dev only, uncomment above code
+                    // return ConsultForm(QrData(
+                    //     consent: Consent(
+                    //         signerDeviceID:
+                    //             "75f6c55b-6451-4977-b1d7-e5f9ab795c23",
+                    //         nonce: [
+                    //           81,
+                    //           51,
+                    //           102,
+                    //           104,
+                    //           115,
+                    //           103,
+                    //           71,
+                    //           74,
+                    //           116,
+                    //           57,
+                    //           89,
+                    //           115,
+                    //           53,
+                    //           121,
+                    //           51,
+                    //           100
+                    //         ],
+                    //         signature:
+                    //             "UhoAKhWFNvHlzmT96ZfaY4ZX0X4G84nZX9wctZ9QNEI+K0T4xNj2nW1mGpLgeXXUwBsuvVVg6eqB1cEtyAKdBg=="),
+                    //     userID: "41490144-e4e1-4d1f-9eb7-f90af81c12ce"));
                   }),
                 ),
               );

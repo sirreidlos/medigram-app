@@ -174,4 +174,35 @@ class UserService {
 
     return response;
   }
+
+  Future<http.Response> getUserAllergy(String userID) async {
+    final String url = "${Api.API_BASE_URL}/users/$userID/allergies";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
+    );
+
+    return response;
+  }
+
+  Future<http.Response> getUserMeasurement(String userID) async {
+    final String url = "${Api.API_BASE_URL}/users/$userID/measurements";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
+    );
+
+    return response;
+  }
+
 }

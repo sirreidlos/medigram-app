@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:medigram_app/components/popup_header.dart';
+import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -50,18 +53,30 @@ class ScanQR extends StatelessWidget {
                         ),
                         onDetect: (capture) {
                           final List<Barcode> barcodes = capture.barcodes;
-                          String barcode = "";
-                          for (final b in barcodes) {
-                            barcode = barcode + (b.rawValue ?? "");
+                          if (barcodes.isNotEmpty) {
+                            final String? raw = barcodes.first.rawValue;
+                            if (raw != null) {
+                              try {
+                                final String jsonString =
+                                    utf8.decode(base64Decode(raw));
+                                final Map<String, dynamic> data =
+                                    jsonDecode(jsonString);
+                                final qrData = QrData.fromJson(data);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ConsultForm(qrData),
+                                  ),
+                                );
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'QR code has expired. Must regenerate the QR.')),
+                                );
+                              }
+                            }
                           }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((context) {
-                                return ConsultForm(barcode);
-                              }),
-                            ),
-                          );
                         },
                       ),
                     ),

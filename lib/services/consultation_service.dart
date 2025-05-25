@@ -9,10 +9,14 @@ class ConsultationService {
   Future<http.Response> postConsultation(
       String userID, PostConsult body) async {
     final String url = "${Api.API_BASE_URL}/users/$userID/consultations";
+    final sessionID = await SecureStorageService().read('session_id');
 
     final response = await http.post(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
       body: jsonEncode(body),
     );
     return response;

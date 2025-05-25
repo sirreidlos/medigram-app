@@ -41,10 +41,10 @@ class CPrescription {
 }
 
 class PostConsult {
-  final String consent;
+  final Consent consent;
   final String userID;
   final List<CDiagnosis> diagnosis;
-  final List<String> symptoms;
+  final String symptoms;
   final List<CPrescription> prescription;
 
   PostConsult({

@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/qr_profile.dart';
+import 'package:medigram_app/models/consultation/consent.dart';
 import 'package:medigram_app/models/nonce.dart';
+import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 import 'package:medigram_app/utils/qr_image.dart';
@@ -28,7 +30,7 @@ class ShowQr extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<String>(
+      body: FutureBuilder<QrData>(
         future: () async {
           return signConsent(nonce.nonce);
         }(),
@@ -38,7 +40,8 @@ class ShowQr extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
-            final signature = snapshot.data!;
+            final consent = snapshot.data!;
+
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -71,10 +74,10 @@ class ShowQr extends StatelessWidget {
                             spacing: 15,
                             children: [
                               Text(
-                                "QR code below will expire at ${DateFormat.yMMMMEEEEd().add_jms().format(nonce.expirationDate.toLocal())}",
+                                "QR code below will expire at ${DateFormat("dd MMMM yyyy HH:mm:ss").format(nonce.expirationDate)}",
                                 style: content,
                               ),
-                              Center(child: QRImage(signature)),
+                              Center(child: QRImage(consent)),
                               InkWell(
                                 child: Text(
                                   "Regenerate QR Code",
@@ -106,18 +109,11 @@ class ShowQr extends StatelessWidget {
   }
 }
 
-DateTime expiredTime() {
-  DateTime current = DateTime.now();
-  Duration duration = Duration(minutes: 5);
-  DateTime expired = current.add(duration);
-
-  return expired;
-}
-
-Future<String> signConsent(String nonce) async {
+Future<QrData> signConsent(String nonce) async {
   String? pk = await SecureStorageService().read('private_key');
   String? deviceId = await SecureStorageService().read('device_id');
-  if (pk == null || deviceId == null) {
+  String? userId = await SecureStorageService().read('user_id');
+  if (pk == null || deviceId == null || userId == null) {
     // TODO handle error better
     throw Exception("not signed in");
   }
@@ -133,6 +129,8 @@ Future<String> signConsent(String nonce) async {
   final signature = await algorithm.sign(messageBytes, keyPair: keyPair);
   final base64Signature = base64.encode(signature.bytes);
 
-  return base64Signature;
+  Consent consent = Consent(signerDeviceID: deviceId, nonce: nonce, signature: base64Signature);
+  QrData data = QrData(consent: consent, userID: userId);
+  return data;
 }
 
