@@ -6,6 +6,7 @@ import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/models/consultation/consultation.dart';
+import 'package:medigram_app/models/consultation/diagnosis.dart';
 import 'package:medigram_app/models/consultation/prescription.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/services/consultation_service.dart';
@@ -22,8 +23,8 @@ class SetupReminder extends StatefulWidget {
 }
 
 class _SetupReminderState extends State<SetupReminder> {
-  String startDate = "-";
-  String startTime = "-";
+  DateTime startDate = DateTime.now();
+  TimeOfDay startTime = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
@@ -45,26 +46,52 @@ class _SetupReminderState extends State<SetupReminder> {
                 "Consultation Info",
                 style: header2,
               ),
-              FutureBuilder(future: () async {
-                return getDoctor(widget.consultation.doctorID);
-              }(), builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (snapshot.hasData) {
-                  Doctor doctor = snapshot.data as Doctor;
-                  return RecordCard(
-                      title: doctor.name,
-                      subtitle: doctor.practiceAddress,
-                      info1: getDate(widget.consultation.createdAt),
-                      info2: DateFormat('HH:mm')
-                          .format(widget.consultation.createdAt),
-                      isMed: false);
-                } else {
-                  return Center(child: Text("No data found"));
-                }
-              }),
+              FutureBuilder(
+                  future: Future.wait([
+                    getDoctor(widget.consultation.doctorID),
+                    getDiagnoses(widget.consultation.consultationID)
+                  ]),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      Doctor doctor = snapshot.data![0] as Doctor;
+                      List<Diagnosis> listDiag =
+                          snapshot.data![1] as List<Diagnosis>;
+                      return Column(
+                        children: [
+                          RecordCard(
+                              title: doctor.name,
+                              subtitle: doctor.practiceAddress,
+                              info1: getDate(widget.consultation.createdAt),
+                              info2: DateFormat('HH:mm')
+                                  .format(widget.consultation.createdAt),
+                              isMed: false),
+                          ListView.separated(
+                              separatorBuilder: (context, index) => SizedBox(
+                                    height: 10,
+                                  ),
+                              itemCount: 0,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                Diagnosis diag = listDiag[index];
+                                return RecordCard(
+                                  title: diag.diagnosis,
+                                  subtitle: diag.severity,
+                                  info1: "",
+                                  info2: "",
+                                  isMed: true,
+                                );
+                              })
+                        ],
+                      );
+                    } else {
+                      return Center(child: Text("No data found"));
+                    }
+                  }),
               Text(
                 "Prescription",
                 style: header2,
@@ -112,11 +139,10 @@ class _SetupReminderState extends State<SetupReminder> {
                 child: Text('Select Time'),
               ),
               ElevatedButton(
-                onPressed: () => submitReminder(),
+                onPressed: () =>
+                    submitReminder(widget.consultation.consultationID),
                 child: Text('Save Reminder'),
               ),
-
-
             ],
           ),
         ),
@@ -124,8 +150,10 @@ class _SetupReminderState extends State<SetupReminder> {
     );
   }
 
-  void submitReminder(){
-    // ReminderService().scheduleAllReminders(pres)
+  void submitReminder(String consultationID) async {
+    DateTime start = new DateTime(startDate.year, startDate.month, startDate.day, startTime.hour, startTime.minute);
+    final listPrescription = await getPrescription(consultationID);
+    ReminderService().scheduleAllReminders(start, listPrescription);
   }
 
   Future<void> displayDatePicker(BuildContext context) async {
@@ -138,7 +166,7 @@ class _SetupReminderState extends State<SetupReminder> {
 
     if (date != null) {
       setState(() {
-        startDate = date.toLocal().toString().split(" ")[0];
+        startDate = date;
       });
     }
   }
@@ -151,7 +179,7 @@ class _SetupReminderState extends State<SetupReminder> {
 
     if (pickedTime != null) {
       setState(() {
-        startTime = pickedTime.toString();
+        startTime = pickedTime;
       });
     }
   }
@@ -170,6 +198,16 @@ class _SetupReminderState extends State<SetupReminder> {
     final List data = jsonDecode(response.body);
     final List<Prescription> listConsult =
         data.map((e) => Prescription.fromJson(e)).toList();
+    return listConsult;
+  }
+
+  Future<List<Diagnosis>> getDiagnoses(String consultationID) async {
+    final userID = await SecureStorageService().read('user_id');
+    final response =
+        await ConsultationService().getDiagnosis(userID!, consultationID);
+    final List data = jsonDecode(response.body);
+    final List<Diagnosis> listConsult =
+        data.map((e) => Diagnosis.fromJson(e)).toList();
     return listConsult;
   }
 

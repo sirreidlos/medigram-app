@@ -2,16 +2,14 @@ import 'package:medigram_app/models/consultation/consent.dart';
 
 class CDiagnosis {
   final String diagnosis;
-  final String icdCode;
   final String severity;
 
   CDiagnosis({
     required this.diagnosis,
-    required this.icdCode,
     required this.severity,
   });
   Map<String, dynamic> toJson() {
-    return {'diagnosis': diagnosis, 'icd_code': icdCode, 'severity': severity};
+    return {'diagnosis': diagnosis, 'severity': severity};
   }
 }
 

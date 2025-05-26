@@ -6,6 +6,7 @@ import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
+import 'package:medigram_app/models/consultation/diagnosis.dart';
 import 'package:medigram_app/models/consultation/post_consult.dart';
 import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/models/user/allery.dart';
@@ -79,9 +80,7 @@ class _ConsultFormState extends State<ConsultForm> {
   void addDiagnosis() {
     setState(() {
       listDiagnosis.add(CDiagnosis(
-          diagnosis: diagnosesController.text,
-          icdCode: "000",
-          severity: severitySelected));
+          diagnosis: diagnosesController.text, severity: severitySelected));
       resetDiagnosis();
     });
   }
@@ -107,14 +106,18 @@ class _ConsultFormState extends State<ConsultForm> {
 
   Future<Widget> saveConsultation() async {
     String userID = widget.qrData.userID;
+    List<CDiagnosis> modifiedList = listDiagnosis
+        .map((item) => CDiagnosis(
+            diagnosis: item.diagnosis, severity: item.severity.split(" ")[0]))
+        .toList();
 
     PostConsult consultData = PostConsult(
         consent: widget.qrData.consent,
         userID: userID,
-        diagnosis: listDiagnosis,
+        diagnosis: modifiedList,
         symptoms: symptomsController.text,
         prescription: listPrescription);
-        
+
     final response =
         await ConsultationService().postConsultation(userID, consultData);
 
@@ -161,7 +164,8 @@ class _ConsultFormState extends State<ConsultForm> {
                     UserMeasurement userDetail =
                         snapshot.data![1] as UserMeasurement;
                     List<Allergy> allergy = snapshot.data![2] as List<Allergy>;
-                    List<MedicalConditions> conditions = snapshot.data![3] as List<MedicalConditions>;
+                    List<MedicalConditions> conditions =
+                        snapshot.data![3] as List<MedicalConditions>;
                     return Column(
                       spacing: 15,
                       children: [
@@ -260,11 +264,10 @@ class _ConsultFormState extends State<ConsultForm> {
                         Input(
                           header: "Medical Conditions",
                           placeholder: conditions.isEmpty
-                                  ? "-"
-                                  : conditions
-                                      .map((c) =>
-                                          "${c.conditions}")
-                                      .join(", "),
+                              ? "-"
+                              : conditions
+                                  .map((c) => "${c.conditions}")
+                                  .join(", "),
                           isDisabled: true,
                           useIcon: Icon(null),
                           controller: TextEditingController(),
@@ -529,7 +532,8 @@ Future<List<Allergy>> getUserAllergy(String userID) async {
 Future<List<MedicalConditions>> getUserConditions(String userID) async {
   final response = await UserService().getUserConditions(userID);
   List<dynamic> data = jsonDecode(response.body);
-  List<MedicalConditions> conditions = data.map((e) => MedicalConditions.fromJson(e)).toList();
+  List<MedicalConditions> conditions =
+      data.map((e) => MedicalConditions.fromJson(e)).toList();
   return conditions;
 }
 

@@ -44,7 +44,7 @@ class ReminderService {
     List<DateTime> reminders = [];
 
     int totalDays =
-        (prescription.quantityPerDose / prescription.regimenPerDay).ceil();
+        (prescription.quantityPerDose / prescription.regimenPerDay).ceil(); // TODO Check if double
 
     for (int day = 0; day < totalDays; day++) {
       for (int i = 0; i < prescription.regimenPerDay; i++) {
