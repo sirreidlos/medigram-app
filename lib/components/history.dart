@@ -102,6 +102,8 @@ class RecordHistory extends StatelessWidget {
       listConsult = data.map((e) => Consultation.fromJson(e)).toList();
     }
 
+    listConsult.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
     List<ConsultationDetail> listDetail = [];
     for (var consult in listConsult) {
       Doctor doctor = await getDoctor(consult.doctorID);
