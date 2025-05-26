@@ -16,7 +16,7 @@ class Diagnosis {
       diagnosisID: json["diagnosis_id"],
       consultationID: json["consultation_id"],
       diagnosis: json["diagnosis"],
-      severity: json["severty"],
+      severity: json["severity"],
     );
   }
 }

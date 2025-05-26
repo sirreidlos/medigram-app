@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/popup_header.dart';
@@ -14,6 +16,8 @@ import 'package:medigram_app/models/user/medical_conditions.dart';
 import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/models/user/user_measurement.dart';
+import 'package:medigram_app/navigation/layout_navbar.dart';
+import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/utils/dob_age.dart';
@@ -104,11 +108,12 @@ class _ConsultFormState extends State<ConsultForm> {
     });
   }
 
-  Future<Widget> saveConsultation() async {
+  Future<void> saveConsultation() async {
     String userID = widget.qrData.userID;
     List<CDiagnosis> modifiedList = listDiagnosis
         .map((item) => CDiagnosis(
-            diagnosis: item.diagnosis, severity: item.severity.split(" ")[0]))
+            diagnosis: item.diagnosis,
+            severity: item.severity.split(" ")[0].toUpperCase()))
         .toList();
 
     PostConsult consultData = PostConsult(
@@ -121,19 +126,35 @@ class _ConsultFormState extends State<ConsultForm> {
     final response =
         await ConsultationService().postConsultation(userID, consultData);
 
-    return AlertDialog(
-      title: const Text('Consultation Finished!'),
-      content: Text(
-          'Make sure the consultation has been saved in your patient\'s account. Tell your patient to refresh the application by dragging down on the screen.'),
-      actions: <Widget>[
-        TextButton(
-          child: const Text('Back to Home'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: ((context) {
+          return BottomNavigationMenu(false);
+        }),
+      ),
     );
+
+    // return AlertDialog(
+    //   title: const Text('Consultation Finished!'),
+    //   content: Text(
+    //       'Make sure the consultation has been saved in your patient\'s account. Tell your patient to refresh the application by dragging down on the screen.'),
+    //   actions: <Widget>[
+    //     TextButton(
+    //       child: const Text('Back to Home'),
+    //       onPressed: () {
+    //         () => Navigator.push(
+    //               context,
+    //               MaterialPageRoute(
+    //                 builder: ((context) {
+    //                   return HomePage(false);
+    //                 }),
+    //               ),
+    //             );
+    //       },
+    //     ),
+    //   ],
+    // );
   }
 
   @override
@@ -288,7 +309,14 @@ class _ConsultFormState extends State<ConsultForm> {
                             Expanded(
                                 child: Button(
                                     "Cancel",
-                                    () => Navigator.pop(context),
+                                    () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: ((context) {
+                                              return HomePage(false);
+                                            }),
+                                          ),
+                                        ),
                                     false,
                                     true,
                                     false)),
@@ -338,12 +366,28 @@ class _ConsultFormState extends State<ConsultForm> {
             controller: diagnosesController,
             inputType: TextInputType.multiline,
           )),
-          DropdownButton(
-              value: severitySelected,
-              items: severityList.map((String severity) {
-                return DropdownMenuItem(value: severity, child: Text(severity));
-              }).toList(),
-              onChanged: (String? newValue) => severityController(newValue!)),
+          Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Color(secondaryColor1).withValues(alpha: 0.65),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: DropdownButton(
+                value: severitySelected,
+                items: severityList.map((String severity) {
+                  return DropdownMenuItem(
+                      value: severity,
+                      child: Text(
+                        severity,
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ));
+                }).toList(),
+                onChanged: (String? newValue) => severityController(newValue!)),
+          ),
         ],
       ),
       Row(
@@ -513,9 +557,8 @@ Future<UserDetail> getUserDetail(String userID) async {
 Future<UserMeasurement> getUserMeasurement(String userID) async {
   final response = await UserService().getUserMeasurement(userID);
   List<dynamic> dataList = jsonDecode(response.body);
-
-  dataList.sort((a, b) => DateTime.parse(a['measured_at'])
-      .compareTo(DateTime.parse(b['measured_at'])));
+  dataList.sort((a, b) => DateTime.parse(b['measured_at'])
+      .compareTo(DateTime.parse(a['measured_at'])));
 
   Map<String, dynamic> lastData = dataList.last;
   UserMeasurement userDetail = UserMeasurement.fromJson(lastData);
@@ -526,6 +569,7 @@ Future<List<Allergy>> getUserAllergy(String userID) async {
   final response = await UserService().getUserAllergy(userID);
   List<dynamic> data = jsonDecode(response.body);
   List<Allergy> allergies = data.map((e) => Allergy.fromJson(e)).toList();
+
   return allergies;
 }
 

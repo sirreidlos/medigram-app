@@ -190,7 +190,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Image.asset(
           'assets/icons/medigram.png',
-          // width: 50,
+          width: 200,
         ),
         // Text(
         //   "Medigram",

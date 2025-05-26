@@ -10,9 +10,9 @@ class MedicalConditions {
 
   factory MedicalConditions.fromJson(Map<String, dynamic> json) {
     return MedicalConditions(
-      conditionsID: json["conditions_id"],
+      conditionsID: json["condition_id"],
       userID: json["user_id"],
-      conditions: json["conditions"],
+      conditions: json["condition"],
     );
   }
 }

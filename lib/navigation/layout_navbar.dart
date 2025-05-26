@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medigram_app/constants/user_status.dart';
 import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/page/profile.dart';
 import 'package:medigram_app/page/record.dart';
@@ -24,6 +25,8 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
 
   @override
   Widget build(BuildContext context) {
+    
+    SharedPrefsHelper.saveUserRole(widget.isPatient);
     final List<Widget> pages = [
       HomePage(widget.isPatient),
       RecordPage(),

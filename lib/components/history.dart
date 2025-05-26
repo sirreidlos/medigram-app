@@ -50,27 +50,44 @@ class RecordHistory extends StatelessWidget {
                     style: body,
                   ));
             }
-            return ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(
-                      height: 10,
-                    ),
-                itemCount: topN
-                    ? (listConsult.length < 3 ? listConsult.length : 3)
-                    : listConsult.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
+            return Column(
+                spacing: 10,
+                children: List.generate(
+                    topN
+                        ? (listConsult.length < 3 ? listConsult.length : 3)
+                        : listConsult.length, (index) {
                   ConsultationDetail consult = listConsult[index];
                   return RecordCard(
                     title: consult.title,
                     subtitle: consult.practiceAddress,
                     info1: getDate(consult.consultation.createdAt),
-                    info2: DateFormat('HH:mm')
-                        .format(consult.consultation.createdAt),
+                    info2: DateFormat('HH:mm').format(
+                        consult.consultation.createdAt.add(Duration(hours: 7))),
                     isMed: false,
                     onPressed: consult.onPressed,
                   );
-                });
+                }));
+            // ListView.separated(
+            //     separatorBuilder: (context, index) => SizedBox(
+            //           height: 10,
+            //         ),
+            //     itemCount: topN
+            //         ? (listConsult.length < 3 ? listConsult.length : 3)
+            //         : listConsult.length,
+            //     shrinkWrap: true,
+            //     physics: NeverScrollableScrollPhysics(),
+            //     itemBuilder: (context, index) {
+            //       ConsultationDetail consult = listConsult[index];
+            //       return RecordCard(
+            //         title: consult.title,
+            //         subtitle: consult.practiceAddress,
+            //         info1: getDate(consult.consultation.createdAt),
+            //         info2: DateFormat('HH:mm').format(
+            //             consult.consultation.createdAt.add(Duration(hours: 7))),
+            //         isMed: false,
+            //         onPressed: consult.onPressed,
+            //       );
+            //     });
           } else {
             return SizedBox(
                 width: double.infinity,
@@ -102,7 +119,7 @@ class RecordHistory extends StatelessWidget {
       listConsult = data.map((e) => Consultation.fromJson(e)).toList();
     }
 
-    listConsult.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    listConsult.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
     List<ConsultationDetail> listDetail = [];
     for (var consult in listConsult) {
@@ -146,6 +163,7 @@ class RecordHistory extends StatelessWidget {
   }
 
   String getDate(DateTime date) {
+    date = date.add(Duration(hours: 7));
     DateTime current = DateTime.now();
     if (current.year - date.year > 0) return DateFormat('MM/y').format(date);
     return DateFormat('d/MM').format(date);

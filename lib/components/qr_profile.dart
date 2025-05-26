@@ -77,7 +77,7 @@ class QRProfile extends StatelessWidget {
     List<dynamic> dataList = jsonDecode(response.body);
     
     dataList.sort((a, b) =>
-      DateTime.parse(a['measured_at']).compareTo(DateTime.parse(b['measured_at'])));
+      DateTime.parse(b['measured_at']).compareTo(DateTime.parse(a['measured_at'])));
 
     Map<String, dynamic> lastData = dataList.last;
     UserMeasurement userDetail = UserMeasurement.fromJson(lastData);

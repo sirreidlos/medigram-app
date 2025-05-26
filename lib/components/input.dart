@@ -10,14 +10,12 @@ class Input extends StatelessWidget {
     required this.useIcon,
     required this.inputType,
     required this.controller,
-    // this.initValue,
     super.key,
   });
 
   final String header;
   final String placeholder;
   final bool isDisabled;
-  // final String? initValue;
   final Icon useIcon;
   final TextInputType inputType;
   final TextEditingController controller;

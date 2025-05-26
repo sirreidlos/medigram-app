@@ -108,8 +108,8 @@ class HomePage extends StatelessWidget {
                 children: [
                   // isPatient ? medsReminder() : Container(), //TODO Notification only
                   Column(
-                    spacing: 10,
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 10,
                     children: [
                       Text(
                         "Recent Consultations",
@@ -286,11 +286,14 @@ Widget medsHandler(BuildContext context) {
                 'assets/icons/meds-regimen.png',
                 width: 50,
               ),
-              Text(
-                "Meds Regimen",
-                style: header1,
-                textAlign: TextAlign.center,
-              ),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  "Meds Regimen",
+                  style: header1,
+                  textAlign: TextAlign.center,
+                ),
+              )
             ],
           ),
         ),

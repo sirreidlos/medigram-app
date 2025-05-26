@@ -6,6 +6,7 @@ class Prescription {
   final double regimenPerDay;
   final double quantityPerDose;
   final String instruction;
+  final DateTime? purchasedAt;
 
   Prescription({
     required this.prescriptionID,
@@ -15,6 +16,7 @@ class Prescription {
     required this.regimenPerDay,
     required this.quantityPerDose,
     required this.instruction,
+    this.purchasedAt,
   });
 
   factory Prescription.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class Prescription {
       regimenPerDay: json["regimen_per_day"],
       quantityPerDose: json["quantity_per_dose"],
       instruction: json["instruction"],
+      purchasedAt: json["purchased_at"] == null ? null : DateTime.parse(json["purchased_at"]),
     );
   }
 }

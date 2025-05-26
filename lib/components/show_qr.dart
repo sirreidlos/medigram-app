@@ -74,7 +74,7 @@ class ShowQr extends StatelessWidget {
                             spacing: 15,
                             children: [
                               Text(
-                                "QR code below will expire at ${DateFormat("dd MMMM yyyy HH:mm:ss").format(nonce.expirationDate)}",
+                                "QR code below will expire at ${DateFormat("dd MMMM yyyy HH:mm:s").format(nonce.expirationDate.add(Duration(hours: 7)))}",
                                 style: content,
                               ),
                               Center(child: QRImage(consent)),
