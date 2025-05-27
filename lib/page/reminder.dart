@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medigram_app/components/history.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/home.dart';
 
 class ReminderPage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _ReminderPageState extends State<ReminderPage> {
             children: [
               PopupHeader(MaterialPageRoute(
                 builder: ((context) {
-                  return HomePage();
+                  return BottomNavigationMenu(true);
                 }),
               ), "Medication Reminder"),
               Text(

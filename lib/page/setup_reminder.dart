@@ -14,6 +14,7 @@ import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/page/reminder.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/doctor_service.dart';
+import 'package:medigram_app/services/notification_service.dart';
 import 'package:medigram_app/services/reminder_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 
@@ -287,7 +288,7 @@ class _SetupReminderState extends State<SetupReminder> {
     DateTime start = new DateTime(startDate.year, startDate.month,
         startDate.day, startTime.hour, startTime.minute);
     final listPrescription = await getPrescription(consultationID);
-    ReminderService().scheduleAllReminders(start, listPrescription);
+    NotificationService().scheduleAllNotification(start, listPrescription);
 
     final response = ConsultationService().putReminder(consultationID);
     Navigator.push(context, MaterialPageRoute(

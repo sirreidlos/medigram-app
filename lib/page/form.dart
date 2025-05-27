@@ -126,6 +126,7 @@ class _ConsultFormState extends State<ConsultForm> {
     final response =
         await ConsultationService().postConsultation(userID, consultData);
 
+    debugPrint(response.body);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -192,7 +193,7 @@ class _ConsultFormState extends State<ConsultForm> {
                       children: [
                         PopupHeader(MaterialPageRoute(
                           builder: ((context) {
-                            return HomePage();
+                            return BottomNavigationMenu(false);
                           }),
                         ), "Consultation Form"),
                         SizedBox(
@@ -317,7 +318,8 @@ class _ConsultFormState extends State<ConsultForm> {
                                           context,
                                           MaterialPageRoute(
                                             builder: ((context) {
-                                              return HomePage();
+                                              return BottomNavigationMenu(
+                                                  false);
                                             }),
                                           ),
                                         ),

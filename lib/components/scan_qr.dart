@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/models/qr_data.dart';
+import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/page/home.dart';
@@ -35,7 +36,7 @@ class ScanQR extends StatelessWidget {
                 children: [
                   PopupHeader(MaterialPageRoute(
                     builder: ((context) {
-                      return HomePage();
+                      return BottomNavigationMenu(false);
                     }),
                   ), "Scan Patient Data"),
                   Container(

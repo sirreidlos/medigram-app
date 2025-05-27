@@ -6,10 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/constants/user_status.dart';
 import 'package:medigram_app/models/consultation/consultation.dart';
 import 'package:medigram_app/models/consultation/diagnosis.dart';
 import 'package:medigram_app/models/consultation/prescription.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
+import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/doctor_service.dart';
@@ -33,11 +35,25 @@ class ConsultationInfo extends StatelessWidget {
             spacing: screenPadding,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              PopupHeader(MaterialPageRoute(
-                    builder: ((context) {
-                      return HomePage();
-                    }),
-                  ), "Consultation Record"),
+              FutureBuilder(
+                  future: SharedPrefsHelper.getUserRole(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      return PopupHeader(MaterialPageRoute(
+                        builder: ((context) {
+                          return BottomNavigationMenu(snapshot.data!);
+                        }),
+                      ), "Consultation Record");
+                    } else {
+                      return Center(
+                        child: Text("No data"),
+                      );
+                    }
+                  }),
               Text(
                 "Consultation Info",
                 style: header2,
