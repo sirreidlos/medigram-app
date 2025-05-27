@@ -7,6 +7,7 @@ import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
+import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/models/consultation/diagnosis.dart';
 import 'package:medigram_app/models/consultation/post_consult.dart';
@@ -15,9 +16,9 @@ import 'package:medigram_app/models/user/allery.dart';
 import 'package:medigram_app/models/user/medical_conditions.dart';
 import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
+import 'package:medigram_app/models/user/user_full.dart';
 import 'package:medigram_app/models/user/user_measurement.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
-import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/utils/dob_age.dart';
@@ -33,6 +34,27 @@ class ConsultForm extends StatefulWidget {
 }
 
 class _ConsultFormState extends State<ConsultForm> {
+  late Future<UserFull> userData;
+
+  @override
+  void initState() {
+    super.initState();
+    userData = fetchFullPatientData();
+  }
+
+  Future<UserFull> fetchFullPatientData() async {
+    final userDetail = await getUserDetail(widget.qrData.userID);
+    final userMeasure = await getUserMeasurement(widget.qrData.userID);
+    final listAllergy = await getUserAllergy(widget.qrData.userID);
+    final listCondition = await getUserConditions(widget.qrData.userID);
+
+    return UserFull(
+        userDetail: userDetail,
+        userMeasurement: userMeasure,
+        listAllergy: listAllergy,
+        listConditions: listCondition);
+  }
+
   List<String> severityList = [
     "Mild (M)",
     "Moderate (MOD)",
@@ -126,36 +148,52 @@ class _ConsultFormState extends State<ConsultForm> {
     final response =
         await ConsultationService().postConsultation(userID, consultData);
 
-    debugPrint(response.body);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: ((context) {
-          return BottomNavigationMenu(false);
-        }),
-      ),
-    );
-
-    // return AlertDialog(
-    //   title: const Text('Consultation Finished!'),
-    //   content: Text(
-    //       'Make sure the consultation has been saved in your patient\'s account. Tell your patient to refresh the application by dragging down on the screen.'),
-    //   actions: <Widget>[
-    //     TextButton(
-    //       child: const Text('Back to Home'),
-    //       onPressed: () {
-    //         () => Navigator.push(
-    //               context,
-    //               MaterialPageRoute(
-    //                 builder: ((context) {
-    //                   return HomePage(false);
-    //                 }),
-    //               ),
-    //             );
-    //       },
-    //     ),
-    //   ],
-    // );
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          if (response.statusCode == 201) {
+            return AlertDialog(
+              title: const Text('Consultation Finished!'),
+              content: Text(
+                  'Make sure the consultation has been saved in your patient\'s account. Tell your patient to refresh the application by dragging down on the screen.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Back to Home'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) {
+                          return BottomNavigationMenu(false);
+                        }),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            );
+          } else {
+            return AlertDialog(
+              title: const Text('Network Error!'),
+              content: Text("Error ${response.statusCode}: ${response.body}"),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Back to Home'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) {
+                          return ScanQR();
+                        }),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            );
+          }
+        });
   }
 
   @override
@@ -169,178 +207,170 @@ class _ConsultFormState extends State<ConsultForm> {
               screenPadding,
               screenPadding,
             ),
-            child: FutureBuilder(
-                future: Future.wait([
-                  getUserDetail(widget.qrData.userID),
-                  getUserMeasurement(widget.qrData.userID),
-                  getUserAllergy(widget.qrData.userID),
-                  getUserConditions(widget.qrData.userID),
-                ]),
-                builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (snapshot.hasData) {
-                    UserDetail user = snapshot.data![0] as UserDetail;
-                    UserMeasurement userDetail =
-                        snapshot.data![1] as UserMeasurement;
-                    List<Allergy> allergy = snapshot.data![2] as List<Allergy>;
-                    List<MedicalConditions> conditions =
-                        snapshot.data![3] as List<MedicalConditions>;
-                    return Column(
-                      spacing: 15,
-                      children: [
-                        PopupHeader(MaterialPageRoute(
-                          builder: ((context) {
-                            return BottomNavigationMenu(false);
-                          }),
-                        ), "Consultation Form"),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Text("Patient Profile", style: header2),
-                        ),
-                        Input(
-                          header: "Name",
-                          placeholder: user.name,
-                          isDisabled: true,
-                          useIcon: Icon(null),
-                          controller: TextEditingController(),
-                          inputType: TextInputType.multiline,
-                        ),
-                        Row(
-                          spacing: 20,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Input(
-                                header: "Age",
-                                placeholder:
-                                    "${dobToAge(user.dob)[2]} years ${dobToAge(user.dob)[1]} months",
+            child: Column(spacing: 15, children: [
+              FutureBuilder<UserFull>(
+                  future: userData,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      UserDetail user = snapshot.data!.userDetail;
+                      UserMeasurement userDetail =
+                          snapshot.data!.userMeasurement;
+                      List<Allergy> allergy = snapshot.data!.listAllergy;
+                      List<MedicalConditions> conditions =
+                          snapshot.data!.listConditions;
+                      return Column(
+                        spacing: 15,
+                        children: [
+                          PopupHeader(MaterialPageRoute(
+                            builder: ((context) {
+                              return BottomNavigationMenu(false);
+                            }),
+                          ), "Consultation Form", true),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text("Patient Profile", style: header2),
+                          ),
+                          Input(
+                            header: "Name",
+                            placeholder: user.name,
+                            isDisabled: true,
+                            useIcon: Icon(null),
+                            controller: TextEditingController(),
+                            inputType: TextInputType.multiline,
+                          ),
+                          Row(
+                            spacing: 20,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Input(
+                                  header: "Age",
+                                  placeholder:
+                                      "${dobToAge(user.dob)[2]} years ${dobToAge(user.dob)[1]} months",
+                                  isDisabled: true,
+                                  useIcon: Icon(null),
+                                  controller: TextEditingController(),
+                                  inputType: TextInputType.multiline,
+                                ),
+                              ),
+                              Expanded(
+                                child: Input(
+                                  header: "Gender",
+                                  placeholder:
+                                      user.gender == "M" ? "Male" : "Female",
+                                  isDisabled: true,
+                                  useIcon: Icon(null),
+                                  controller: TextEditingController(),
+                                  inputType: TextInputType.multiline,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            spacing: 20,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Input(
+                                  header: "Height (cm)",
+                                  placeholder: userDetail.heightInCm.toString(),
+                                  isDisabled: true,
+                                  useIcon: Icon(null),
+                                  controller: TextEditingController(),
+                                  inputType: TextInputType.number,
+                                ),
+                              ),
+                              Expanded(
+                                child: Input(
+                                  header: "Weight (kg)",
+                                  placeholder: userDetail.weightInKg.toString(),
+                                  isDisabled: true,
+                                  useIcon: Icon(null),
+                                  controller: TextEditingController(),
+                                  inputType: TextInputType.number,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Input(
+                                header: "Allergy*",
+                                placeholder: allergy.isEmpty
+                                    ? "-"
+                                    : allergy
+                                        .map((a) =>
+                                            "${a.allergen} (${getSeverity(a.severity)})")
+                                        .join(", "),
                                 isDisabled: true,
                                 useIcon: Icon(null),
                                 controller: TextEditingController(),
                                 inputType: TextInputType.multiline,
                               ),
-                            ),
-                            Expanded(
-                              child: Input(
-                                header: "Gender",
-                                placeholder:
-                                    user.gender == "M" ? "Male" : "Female",
-                                isDisabled: true,
-                                useIcon: Icon(null),
-                                controller: TextEditingController(),
-                                inputType: TextInputType.multiline,
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  "*M = Mild, MOD = Moderate, S = Severe, C = Critical",
+                                  style: content,
+                                  maxLines: 2,
+                                ),
+                              )
+                            ],
+                          ),
+                          Input(
+                            header: "Medical Conditions",
+                            placeholder: conditions.isEmpty
+                                ? "-"
+                                : conditions
+                                    .map((c) => "${c.conditions}")
+                                    .join(", "),
+                            isDisabled: true,
+                            useIcon: Icon(null),
+                            controller: TextEditingController(),
+                            inputType: TextInputType.multiline,
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Center(child: Text("No data found"));
+                    }
+                  }),
+              LineDivider(),
+              consultSection(),
+              showDiagnosis(),
+              LineDivider(),
+              prescriptSection(),
+              showPrescript(),
+              WarningCard(
+                "Make sure your diagnoses and prescription are suitable for the patient!",
+              ),
+              Row(
+                spacing: 10,
+                children: [
+                  Expanded(
+                      child: Button(
+                          "Cancel",
+                          () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((context) {
+                                    return BottomNavigationMenu(false);
+                                  }),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          spacing: 20,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Input(
-                                header: "Height (cm)",
-                                placeholder: userDetail.heightInCm.toString(),
-                                isDisabled: true,
-                                useIcon: Icon(null),
-                                controller: TextEditingController(),
-                                inputType: TextInputType.number,
-                              ),
-                            ),
-                            Expanded(
-                              child: Input(
-                                header: "Weight (kg)",
-                                placeholder: userDetail.weightInKg.toString(),
-                                isDisabled: true,
-                                useIcon: Icon(null),
-                                controller: TextEditingController(),
-                                inputType: TextInputType.number,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Input(
-                              header: "Allergy*",
-                              placeholder: allergy.isEmpty
-                                  ? "-"
-                                  : allergy
-                                      .map((a) =>
-                                          "${a.allergen} (${getSeverity(a.severity)})")
-                                      .join(", "),
-                              isDisabled: true,
-                              useIcon: Icon(null),
-                              controller: TextEditingController(),
-                              inputType: TextInputType.multiline,
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                "*M = Mild, MOD = Moderate, S = Severe, C = Critical",
-                                style: content,
-                                maxLines: 2,
-                              ),
-                            )
-                          ],
-                        ),
-                        Input(
-                          header: "Medical Conditions",
-                          placeholder: conditions.isEmpty
-                              ? "-"
-                              : conditions
-                                  .map((c) => "${c.conditions}")
-                                  .join(", "),
-                          isDisabled: true,
-                          useIcon: Icon(null),
-                          controller: TextEditingController(),
-                          inputType: TextInputType.multiline,
-                        ),
-                        LineDivider(),
-                        consultSection(),
-                        showDiagnosis(),
-                        LineDivider(),
-                        prescriptSection(),
-                        showPrescript(),
-                        WarningCard(
-                          "Make sure your diagnoses and prescription are suitable for the patient!",
-                        ),
-                        Row(
-                          spacing: 10,
-                          children: [
-                            Expanded(
-                                child: Button(
-                                    "Cancel",
-                                    () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: ((context) {
-                                              return BottomNavigationMenu(
-                                                  false);
-                                            }),
-                                          ),
-                                        ),
-                                    false,
-                                    true,
-                                    false)),
-                            Expanded(
-                                child: Button(
-                                    "Prescribe",
-                                    () => saveConsultation(),
-                                    true,
-                                    true,
-                                    false)),
-                          ],
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Center(child: Text("No data found"));
-                  }
-                })),
+                          false,
+                          true,
+                          false)),
+                  Expanded(
+                      child: Button("Prescribe", () => saveConsultation(), true,
+                          true, false)),
+                ],
+              ),
+            ])),
       ),
     );
   }
@@ -411,33 +441,23 @@ class _ConsultFormState extends State<ConsultForm> {
 
   Widget showDiagnosis() {
     return Column(
-      children: [
-        ListView.separated(
-            separatorBuilder: (context, index) => SizedBox(
-                  height: 10,
-                ),
-            itemCount: listDiagnosis.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Row(
-                children: [
-                  Expanded(
-                      child: RecordCard(
-                    title: listDiagnosis[index].diagnosis,
-                    subtitle: listDiagnosis[index].severity,
-                    info1: "",
-                    info2: "",
-                    isMed: true,
-                  )),
-                  IconButton(
-                      onPressed: () => removeDiagnosis(index),
-                      icon: Icon(Icons.remove_circle_outline_rounded))
-                ],
-              );
-            }),
-      ],
-    );
+        children: List.generate(listDiagnosis.length, (index) {
+      return Row(
+        children: [
+          Expanded(
+              child: RecordCard(
+            title: listDiagnosis[index].diagnosis,
+            subtitle: listDiagnosis[index].severity,
+            info1: "",
+            info2: "",
+            isMed: true,
+          )),
+          IconButton(
+              onPressed: () => removeDiagnosis(index),
+              icon: Icon(Icons.remove_circle_outline_rounded))
+        ],
+      );
+    }));
   }
 
   Widget prescriptSection() {
@@ -515,34 +535,24 @@ class _ConsultFormState extends State<ConsultForm> {
 
   Widget showPrescript() {
     return Column(
-      children: [
-        ListView.separated(
-            separatorBuilder: (context, index) => SizedBox(
-                  height: 10,
-                ),
-            itemCount: listPrescription.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Row(
-                children: [
-                  Expanded(
-                      child: RecordCard(
-                    title: listPrescription[index].drugName,
-                    subtitle:
-                        "${listPrescription[index].regimenPerDay} times/day, ${listPrescription[index].instruction}",
-                    info1: "${listPrescription[index].quantityPerDose}x",
-                    info2: "",
-                    isMed: true,
-                  )),
-                  IconButton(
-                      onPressed: () => removePrescription(index),
-                      icon: Icon(Icons.remove_circle_outline_rounded))
-                ],
-              );
-            }),
-      ],
-    );
+        children: List.generate(listPrescription.length, (index) {
+      return Row(
+        children: [
+          Expanded(
+              child: RecordCard(
+            title: listPrescription[index].drugName,
+            subtitle:
+                "${listPrescription[index].regimenPerDay} times/day, ${listPrescription[index].instruction}",
+            info1: "${listPrescription[index].quantityPerDose}x",
+            info2: "",
+            isMed: true,
+          )),
+          IconButton(
+              onPressed: () => removePrescription(index),
+              icon: Icon(Icons.remove_circle_outline_rounded))
+        ],
+      );
+    }));
   }
 }
 

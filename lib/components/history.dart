@@ -67,27 +67,6 @@ class RecordHistory extends StatelessWidget {
                     onPressed: consult.onPressed,
                   );
                 }));
-            // ListView.separated(
-            //     separatorBuilder: (context, index) => SizedBox(
-            //           height: 10,
-            //         ),
-            //     itemCount: topN
-            //         ? (listConsult.length < 3 ? listConsult.length : 3)
-            //         : listConsult.length,
-            //     shrinkWrap: true,
-            //     physics: NeverScrollableScrollPhysics(),
-            //     itemBuilder: (context, index) {
-            //       ConsultationDetail consult = listConsult[index];
-            //       return RecordCard(
-            //         title: consult.title,
-            //         subtitle: consult.practiceAddress,
-            //         info1: getDate(consult.consultation.createdAt),
-            //         info2: DateFormat('HH:mm').format(
-            //             consult.consultation.createdAt.add(Duration(hours: 7))),
-            //         isMed: false,
-            //         onPressed: consult.onPressed,
-            //       );
-            //     });
           } else {
             return SizedBox(
                 width: double.infinity,

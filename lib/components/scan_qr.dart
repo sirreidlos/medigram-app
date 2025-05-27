@@ -7,10 +7,32 @@ import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/page/home.dart';
+import 'package:medigram_app/services/secure_storage.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class ScanQR extends StatelessWidget {
+class ScanQR extends StatefulWidget {
   const ScanQR({super.key});
+
+  @override
+  State<ScanQR> createState() => _ScanQRState();
+}
+
+class _ScanQRState extends State<ScanQR> {
+  late final MobileScannerController cameraController;
+
+  @override
+  void initState() {
+    super.initState();
+    cameraController = MobileScannerController(
+      detectionSpeed: DetectionSpeed.noDuplicates,
+    );
+  }
+
+  @override
+  void dispose() {
+    cameraController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +60,7 @@ class ScanQR extends StatelessWidget {
                     builder: ((context) {
                       return BottomNavigationMenu(false);
                     }),
-                  ), "Scan Patient Data"),
+                  ), "Scan Patient Data", false),
                   Container(
                     padding: EdgeInsets.only(
                       top: screenPadding,
@@ -54,9 +76,7 @@ class ScanQR extends StatelessWidget {
                           300,
                           300,
                         ),
-                        controller: MobileScannerController(
-                          detectionSpeed: DetectionSpeed.noDuplicates,
-                        ),
+                        controller: cameraController,
                         onDetect: (capture) {
                           final List<Barcode> barcodes = capture.barcodes;
                           if (barcodes.isNotEmpty) {
@@ -68,12 +88,36 @@ class ScanQR extends StatelessWidget {
                                 final Map<String, dynamic> data =
                                     jsonDecode(jsonString);
                                 final qrData = QrData.fromJson(data);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ConsultForm(qrData),
-                                  ),
-                                );
+                                final currentUserID =
+                                    SecureStorageService().read('user_id');
+                                if ((qrData.expiredAt
+                                        .isBefore(DateTime.now())) ||
+                                    (qrData.userID == currentUserID)) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('QR Invalid!'),
+                                          content: Text(qrData.userID ==
+                                                  currentUserID
+                                              ? 'You can not diagnose yourself!'
+                                              : 'Kindly inform your patient to regenerate the QR to continue with the consultation'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: const Text('Back to Home'),
+                                              onPressed: () {},
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ConsultForm(qrData),
+                                    ),
+                                  );
+                                }
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

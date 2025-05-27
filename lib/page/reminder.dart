@@ -32,7 +32,7 @@ class _ReminderPageState extends State<ReminderPage> {
                 builder: ((context) {
                   return BottomNavigationMenu(true);
                 }),
-              ), "Medication Reminder"),
+              ), "Medication Reminder", false),
               Text(
                 "Setup your new regimen",
                 style: header2,

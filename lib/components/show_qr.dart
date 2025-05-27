@@ -34,7 +34,7 @@ class ShowQr extends StatelessWidget {
     return Scaffold(
       body: FutureBuilder<QrData>(
         future: () async {
-          return signConsent(nonce.nonce);
+          return signConsent(nonce);
         }(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -63,14 +63,12 @@ class ShowQr extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        PopupHeader(
-                          MaterialPageRoute(
-                            builder: ((context) {
-                              return BottomNavigationMenu(true);
-                            }),
-                          ),
-                          isConsult ? "Consultation" : "Medicine Claim",
-                        ),
+                        PopupHeader(MaterialPageRoute(
+                          builder: ((context) {
+                            return BottomNavigationMenu(true);
+                          }),
+                        ), isConsult ? "Consultation" : "Medicine Claim",
+                            false),
                         Container(
                           padding: EdgeInsets.only(
                             top: screenPadding,
@@ -115,7 +113,7 @@ class ShowQr extends StatelessWidget {
   }
 }
 
-Future<QrData> signConsent(String nonce) async {
+Future<QrData> signConsent(Nonce nonce) async {
   String? pk = await SecureStorageService().read('private_key');
   String? deviceId = await SecureStorageService().read('device_id');
   String? userId = await SecureStorageService().read('user_id');
@@ -129,14 +127,14 @@ Future<QrData> signConsent(String nonce) async {
   final algorithm = Ed25519();
   final keyPair = await algorithm.newKeyPairFromSeed(keyBytes.sublist(0, 32));
 
-  final message = jsonEncode([deviceId, nonce]);
+  final message = jsonEncode([deviceId, nonce.nonce]);
   final messageBytes = utf8.encode(message);
 
   final signature = await algorithm.sign(messageBytes, keyPair: keyPair);
   final base64Signature = base64.encode(signature.bytes);
 
   Consent consent = Consent(
-      signerDeviceID: deviceId, nonce: nonce, signature: base64Signature);
-  QrData data = QrData(consent: consent, userID: userId);
+      signerDeviceID: deviceId, nonce: nonce.nonce, signature: base64Signature);
+  QrData data = QrData(consent: consent, userID: userId, expiredAt: nonce.expirationDate);
   return data;
 }

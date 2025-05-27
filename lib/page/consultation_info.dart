@@ -47,7 +47,7 @@ class ConsultationInfo extends StatelessWidget {
                         builder: ((context) {
                           return BottomNavigationMenu(snapshot.data!);
                         }),
-                      ), "Consultation Record");
+                      ), "Consultation Record", false);
                     } else {
                       return Center(
                         child: Text("No data"),

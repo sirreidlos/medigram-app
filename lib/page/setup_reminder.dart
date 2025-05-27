@@ -49,7 +49,7 @@ class _SetupReminderState extends State<SetupReminder> {
                 builder: ((context) {
                   return ReminderPage();
                 }),
-              ), "Setup Reminder"),
+              ), "Setup Reminder", true),
               Text(
                 "Consultation Info",
                 style: header2,
@@ -68,7 +68,7 @@ class _SetupReminderState extends State<SetupReminder> {
                     spacing: 10,
                     children: [
                       RecordCard(
-                          title: doctor.name,
+                          title: "Dr. ${doctor.name}",
                           subtitle: doctor.practiceAddress,
                           info1: getDate(widget.consultation.createdAt
                               .add(Duration(hours: 7))),
@@ -291,31 +291,31 @@ class _SetupReminderState extends State<SetupReminder> {
     NotificationService().scheduleAllNotification(start, listPrescription);
 
     final response = ConsultationService().putReminder(consultationID);
-    Navigator.push(context, MaterialPageRoute(
-      builder: ((context) {
-        return ReminderPage();
-      }),
-    ));
-    // return AlertDialog(
-    //   title: const Text('Consultation Finished!'),
-    //   content: Text(
-    //       'Make sure the consultation has been saved in your patient\'s account. Tell your patient to refresh the application by dragging down on the screen.'),
-    //   actions: <Widget>[
-    //     TextButton(
-    //       child: const Text('Back to Home'),
-    //       onPressed: () {
-    //         () => Navigator.push(
-    //               context,
-    //               MaterialPageRoute(
-    //                 builder: ((context) {
-    //                   return ReminderPage();
-    //                 }),
-    //               ),
-    //             );
-    //       },
-    //     ),
-    //   ],
-    // );
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Setup Finished!'),
+            content: Text(
+                'Don\'t forget to take your medicine regularly. Keep Healthy!'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Back to Home'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) {
+                        return ReminderPage();
+                      }),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> displayDatePicker(BuildContext context) async {
