@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medigram_app/components/history.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/page/home.dart';
 
 class ReminderPage extends StatefulWidget {
   const ReminderPage({super.key});
@@ -26,16 +27,20 @@ class _ReminderPageState extends State<ReminderPage> {
             spacing: screenPadding,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              PopupHeader(context, "Medication Reminder"),
+              PopupHeader(MaterialPageRoute(
+                builder: ((context) {
+                  return HomePage();
+                }),
+              ), "Medication Reminder"),
               Text(
-                        "Setup your new regimen",
-                        style: header2,
-                      ),
+                "Setup your new regimen",
+                style: header2,
+              ),
               RecordHistory(isPatient: true, topN: false, isReminder: true),
               Text(
-                        "Your ongoing regimen",
-                        style: header2,
-                      ),
+                "Your ongoing regimen",
+                style: header2,
+              ),
               RecordHistory(isPatient: true, topN: false, isReminder: false),
             ],
           ),
@@ -43,7 +48,4 @@ class _ReminderPageState extends State<ReminderPage> {
       ),
     );
   }
-  
 }
-
-

@@ -190,7 +190,11 @@ class _ConsultFormState extends State<ConsultForm> {
                     return Column(
                       spacing: 15,
                       children: [
-                        PopupHeader(context, "Prescription Form"),
+                        PopupHeader(MaterialPageRoute(
+                          builder: ((context) {
+                            return HomePage();
+                          }),
+                        ), "Consultation Form"),
                         SizedBox(
                           width: double.infinity,
                           child: Text("Patient Profile", style: header2),
@@ -313,7 +317,7 @@ class _ConsultFormState extends State<ConsultForm> {
                                           context,
                                           MaterialPageRoute(
                                             builder: ((context) {
-                                              return HomePage(false);
+                                              return HomePage();
                                             }),
                                           ),
                                         ),

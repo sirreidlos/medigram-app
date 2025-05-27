@@ -10,6 +10,7 @@ import 'package:medigram_app/models/consultation/consultation.dart';
 import 'package:medigram_app/models/consultation/diagnosis.dart';
 import 'package:medigram_app/models/consultation/prescription.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
+import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 
@@ -32,7 +33,11 @@ class ConsultationInfo extends StatelessWidget {
             spacing: screenPadding,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              PopupHeader(context, "Consultation Record"),
+              PopupHeader(MaterialPageRoute(
+                    builder: ((context) {
+                      return HomePage();
+                    }),
+                  ), "Consultation Record"),
               Text(
                 "Consultation Info",
                 style: header2,

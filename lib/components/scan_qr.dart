@@ -5,6 +5,7 @@ import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/page/home.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScanQR extends StatelessWidget {
@@ -32,7 +33,11 @@ class ScanQR extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  PopupHeader(context, "Scan Patient Data"),
+                  PopupHeader(MaterialPageRoute(
+                    builder: ((context) {
+                      return HomePage();
+                    }),
+                  ), "Scan Patient Data"),
                   Container(
                     padding: EdgeInsets.only(
                       top: screenPadding,

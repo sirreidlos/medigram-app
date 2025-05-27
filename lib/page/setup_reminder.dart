@@ -44,7 +44,11 @@ class _SetupReminderState extends State<SetupReminder> {
             spacing: screenPadding,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              PopupHeader(context, "Setup Reminder"),
+              PopupHeader(MaterialPageRoute(
+                builder: ((context) {
+                  return ReminderPage();
+                }),
+              ), "Setup Reminder"),
               Text(
                 "Consultation Info",
                 style: header2,
@@ -65,10 +69,11 @@ class _SetupReminderState extends State<SetupReminder> {
                       RecordCard(
                           title: doctor.name,
                           subtitle: doctor.practiceAddress,
-                          info1: getDate(
-                              widget.consultation.createdAt.add(Duration(hours: 7))),
-                          info2: DateFormat('HH:mm').format(
-                              widget.consultation.createdAt.add(Duration(hours: 7))),
+                          info1: getDate(widget.consultation.createdAt
+                              .add(Duration(hours: 7))),
+                          info2: DateFormat('HH:mm').format(widget
+                              .consultation.createdAt
+                              .add(Duration(hours: 7))),
                           isMed: false),
                     ],
                   );

@@ -28,7 +28,7 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
     
     SharedPrefsHelper.saveUserRole(widget.isPatient);
     final List<Widget> pages = [
-      HomePage(widget.isPatient),
+      HomePage(),
       RecordPage(),
       ProfilePage()
     ];

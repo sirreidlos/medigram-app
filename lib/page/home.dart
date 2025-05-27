@@ -16,9 +16,7 @@ import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/user_service.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage(this.isPatient, {super.key});
-
-  final bool isPatient;
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,87 +38,119 @@ class HomePage extends StatelessWidget {
                   bottomRight: Radius.circular(40),
                 ),
               ),
-              child: Column(
-                spacing: 30,
-                children: [
-                  Row(
-                    children: [
-                      FutureBuilder(
-                          future: getUser(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
-                            } else if (snapshot.hasError) {
-                              return Center(
-                                  child: Text('Error: ${snapshot.error}'));
-                            } else if (snapshot.hasData) {
-                              return Text(
-                                "Hello, ${isPatient ? "" : "Dr. "}${snapshot.data!.name}",
-                                style: title,
-                              );
-                            } else {
-                              return Center(child: Text("No data found"));
-                            }
-                          }),
-                      Spacer(),
-                      FutureBuilder(
-                        future: getDoctor(),
-                        builder: (context, snapshot) {
-                          bool isEnabled = snapshot.connectionState ==
-                                  ConnectionState.done &&
-                              snapshot.hasData &&
-                              snapshot.data != null;
+              child: FutureBuilder(
+                  future: SharedPrefsHelper.getUserRole(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      bool isPatient = snapshot.data!;
+                      return Column(
+                        spacing: 30,
+                        children: [
+                          Row(
+                            children: [
+                              FutureBuilder(
+                                  future: getUser(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    } else if (snapshot.hasError) {
+                                      return Center(
+                                          child:
+                                              Text('Error: ${snapshot.error}'));
+                                    } else if (snapshot.hasData) {
+                                      return Text(
+                                        "Hello, ${isPatient ? "" : "Dr. "}${snapshot.data!.name}",
+                                        style: title,
+                                      );
+                                    } else {
+                                      return Center(
+                                          child: Text("No data found"));
+                                    }
+                                  }),
+                              Spacer(),
+                              FutureBuilder(
+                                future: getDoctor(),
+                                builder: (context, snapshot) {
+                                  bool isEnabled = snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      snapshot.hasData &&
+                                      snapshot.data != null;
 
-                          return IconButton(
-                            icon: Icon(
-                              Icons.swap_horiz_rounded,
-                            ),
-                            onPressed: isEnabled
-                                ? () async {
-                                    await SharedPrefsHelper.saveUserRole(
-                                        !isPatient);
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) =>
-                                            BottomNavigationMenu(!isPatient),
-                                      ),
-                                    );
-                                  }
-                                : null,
-                          );
-                        },
-                      ),
-                      Icon(Icons.notifications),
-                    ],
-                  ),
-                  mainFeature(context, isPatient),
-                  isPatient ? medsHandler(context) : Container(),
-                ],
-              ),
+                                  return IconButton(
+                                    icon: Icon(
+                                      Icons.swap_horiz_rounded,
+                                    ),
+                                    onPressed: isEnabled
+                                        ? () async {
+                                            await SharedPrefsHelper
+                                                .saveUserRole(!isPatient);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    BottomNavigationMenu(
+                                                        !isPatient),
+                                              ),
+                                            );
+                                          }
+                                        : null,
+                                  );
+                                },
+                              ),
+                              Icon(Icons.notifications),
+                            ],
+                          ),
+                          mainFeature(context, isPatient),
+                          isPatient ? medsHandler(context) : Container(),
+                        ],
+                      );
+                    } else {
+                      return Center(
+                        child: Text("No data"),
+                      );
+                    }
+                  }),
             ),
-            Container(
-              padding: EdgeInsets.all(screenPadding),
-              child: Column(
-                spacing: 30,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // isPatient ? medsReminder() : Container(), //TODO Notification only
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 10,
-                    children: [
-                      Text(
-                        "Recent Consultations",
-                        style: header2,
+            FutureBuilder(
+                future: SharedPrefsHelper.getUserRole(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    bool isPatient = snapshot.data!;
+                    return Container(
+                      padding: EdgeInsets.all(screenPadding),
+                      child: Column(
+                        spacing: 30,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // isPatient ? medsReminder() : Container(), //TODO Notification only
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 10,
+                            children: [
+                              Text(
+                                "Recent Consultations",
+                                style: header2,
+                              ),
+                              RecordHistory(isPatient: isPatient, topN: true)
+                            ],
+                          ),
+                        ],
                       ),
-                      RecordHistory(isPatient: isPatient, topN: true)
-                    ],
-                  ),
-                ],
-              ),
-            )
+                    );
+                  } else {
+                    return Center(child: Text("No data"));
+                  }
+                })
           ],
         ),
       ),

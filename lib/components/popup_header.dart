@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:medigram_app/constants/style.dart';
 
 class PopupHeader extends StatelessWidget {
-  const PopupHeader(this.prevPage, this.header, {super.key});
+  const PopupHeader(this.goPage, this.header, {super.key});
 
-  final BuildContext prevPage;
+  final MaterialPageRoute goPage;
   final String header;
 
   @override
@@ -15,7 +15,10 @@ class PopupHeader extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () {
-            Navigator.pop(prevPage);
+            Navigator.push(
+            context,
+            goPage
+          );
           },
           padding: EdgeInsets.zero,
           constraints: BoxConstraints(),

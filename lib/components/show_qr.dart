@@ -8,6 +8,7 @@ import 'package:medigram_app/components/qr_profile.dart';
 import 'package:medigram_app/models/consultation/consent.dart';
 import 'package:medigram_app/models/nonce.dart';
 import 'package:medigram_app/models/qr_data.dart';
+import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 import 'package:medigram_app/utils/qr_image.dart';
@@ -62,7 +63,11 @@ class ShowQr extends StatelessWidget {
                     child: Column(
                       children: [
                         PopupHeader(
-                          context,
+                          MaterialPageRoute(
+                            builder: ((context) {
+                              return HomePage();
+                            }),
+                          ),
                           isConsult ? "Consultation" : "Medicine Claim",
                         ),
                         Container(
@@ -129,8 +134,8 @@ Future<QrData> signConsent(String nonce) async {
   final signature = await algorithm.sign(messageBytes, keyPair: keyPair);
   final base64Signature = base64.encode(signature.bytes);
 
-  Consent consent = Consent(signerDeviceID: deviceId, nonce: nonce, signature: base64Signature);
+  Consent consent = Consent(
+      signerDeviceID: deviceId, nonce: nonce, signature: base64Signature);
   QrData data = QrData(consent: consent, userID: userId);
   return data;
 }
-
