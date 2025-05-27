@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/services/auth_service.dart';
@@ -93,9 +94,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   ? Center(child: Text(_error!, style: TextStyle(color: Colors.red)))
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: screenPadding,
                       children: [
                         Text("Profile", style: header2),
-                        const SizedBox(height: 20),
                         Card(
                           elevation: 4,
                           shape: RoundedRectangleBorder(
@@ -130,27 +131,28 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
                         SizedBox(
                           width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: _logout,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: const Text(
-                              'Logout',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                          child: Button("Logout", () => _logout(), true,
+                          true, false),
+                          // child: ElevatedButton(
+                          //   onPressed: _logout,
+                          //   style: ElevatedButton.styleFrom(
+                          //     backgroundColor: Colors.red,
+                          //     padding: const EdgeInsets.symmetric(vertical: 15),
+                          //     shape: RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.circular(12),
+                          //     ),
+                          //   ),
+                          //   child: const Text(
+                          //     'Logout',
+                          //     style: TextStyle(
+                          //       color: Colors.white,
+                          //       fontSize: 16,
+                          //       fontWeight: FontWeight.bold,
+                          //     ),
+                          //   ),
+                          // ),
                         ),
                       ],
                     ),

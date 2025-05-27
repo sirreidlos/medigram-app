@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
@@ -221,18 +222,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _register,
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(secondaryColor2),
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.all(15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          side: BorderSide(color: Color(0xffffff))),
-                      child: Text("Register", style: header2),
-                    )),
+                    child: Button(
+                        "Register", () => _register(), true, true, false)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   // spacing: -6,
@@ -250,6 +241,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             decoration: TextDecoration.underline,
+                            color: Color(primaryColor2),
+                            decorationColor: Color(primaryColor2),
                           )),
                     ),
                   ],

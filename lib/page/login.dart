@@ -179,19 +179,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: screenPadding),
                 SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _login,
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(secondaryColor2),
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.all(15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          side: BorderSide(color: Color(0xffffff))),
-                      child: Text("Login", style: header2),
-                    )),
+                  width: double.infinity,
+                  child: Button("Login", () => _login(), true, true, false),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   // spacing: -8,
@@ -213,6 +203,8 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             decoration: TextDecoration.underline,
+                            color: Color(primaryColor2),
+                            decorationColor: Color(primaryColor2),
                           )),
                     ),
                   ],
