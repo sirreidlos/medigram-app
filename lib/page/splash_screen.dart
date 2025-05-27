@@ -192,10 +192,6 @@ class _SplashScreenState extends State<SplashScreen> {
           'assets/icons/medigram.png',
           width: 200,
         ),
-        // Text(
-        //   "Medigram",
-        //   style: GoogleFonts.montserratAlternates(fontSize: 40, fontWeight: FontWeight.bold),
-        // ),
       ),
     );
   }

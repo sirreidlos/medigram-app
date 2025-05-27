@@ -15,7 +15,6 @@ import 'package:medigram_app/page/reminder.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/notification_service.dart';
-import 'package:medigram_app/services/reminder_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 
 class SetupReminder extends StatefulWidget {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
@@ -49,15 +51,18 @@ class _LoginPageState extends State<LoginPage> {
           if (mounted) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const BottomNavigationMenu(true)),
+              MaterialPageRoute(
+                  builder: (context) => const BottomNavigationMenu(true)),
             );
           }
         } else {
-          developer.log('Login failed with status code: ${response.statusCode}');
+          developer
+              .log('Login failed with status code: ${response.statusCode}');
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(responseData['message'] ?? 'Login failed. Please check your credentials.'),
+                content: Text(responseData['message'] ??
+                    'Login failed. Please check your credentials.'),
                 backgroundColor: Colors.red,
               ),
             );
@@ -88,26 +93,49 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(screenPadding),
+          padding: EdgeInsets.fromLTRB(
+            screenPadding,
+            topScreenPadding,
+            screenPadding,
+            screenPadding,
+          ),
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: screenPadding,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 60),
+                Center(
+                  child: Image.asset(
+                    'assets/icons/medigram.png',
+                    width: 100,
+                  ),
+                ),
                 Text(
                   "Welcome Back!",
-                  style: title,
+                  style: header1,
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 40),
+                SizedBox(
+                  height: screenPadding,
+                ),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
+                    labelStyle: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black.withValues(alpha: 0.5),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                  ),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
@@ -120,7 +148,6 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
                 TextFormField(
                   controller: _passwordController,
                   decoration: InputDecoration(
@@ -128,6 +155,16 @@ class _LoginPageState extends State<LoginPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    labelStyle: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -140,38 +177,45 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _login,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(primaryColor1),
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                SizedBox(height: screenPadding),
+                SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _login,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(secondaryColor2),
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.all(15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          side: BorderSide(color: Color(0xffffff))),
+                      child: Text("Login", style: header2),
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // spacing: -8,
+                  children: [
+                    Text(
+                      "Don\'t have an account?",
+                      style: body,
                     ),
-                  ),
-                  child: _isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                          'Login',
-                          style: header1,
-                        ),
-                ),
-                SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const RegisterPage()),
-                    );
-                  },
-                  child: Text(
-                    'Don\'t have an account? Register',
-                    style: TextStyle(
-                      color: Color(primaryColor1),
-                      fontSize: 16,
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const RegisterPage()),
+                        );
+                      },
+                      child: Text('Register',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                          )),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -180,4 +224,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-} 
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
@@ -51,13 +52,15 @@ class _RegisterPageState extends State<RegisterPage> {
             if (loginResponse.statusCode == 200) {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const BottomNavigationMenu(true)),
+                MaterialPageRoute(
+                    builder: (context) => const BottomNavigationMenu(true)),
               );
             } else {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Registration successful but login failed. Please try logging in.'),
+                    content: Text(
+                        'Registration successful but login failed. Please try logging in.'),
                     backgroundColor: Colors.orange,
                   ),
                 );
@@ -69,7 +72,8 @@ class _RegisterPageState extends State<RegisterPage> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(responseData['message'] ?? 'Registration failed. Please try again.'),
+                content: Text(responseData['message'] ??
+                    'Registration failed. Please try again.'),
                 backgroundColor: Colors.red,
               ),
             );
@@ -99,19 +103,32 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(screenPadding),
+          padding: EdgeInsets.fromLTRB(
+            screenPadding,
+            topScreenPadding,
+            screenPadding,
+            screenPadding,
+          ),
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: screenPadding,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 60),
+                Center(
+                  child: Image.asset(
+                    'assets/icons/medigram.png',
+                    width: 100,
+                  ),
+                ),
                 Text(
-                  "Create Account",
-                  style: title,
+                  "Welcome to Medigram!",
+                  style: header1,
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 40),
+                SizedBox(
+                  height: screenPadding,
+                ),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -119,6 +136,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    labelStyle: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
@@ -131,7 +158,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
                 TextFormField(
                   controller: _passwordController,
                   decoration: InputDecoration(
@@ -139,6 +165,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    labelStyle: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -151,7 +187,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
                 TextFormField(
                   controller: _confirmPasswordController,
                   decoration: InputDecoration(
@@ -159,6 +194,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    labelStyle: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -171,35 +216,43 @@ class _RegisterPageState extends State<RegisterPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _register,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(primaryColor1),
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: _isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                          'Register',
-                          style: header1,
-                        ),
+                SizedBox(
+                  height: screenPadding,
                 ),
-                SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Already have an account? Login',
-                    style: TextStyle(
-                      color: Color(primaryColor1),
-                      fontSize: 16,
+                SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _register,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(secondaryColor2),
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.all(15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          side: BorderSide(color: Color(0xffffff))),
+                      child: Text("Register", style: header2),
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // spacing: -6,
+                  children: [
+                    Text(
+                      "Already have an account?",
+                      style: body,
                     ),
-                  ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Login',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                          )),
+                    ),
+                  ],
                 ),
               ],
             ),
