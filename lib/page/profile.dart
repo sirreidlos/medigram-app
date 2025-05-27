@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/page/edit_profile.dart';
 import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/models/user/user.dart';
@@ -91,7 +93,8 @@ class _ProfilePageState extends State<ProfilePage> {
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
               : _error != null
-                  ? Center(child: Text(_error!, style: TextStyle(color: Colors.red)))
+                  ? Center(
+                      child: Text(_error!, style: TextStyle(color: Colors.red)))
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: screenPadding,
@@ -103,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -111,48 +114,56 @@ class _ProfilePageState extends State<ProfilePage> {
                                   leading: const CircleAvatar(
                                     child: Icon(Icons.person),
                                   ),
-                                  title: Text(
-                                    _userDetail?.name ?? 'Not set',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  title: Text(_userDetail?.name ?? 'Not set',
+                                      style: header1),
+                                  subtitle: Text(
+                                    _user?.email ?? '',
+                                    style: body,
                                   ),
-                                  subtitle: Text(_user?.email ?? ''),
                                 ),
                                 const Divider(),
-                                _buildInfoRow('NIK', _userDetail?.nik.toString() ?? 'Not set'),
-                                _buildInfoRow('Gender', _userDetail?.gender ?? 'Not set'),
+                                _buildInfoRow('NIK',
+                                    _userDetail?.nik.toString() ?? 'Not set'),
+                                _buildInfoRow(
+                                    'Gender',
+                                    _userDetail?.gender == null
+                                        ? 'Not set'
+                                        : _userDetail!.gender == "M"
+                                            ? "Male"
+                                            : "Female"),
                                 _buildInfoRow(
                                   'Date of Birth',
-                                  _userDetail?.dob.toString().split(' ')[0] ?? 'Not set',
+                                  _userDetail?.dob == null
+                                      ? 'Not set'
+                                      : DateFormat("dd MMMM yyyy")
+                                          .format(_userDetail!.dob),
                                 ),
+                                Container(
+                                    padding: EdgeInsets.all(16),
+                                    child: Button(
+                                        "Edit Health Information",
+                                        () => EditProfile(),
+                                        false,
+                                        false,
+                                        false))
                               ],
                             ),
                           ),
                         ),
                         SizedBox(
                           width: double.infinity,
-                          child: Button("Logout", () => _logout(), true,
-                          true, false),
-                          // child: ElevatedButton(
-                          //   onPressed: _logout,
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: Colors.red,
-                          //     padding: const EdgeInsets.symmetric(vertical: 15),
-                          //     shape: RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.circular(12),
-                          //     ),
-                          //   ),
-                          //   child: const Text(
-                          //     'Logout',
-                          //     style: TextStyle(
-                          //       color: Colors.white,
-                          //       fontSize: 16,
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
+                          child: ElevatedButton(
+                            onPressed: () => _logout(),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                padding: EdgeInsets.all(15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                side: BorderSide(color: Color(0xffffff))),
+                            child: Text("Logout", style: header2),
+                          ),
                         ),
                       ],
                     ),
@@ -163,24 +174,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
-            ),
+            style: content,
           ),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Text(value, style: body),
         ],
       ),
     );
