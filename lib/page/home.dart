@@ -374,6 +374,6 @@ Future<Doctor> getDoctor() async {
 
   final response = await DoctorService().getDoctorByUserID(userID);
   Map<String, dynamic> data = jsonDecode(response.body);
-  Doctor doctor = Doctor.fromJson(data);
+  Doctor doctor = Doctor.fromJson(data); // TODO Change to array of object
   return doctor;
 }

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/page/edit_profile.dart';
+import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/models/user/user.dart';
@@ -141,8 +142,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Container(
                                     padding: EdgeInsets.all(16),
                                     child: Button(
-                                        "Edit Health Information",
-                                        () => EditProfile(),
+                                        "Edit Profile",
+                                        () => Navigator.push(context,
+                                                MaterialPageRoute(builder:
+                                                    (BuildContext context) {
+                                              return EditProfile();
+                                            })),
                                         false,
                                         false,
                                         false))

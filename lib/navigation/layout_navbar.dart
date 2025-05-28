@@ -6,8 +6,8 @@ import 'package:medigram_app/page/record.dart';
 import 'package:medigram_app/constants/style.dart';
 
 class BottomNavigationMenu extends StatefulWidget {
-  const BottomNavigationMenu(this.isPatient, {super.key});
-
+  const BottomNavigationMenu(this.isPatient, {this.initialIndex = 0 , super.key});
+  final int initialIndex;
   final bool isPatient;
 
   @override
@@ -16,6 +16,12 @@ class BottomNavigationMenu extends StatefulWidget {
 
 class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
   int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
 
   void onTapMenu(int index) {
     setState(() {

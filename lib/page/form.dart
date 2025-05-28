@@ -556,13 +556,6 @@ class _ConsultFormState extends State<ConsultForm> {
   }
 }
 
-Future<User> getUser(String userID) async {
-  final response = await UserService().getUserInfo(userID);
-  Map<String, dynamic> data = jsonDecode(response.body);
-  User user = User.fromJson(data);
-  return user;
-}
-
 Future<UserDetail> getUserDetail(String userID) async {
   final response = await UserService().getUserDetail(userID);
   Map<String, dynamic> data = jsonDecode(response.body);
