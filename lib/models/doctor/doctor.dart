@@ -1,31 +1,29 @@
+import 'package:medigram_app/models/doctor/location.dart';
+
 class Doctor {
   final String doctorID;
   final String userID;
   final String name;
-  final String praticePermit;
-  final String practiceAddress;
-  final bool approved;
-  final DateTime approvedAt;
+  final DateTime createdAt;
+  final List<Location> locations;
 
   Doctor({
     required this.doctorID,
     required this.userID,
     required this.name,
-    required this.praticePermit,
-    required this.practiceAddress,
-    required this.approved,
-    required this.approvedAt,
+    required this.createdAt,
+    required this.locations,
   });
 
   factory Doctor.fromJson(Map<String, dynamic> json) {
     return Doctor(
-      doctorID: json["doctor_id"],
-      userID: json["user_id"],
-      name: json["name"],
-      praticePermit: json["practice_permit"],
-      practiceAddress: json["practice_address"],
-      approved: json["approved"],
-      approvedAt: DateTime.parse(json["approved_at"]),
-    );
+        doctorID: json["doctor_id"],
+        userID: json["user_id"],
+        name: json["name"],
+        createdAt: DateTime.parse(json["created_at"]),
+        locations: (json["locations"] as List)
+        .map((loc) => Location.fromJson(loc as Map<String, dynamic>))
+        .toList()
+        );
   }
 }

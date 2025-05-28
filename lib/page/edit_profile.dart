@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
@@ -11,14 +12,13 @@ import 'package:medigram_app/constants/user_status.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/user/allery.dart';
 import 'package:medigram_app/models/user/medical_conditions.dart';
+import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/models/user/user_full.dart';
 import 'package:medigram_app/models/user/user_measurement.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
-import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/user_service.dart';
-import 'package:medigram_app/utils/dob_age.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -32,22 +32,87 @@ class _EditProfileState extends State<EditProfile> {
   bool isPatient = true;
 
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nikController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
+  final TextEditingController allergyController = TextEditingController();
+  final TextEditingController conditionController = TextEditingController();
+
   DateTime startDate = DateTime.now();
+  String severitySelected = "Mild (M)";
+  String genderSelected = "";
+
+  List<Allergy> listAllergy = [];
+  List<MedicalConditions> listConditions = [];
 
   List<String> genderList = [
     "Female (F)",
     "Male (M)",
   ];
-  String genderSelected = "";
+  List<String> severityList = [
+    "Mild (M)",
+    "Moderate (MOD)",
+    "Severe (S)",
+    "Critical (C)"
+  ];
 
   @override
   void initState() {
     super.initState();
     userData = fetchFullPatientData();
     getPatientStatus();
+  }
+
+  void addAllergy() {
+    setState(() {
+      listAllergy.add(Allergy(
+          allergyID: "",
+          userID: "",
+          allergen: allergyController.text,
+          severity: severitySelected));
+    });
+    resetAllergy();
+  }
+
+  void resetAllergy() {
+    setState(() {
+      allergyController.text = "";
+      severitySelected = "Mild (M)";
+    });
+  }
+
+  void removeAllergy(int index) {
+    setState(() {
+      listAllergy.removeAt(index);
+    });
+  }
+
+  void addCondition() {
+    setState(() {
+      listConditions.add(MedicalConditions(
+          conditionsID: "", userID: "", conditions: conditionController.text));
+      resetCondition();
+    });
+  }
+
+  void resetCondition() {
+    setState(() {
+      conditionController.text = "";
+    });
+  }
+
+  void removeCondition(int index) {
+    setState(() {
+      listConditions.removeAt(index);
+    });
+  }
+
+  void severityController(String newValue) {
+    setState(() {
+      severitySelected = newValue;
+    });
   }
 
   void genderController(String newValue) {
@@ -64,12 +129,14 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<UserFull> fetchFullPatientData() async {
+    final user = await getUser();
     final userDetail = await getUserDetail();
     final userMeasure = await getUserMeasurement();
     final listAllergy = await getUserAllergy();
     final listCondition = await getUserConditions();
 
     return UserFull(
+      user: user,
       userDetail: userDetail,
       userMeasurement: userMeasure,
       listAllergy: listAllergy,
@@ -100,12 +167,12 @@ class _EditProfileState extends State<EditProfile> {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else if (snapshot.hasData) {
+                          User userInfo = snapshot.data!.user!;
                           UserDetail user = snapshot.data!.userDetail;
                           UserMeasurement userDetail =
                               snapshot.data!.userMeasurement;
-                          List<Allergy> allergy = snapshot.data!.listAllergy;
-                          List<MedicalConditions> conditions =
-                              snapshot.data!.listConditions;
+                          listAllergy = snapshot.data!.listAllergy;
+                          listConditions = snapshot.data!.listConditions;
                           dobController.text =
                               DateFormat("dd MMMM yyyy").format(startDate);
                           if (genderSelected == "") {
@@ -117,15 +184,39 @@ class _EditProfileState extends State<EditProfile> {
                             children: [
                               PopupHeader(MaterialPageRoute(
                                 builder: ((context) {
-                                  return BottomNavigationMenu(isPatient, initialIndex: 2,);
+                                  return BottomNavigationMenu(
+                                    isPatient,
+                                    initialIndex: 2,
+                                  );
                                 }),
                               ), "Edit Profile", true),
+                              SizedBox(
+                                width: double.infinity,
+                                child:
+                                    Text("Personal Infomation", style: header2),
+                              ),
                               Input(
                                 header: "Name",
                                 placeholder: user.name,
                                 isDisabled: false,
                                 useIcon: Icon(null),
                                 controller: nameController,
+                                inputType: TextInputType.multiline,
+                              ),
+                              Input(
+                                header: "NIK",
+                                placeholder: user.nik.toString(),
+                                isDisabled: false,
+                                useIcon: Icon(null),
+                                controller: nikController,
+                                inputType: TextInputType.multiline,
+                              ),
+                              Input(
+                                header: "Email",
+                                placeholder: userInfo.email,
+                                isDisabled: false,
+                                useIcon: Icon(null),
+                                controller: emailController,
                                 inputType: TextInputType.multiline,
                               ),
                               Row(
@@ -167,8 +258,7 @@ class _EditProfileState extends State<EditProfile> {
                               Container(
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: Color(secondaryColor1)
-                                        .withValues(alpha: 0.65),
+                                    color: Color(secondaryColor1),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   ),
@@ -222,42 +312,25 @@ class _EditProfileState extends State<EditProfile> {
                                 inputType: TextInputType.number,
                               ),
                               Column(
-                                children: [
-                                  Input(
-                                    header: "Allergy*",
-                                    placeholder: allergy.isEmpty
-                                        ? "-"
-                                        : allergy
-                                            .map((a) =>
-                                                "${a.allergen} (${getSeverity(a.severity)})")
-                                            .join(", "),
-                                    isDisabled: false,
-                                    useIcon: Icon(null),
-                                    controller: TextEditingController(),
-                                    inputType: TextInputType.multiline,
-                                  ),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Text(
-                                      "*M = Mild, MOD = Moderate, S = Severe, C = Critical",
-                                      style: content,
-                                      maxLines: 2,
-                                    ),
-                                  )
-                                ],
+                                spacing: 20,
+                                children: [showAllergy(), allergyField()],
                               ),
-                              Input(
-                                header: "Medical Conditions",
-                                placeholder: conditions.isEmpty
-                                    ? "-"
-                                    : conditions
-                                        .map((c) => c.conditions)
-                                        .join(", "),
-                                isDisabled: false,
-                                useIcon: Icon(null),
-                                controller: TextEditingController(),
-                                inputType: TextInputType.multiline,
+                              Column(
+                                spacing: 20,
+                                children: [showCondition(), conditionField()],
                               ),
+                              // Input(
+                              //   header: "Medical Conditions",
+                              //   placeholder: conditions.isEmpty
+                              //       ? "-"
+                              //       : conditions
+                              //           .map((c) => c.conditions)
+                              //           .join(", "),
+                              //   isDisabled: false,
+                              //   useIcon: Icon(null),
+                              //   controller: TextEditingController(),
+                              //   inputType: TextInputType.multiline,
+                              // ),
                             ],
                           );
                         } else {
@@ -278,12 +351,13 @@ class _EditProfileState extends State<EditProfile> {
                           return Row(
                             children: [
                               Input(
-                                header: doctor.praticePermit,
-                                placeholder: doctor.practiceAddress,
+                                header: "doctor.praticePermit",
+                                placeholder: "doctor.practiceAddress",
                                 isDisabled: false,
-                                useIcon: Icon(doctor.approved
-                                    ? Icons.verified_user_outlined
-                                    : Icons.pending_actions_rounded),
+                                useIcon: Icon(null),
+                                // useIcon: Icon(doctor.approved
+                                //     ? Icons.verified_user_outlined
+                                //     : Icons.pending_actions_rounded),
                                 controller: TextEditingController(),
                                 inputType: TextInputType.multiline,
                               ),
@@ -293,9 +367,171 @@ class _EditProfileState extends State<EditProfile> {
                           return Center(child: Text("No data found"));
                         }
                       }),
+              Row(
+                spacing: 10,
+                children: [
+                  Expanded(
+                      child: Button(
+                          "Cancel",
+                          () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((context) {
+                                    return BottomNavigationMenu(isPatient, initialIndex: 2,);
+                                  }),
+                                ),
+                              ),
+                          false,
+                          true,
+                          false)),
+                  Expanded(
+                      child: Button("Save Changes", () => saveProfile(), true,
+                          true, false)),
+                ],
+              ),
             ])),
       ),
     );
+  }
+
+  void saveProfile(){}
+
+  Widget conditionField() {
+    return Column(
+      spacing: 20,
+      children: [
+        Input(
+          header: "Medical Conditions",
+          placeholder: "Add new condition",
+          isDisabled: false,
+          useIcon: Icon(null),
+          controller: conditionController,
+          inputType: TextInputType.multiline,
+        ),
+        Row(
+          spacing: 10,
+          children: [
+            Expanded(
+                child: Button(
+                    "Reset Condition", () => resetCondition(), false, false, true)),
+            Expanded(
+                child: Button("Add Condition", () => addCondition(), true, false, true)),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget showCondition() {
+    return Column(spacing: 10, children: [
+      SizedBox(
+        width: double.infinity,
+        child: Text("Medical Conditions", style: header2),
+      ),
+      Column(
+          spacing: 5,
+          children: List.generate(listConditions.length, (index) {
+            return Row(
+              children: [
+                Expanded(
+                    child: RecordCard(
+                  title: listConditions[index].conditions,
+                  subtitle: "",
+                  info1: "",
+                  info2: "",
+                  isMed: true,
+                )),
+                IconButton(
+                    onPressed: () => removeCondition(index),
+                    icon: Icon(Icons.remove_circle_outline_rounded))
+              ],
+            );
+          }))
+    ]);
+  }
+
+  Widget allergyField() {
+    return Column(
+      spacing: 20,
+      children: [
+        Row(
+          spacing: 20,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+                child: Input(
+              header: "Allergy",
+              placeholder: "Add new allergy",
+              isDisabled: false,
+              useIcon: Icon(null),
+              controller: allergyController,
+              inputType: TextInputType.multiline,
+            )),
+            Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Color(secondaryColor1).withValues(alpha: 0.65),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: DropdownButton(
+                  value: severitySelected,
+                  items: severityList.map((String severity) {
+                    return DropdownMenuItem(
+                        value: severity,
+                        child: Text(
+                          severity,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ));
+                  }).toList(),
+                  onChanged: (String? newValue) =>
+                      severityController(newValue!)),
+            ),
+          ],
+        ),
+        Row(
+          spacing: 10,
+          children: [
+            Expanded(
+                child:
+                    Button("Reset Allergy", () => resetAllergy(), false, false, true)),
+            Expanded(
+                child: Button("Add Allergy", () => addAllergy(), true, false, true)),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget showAllergy() {
+    return Column(spacing: 10, children: [
+      SizedBox(
+        width: double.infinity,
+        child: Text("Allergies", style: header2),
+      ),
+      Column(
+          spacing: 5,
+          children: List.generate(listAllergy.length, (index) {
+            return Row(
+              children: [
+                Expanded(
+                    child: RecordCard(
+                  title: listAllergy[index].allergen,
+                  subtitle: listAllergy[index].severity,
+                  info1: "",
+                  info2: "",
+                  isMed: true,
+                )),
+                IconButton(
+                    onPressed: () => removeAllergy(index),
+                    icon: Icon(Icons.remove_circle_outline_rounded))
+              ],
+            );
+          }))
+    ]);
   }
 
   Future<void> displayDatePicker(BuildContext context) async {
@@ -332,13 +568,20 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<Doctor> getDoctor() async {
-    UserDetail user = await getUser();
+    User user = await getUser();
     String userID = user.userID;
 
     final response = await DoctorService().getDoctorByUserID(userID);
     Map<String, dynamic> data = jsonDecode(response.body);
     Doctor doctor = Doctor.fromJson(data); // TODO Change to array of object
     return doctor;
+  }
+
+  Future<User> getUser() async {
+    final response = await UserService().getOwnInfo();
+    Map<String, dynamic> data = jsonDecode(response.body);
+    User user = User.fromJson(data);
+    return user;
   }
 
   Future<UserDetail> getUserDetail() async {

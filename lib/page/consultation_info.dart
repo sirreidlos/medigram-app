@@ -73,7 +73,7 @@ class ConsultationInfo extends StatelessWidget {
                     children: [
                       RecordCard(
                           title: doctor.name,
-                          subtitle: doctor.practiceAddress,
+                          subtitle: "PRACTICE ADDRESS", // TODO Get correct address
                           info1: getDate(
                               consultation.createdAt.add(Duration(hours: 7))),
                           info2: DateFormat('HH:mm').format(

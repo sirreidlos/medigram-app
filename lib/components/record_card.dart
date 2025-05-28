@@ -40,8 +40,11 @@ class RecordCard extends StatelessWidget {
                       children: [
                         Text(title,
                             overflow: TextOverflow.ellipsis, style: body),
-                        Text(subtitle,
-                            overflow: TextOverflow.ellipsis, style: content),
+                        subtitle == ""
+                            ? Container()
+                            : Text(subtitle,
+                                overflow: TextOverflow.ellipsis,
+                                style: content),
                       ],
                     ),
                   ),

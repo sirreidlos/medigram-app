@@ -68,7 +68,7 @@ class _SetupReminderState extends State<SetupReminder> {
                     children: [
                       RecordCard(
                           title: "Dr. ${doctor.name}",
-                          subtitle: doctor.practiceAddress,
+                          subtitle: "PRACTICE ADDRESS", // TODO Get correct address
                           info1: getDate(widget.consultation.createdAt
                               .add(Duration(hours: 7))),
                           info2: DateFormat('HH:mm').format(widget

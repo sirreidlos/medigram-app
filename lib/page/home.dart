@@ -178,7 +178,8 @@ Widget mainFeature(BuildContext context, bool isPatient) {
                     } else if (snapshot.hasData) {
                       return Expanded(
                         child: Text(
-                          snapshot.data!.practiceAddress,
+                          // snapshot.data!.practiceAddress, 
+                          "PRACTICE ADDRESS", // TODO Get correct address
                           style: title,
                           overflow: TextOverflow.ellipsis,
                         ),

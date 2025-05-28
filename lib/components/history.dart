@@ -97,7 +97,6 @@ class RecordHistory extends StatelessWidget {
       final List data = jsonDecode(response.body);
       listConsult = data.map((e) => Consultation.fromJson(e)).toList();
     }
-
     listConsult.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
     List<ConsultationDetail> listDetail = [];
@@ -108,7 +107,8 @@ class RecordHistory extends StatelessWidget {
       listDetail.add(ConsultationDetail(
         consultation: consult,
         title: title,
-        practiceAddress: doctor.practiceAddress,
+        // practiceAddress: doctor.practiceAddress,
+                          practiceAddress: "PRACTICE ADDRESS", // TODO Get correct address
         onPressed: () {
           Navigator.push(
             context,
