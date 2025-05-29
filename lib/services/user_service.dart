@@ -66,7 +66,7 @@ class UserService {
   }
 
   Future<http.Response> putOwnDetail(
-    String nik,
+    int nik,
     String name,
     DateTime dob,
     String gender,

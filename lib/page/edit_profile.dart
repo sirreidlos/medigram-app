@@ -32,7 +32,6 @@ class _EditProfileState extends State<EditProfile> {
   bool isPatient = true;
 
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
   final TextEditingController nikController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
@@ -46,6 +45,8 @@ class _EditProfileState extends State<EditProfile> {
 
   List<Allergy> listAllergy = [];
   List<MedicalConditions> listConditions = [];
+  List<String> deletedAllergy = [];
+  List<String> deletedCondition = [];
 
   List<String> genderList = [
     "Female (F)",
@@ -83,8 +84,11 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  void removeAllergy(int index) {
+  void removeAllergy(
+    int index,
+  ) {
     setState(() {
+      deletedAllergy.add(listAllergy[index].allergyID);
       listAllergy.removeAt(index);
     });
   }
@@ -105,6 +109,7 @@ class _EditProfileState extends State<EditProfile> {
 
   void removeCondition(int index) {
     setState(() {
+      deletedCondition.add(listConditions[index].conditionsID);
       listConditions.removeAt(index);
     });
   }
@@ -129,14 +134,18 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<UserFull> fetchFullPatientData() async {
-    final user = await getUser();
     final userDetail = await getUserDetail();
     final userMeasure = await getUserMeasurement();
     final listAllergy = await getUserAllergy();
     final listCondition = await getUserConditions();
+    startDate = userDetail.dob;
+    dobController.text = DateFormat("dd MMMM yyyy").format(startDate);
+    nameController.text = userDetail.name;
+    nikController.text = userDetail.nik.toString();
+    weightController.text = userMeasure.weightInKg.toString();
+    heightController.text = userMeasure.heightInCm.toString();
 
     return UserFull(
-      user: user,
       userDetail: userDetail,
       userMeasurement: userMeasure,
       listAllergy: listAllergy,
@@ -167,14 +176,11 @@ class _EditProfileState extends State<EditProfile> {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else if (snapshot.hasData) {
-                          User userInfo = snapshot.data!.user!;
                           UserDetail user = snapshot.data!.userDetail;
                           UserMeasurement userDetail =
                               snapshot.data!.userMeasurement;
                           listAllergy = snapshot.data!.listAllergy;
                           listConditions = snapshot.data!.listConditions;
-                          dobController.text =
-                              DateFormat("dd MMMM yyyy").format(startDate);
                           if (genderSelected == "") {
                             genderSelected =
                                 user.gender == "M" ? "Male (M)" : "Female (F)";
@@ -189,7 +195,7 @@ class _EditProfileState extends State<EditProfile> {
                                     initialIndex: 2,
                                   );
                                 }),
-                              ), "Edit Profile", true),
+                              ), isPatient ? "Edit Health Information" : "Edit Practice Information", true),
                               SizedBox(
                                 width: double.infinity,
                                 child:
@@ -209,15 +215,7 @@ class _EditProfileState extends State<EditProfile> {
                                 isDisabled: false,
                                 useIcon: Icon(null),
                                 controller: nikController,
-                                inputType: TextInputType.multiline,
-                              ),
-                              Input(
-                                header: "Email",
-                                placeholder: userInfo.email,
-                                isDisabled: false,
-                                useIcon: Icon(null),
-                                controller: emailController,
-                                inputType: TextInputType.multiline,
+                                inputType: TextInputType.number,
                               ),
                               Row(
                                 spacing: 10,
@@ -229,7 +227,7 @@ class _EditProfileState extends State<EditProfile> {
                                       isDisabled: false,
                                       useIcon: Icon(null),
                                       controller: TextEditingController(),
-                                      inputType: TextInputType.multiline,
+                                      inputType: TextInputType.none,
                                     ),
                                   ),
                                   ElevatedButton(
@@ -285,9 +283,7 @@ class _EditProfileState extends State<EditProfile> {
                                                         fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.w500,
-                                                        color: Colors.black
-                                                            .withValues(
-                                                                alpha: 0.5),
+                                                        color: Colors.black,
                                                       ),
                                                     ));
                                               }).toList(),
@@ -319,18 +315,6 @@ class _EditProfileState extends State<EditProfile> {
                                 spacing: 20,
                                 children: [showCondition(), conditionField()],
                               ),
-                              // Input(
-                              //   header: "Medical Conditions",
-                              //   placeholder: conditions.isEmpty
-                              //       ? "-"
-                              //       : conditions
-                              //           .map((c) => c.conditions)
-                              //           .join(", "),
-                              //   isDisabled: false,
-                              //   useIcon: Icon(null),
-                              //   controller: TextEditingController(),
-                              //   inputType: TextInputType.multiline,
-                              // ),
                             ],
                           );
                         } else {
@@ -377,7 +361,10 @@ class _EditProfileState extends State<EditProfile> {
                                 context,
                                 MaterialPageRoute(
                                   builder: ((context) {
-                                    return BottomNavigationMenu(isPatient, initialIndex: 2,);
+                                    return BottomNavigationMenu(
+                                      isPatient,
+                                      initialIndex: 2,
+                                    );
                                   }),
                                 ),
                               ),
@@ -394,7 +381,67 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  void saveProfile(){}
+  Future saveProfile() async {
+    int nik = int.parse(nikController.text);
+    String name = nameController.text;
+    DateTime dob = startDate;
+    String gender = genderSelected.substring(0, 1).toUpperCase();
+    double weight = double.parse(weightController.text);
+    double height = double.parse(heightController.text);
+
+    final responseDetail =
+        await UserService().putOwnDetail(nik, name, dob, gender); 
+      debugPrint(responseDetail.body);
+      debugPrint(responseDetail.statusCode.toString());
+      debugPrint(responseDetail.request.toString());
+
+    // final responseMeasurement =
+    //     await UserService().postOwnMeasurements(weight, height);
+
+    // for (var allergyID in deletedAllergy) {
+    //   final responseDelAllergy = await UserService().deleteAllergy(allergyID);
+    // }
+    // for (var conditionID in deletedCondition) {
+    //   final responseDelCondition =
+    //       await UserService().deleteConditions(conditionID);
+    // }
+
+    // for (var allergy in listAllergy) {
+    //   final responseAllergy = await UserService()
+    //       .postOwnAllergy(allergy.allergen, allergy.severity);
+    // }
+    // for (var condition in listConditions) {
+    //   final responseCondition =
+    //       await UserService().postOwnConditions(condition.conditions);
+    // }
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Changes saved successfully!'),
+            content: Text('Stay Healthy!'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Back to Home'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) {
+                        return BottomNavigationMenu(
+                          isPatient,
+                          initialIndex: 2,
+                        );
+                      }),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        });
+  }
 
   Widget conditionField() {
     return Column(
@@ -412,10 +459,11 @@ class _EditProfileState extends State<EditProfile> {
           spacing: 10,
           children: [
             Expanded(
-                child: Button(
-                    "Reset Condition", () => resetCondition(), false, false, true)),
+                child: Button("Reset Condition", () => resetCondition(), false,
+                    false, true)),
             Expanded(
-                child: Button("Add Condition", () => addCondition(), true, false, true)),
+                child: Button(
+                    "Add Condition", () => addCondition(), true, false, true)),
           ],
         ),
       ],
@@ -496,10 +544,11 @@ class _EditProfileState extends State<EditProfile> {
           spacing: 10,
           children: [
             Expanded(
-                child:
-                    Button("Reset Allergy", () => resetAllergy(), false, false, true)),
+                child: Button(
+                    "Reset Allergy", () => resetAllergy(), false, false, true)),
             Expanded(
-                child: Button("Add Allergy", () => addAllergy(), true, false, true)),
+                child: Button(
+                    "Add Allergy", () => addAllergy(), true, false, true)),
           ],
         ),
       ],
@@ -538,14 +587,14 @@ class _EditProfileState extends State<EditProfile> {
     var date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
+      firstDate: DateTime(1930),
       lastDate: DateTime.now().add(Duration(days: 365)),
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light(
               primary: Color(secondaryColor2), // Warna header & tombol OK
-              onPrimary: Colors.white, // Warna teks di header
+              onPrimary: Colors.black, // Warna teks di header
               onSurface: Colors.black, // Warna teks di tanggal
             ),
             textButtonTheme: TextButtonThemeData(
