@@ -5,7 +5,7 @@ class Doctor {
   final String userID;
   final String name;
   final DateTime createdAt;
-  final List<Location> locations;
+  final List<PracticeLocation> locations;
 
   Doctor({
     required this.doctorID,
@@ -22,7 +22,7 @@ class Doctor {
         name: json["name"],
         createdAt: DateTime.parse(json["created_at"]),
         locations: (json["locations"] as List)
-        .map((loc) => Location.fromJson(loc as Map<String, dynamic>))
+        .map((loc) => PracticeLocation.fromJson(loc as Map<String, dynamic>))
         .toList()
         );
   }

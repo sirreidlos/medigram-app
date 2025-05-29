@@ -1,4 +1,4 @@
-class Location {
+class PracticeLocation {
   final String locationID;
   final String doctorID;
   final String practicePermit;
@@ -6,7 +6,7 @@ class Location {
   final DateTime approvedAt;
   final DateTime createdAt;
 
-  Location({
+  PracticeLocation({
     required this.locationID,
     required this.doctorID,
     required this.practicePermit,
@@ -15,8 +15,8 @@ class Location {
     required this.createdAt,
   });
 
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
+  factory PracticeLocation.fromJson(Map<String, dynamic> json) {
+    return PracticeLocation(
         locationID: json["location_id"],
         doctorID: json["doctor_id"],
         practiceAddress: json["practice_address"],

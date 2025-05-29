@@ -7,7 +7,6 @@ class Input extends StatelessWidget {
     required this.header,
     required this.placeholder,
     required this.isDisabled,
-    required this.useIcon,
     required this.inputType,
     required this.controller,
     super.key,
@@ -16,7 +15,6 @@ class Input extends StatelessWidget {
   final String header;
   final String placeholder;
   final bool isDisabled;
-  final Icon useIcon;
   final TextInputType inputType;
   final TextEditingController controller;
 
@@ -84,14 +82,6 @@ class Input extends StatelessWidget {
               ],
             ),
           ),
-          useIcon.icon != null
-              ? (IconButton(
-                  onPressed: () {},
-                  icon: useIcon,
-                  iconSize: 20,
-                  padding: EdgeInsets.zero,
-                ))
-              : Container(),
         ],
       ),
     );

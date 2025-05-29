@@ -10,6 +10,7 @@ import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/constants/user_status.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
+import 'package:medigram_app/models/doctor/location.dart';
 import 'package:medigram_app/models/user/allery.dart';
 import 'package:medigram_app/models/user/medical_conditions.dart';
 import 'package:medigram_app/models/user/user.dart';
@@ -19,6 +20,7 @@ import 'package:medigram_app/models/user/user_measurement.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/user_service.dart';
+import 'package:timezone/standalone.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -144,6 +146,24 @@ class _EditProfileState extends State<EditProfile> {
               screenPadding,
             ),
             child: Column(spacing: 15, children: [
+              PopupHeader(MaterialPageRoute(
+                builder: ((context) {
+                  return BottomNavigationMenu(
+                    isPatient,
+                    initialIndex: 2,
+                  );
+                }),
+              ),
+                  isPatient
+                      ? "Edit Health Information"
+                      : "Edit Practice Information",
+                  true),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                    isPatient ? "Health Infomation" : "Practice Information",
+                    style: header2),
+              ),
               isPatient
                   ? (FutureBuilder<UserFull>(
                       future: userData,
@@ -162,31 +182,11 @@ class _EditProfileState extends State<EditProfile> {
                           return Column(
                             spacing: 15,
                             children: [
-                              PopupHeader(MaterialPageRoute(
-                                builder: ((context) {
-                                  return BottomNavigationMenu(
-                                    isPatient,
-                                    initialIndex: 2,
-                                  );
-                                }),
-                              ),
-                                  isPatient
-                                      ? "Edit Health Information"
-                                      : "Edit Practice Information",
-                                  true),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                    isPatient
-                                        ? "Health Infomation"
-                                        : "Practice Information",
-                                    style: header2),
-                              ),
                               Input(
                                 header: "Height (cm)",
                                 placeholder: userDetail.heightInCm.toString(),
                                 isDisabled: false,
-                                useIcon: Icon(null),
+                                
                                 controller: heightController,
                                 inputType: TextInputType.number,
                               ),
@@ -194,7 +194,7 @@ class _EditProfileState extends State<EditProfile> {
                                 header: "Weight (kg)",
                                 placeholder: userDetail.weightInKg.toString(),
                                 isDisabled: false,
-                                useIcon: Icon(null),
+                                
                                 controller: weightController,
                                 inputType: TextInputType.number,
                               ),
@@ -223,21 +223,37 @@ class _EditProfileState extends State<EditProfile> {
                               child: Text('Error: ${snapshot.error}'));
                         } else if (snapshot.hasData) {
                           Doctor doctor = snapshot.data!; // TODO Change to list
-                          return Row(
-                            children: [
-                              Input(
-                                header: "doctor.praticePermit",
-                                placeholder: "doctor.practiceAddress",
-                                isDisabled: false,
-                                useIcon: Icon(null),
-                                // useIcon: Icon(doctor.approved
-                                //     ? Icons.verified_user_outlined
-                                //     : Icons.pending_actions_rounded),
-                                controller: TextEditingController(),
-                                inputType: TextInputType.multiline,
-                              ),
-                            ],
-                          );
+                          List<PracticeLocation> listLocation =
+                              doctor.locations;
+                          return Column(
+                              children:
+                                  List.generate(listLocation.length, (index) {
+                            return Row(
+                              spacing: 5,
+                              children: [
+                                SizedBox(
+                                    child: listLocation[index].approvedAt ==
+                                            null
+                                        ? Icon(null)
+                                        : Icon(Icons.verified_user_rounded, color: Color(primaryColor1),)),
+                                Expanded(
+                                    child: RecordCard(
+                                  title: listLocation[index].practicePermit,
+                                  subtitle: listLocation[index].practiceAddress,
+                                  info1: "",
+                                  info2: "",
+                                  isMed: false,
+                                )),
+                                SizedBox(
+                                    child: IconButton(
+                                        onPressed: () => removeCondition(index),
+                                        padding: EdgeInsets.zero,
+                                        constraints: BoxConstraints(),
+                                        icon: Icon(Icons
+                                            .remove_circle_outline_rounded))),
+                              ],
+                            );
+                          }));
                         } else {
                           return Center(child: Text("No data found"));
                         }
@@ -336,7 +352,7 @@ class _EditProfileState extends State<EditProfile> {
           header: "Medical Conditions",
           placeholder: "Add new condition",
           isDisabled: false,
-          useIcon: Icon(null),
+          
           controller: conditionController,
           inputType: TextInputType.multiline,
         ),
@@ -396,7 +412,7 @@ class _EditProfileState extends State<EditProfile> {
               header: "Allergy",
               placeholder: "Add new allergy",
               isDisabled: false,
-              useIcon: Icon(null),
+              
               controller: allergyController,
               inputType: TextInputType.multiline,
             )),

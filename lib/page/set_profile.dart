@@ -61,7 +61,7 @@ class _SetProfileState extends State<SetProfile> {
                 header: "Name",
                 placeholder: "Your full name",
                 isDisabled: false,
-                useIcon: Icon(null),
+                
                 controller: nameController,
                 inputType: TextInputType.multiline,
               ),
@@ -69,7 +69,7 @@ class _SetProfileState extends State<SetProfile> {
                 header: "NIK",
                 placeholder: "Your identity number must be 16 digits",
                 isDisabled: false,
-                useIcon: Icon(null),
+                
                 controller: nikController,
                 inputType: TextInputType.number,
               ),
@@ -81,7 +81,7 @@ class _SetProfileState extends State<SetProfile> {
                       header: "Age",
                       placeholder: DateFormat("dd MMMM yyyy").format(startDate),
                       isDisabled: false,
-                      useIcon: Icon(null),
+                      
                       controller: TextEditingController(),
                       inputType: TextInputType.none,
                     ),

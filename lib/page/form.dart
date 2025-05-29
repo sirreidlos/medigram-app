@@ -238,7 +238,7 @@ class _ConsultFormState extends State<ConsultForm> {
                             header: "Name",
                             placeholder: user.name,
                             isDisabled: true,
-                            useIcon: Icon(null),
+                            
                             controller: TextEditingController(),
                             inputType: TextInputType.multiline,
                           ),
@@ -252,7 +252,7 @@ class _ConsultFormState extends State<ConsultForm> {
                                   placeholder:
                                       "${dobToAge(user.dob)[2]} years ${dobToAge(user.dob)[1]} months",
                                   isDisabled: true,
-                                  useIcon: Icon(null),
+                                  
                                   controller: TextEditingController(),
                                   inputType: TextInputType.multiline,
                                 ),
@@ -263,7 +263,7 @@ class _ConsultFormState extends State<ConsultForm> {
                                   placeholder:
                                       user.gender == "M" ? "Male" : "Female",
                                   isDisabled: true,
-                                  useIcon: Icon(null),
+                                  
                                   controller: TextEditingController(),
                                   inputType: TextInputType.multiline,
                                 ),
@@ -279,7 +279,7 @@ class _ConsultFormState extends State<ConsultForm> {
                                   header: "Height (cm)",
                                   placeholder: userDetail.heightInCm.toString(),
                                   isDisabled: true,
-                                  useIcon: Icon(null),
+                                  
                                   controller: TextEditingController(),
                                   inputType: TextInputType.number,
                                 ),
@@ -289,7 +289,7 @@ class _ConsultFormState extends State<ConsultForm> {
                                   header: "Weight (kg)",
                                   placeholder: userDetail.weightInKg.toString(),
                                   isDisabled: true,
-                                  useIcon: Icon(null),
+                                  
                                   controller: TextEditingController(),
                                   inputType: TextInputType.number,
                                 ),
@@ -307,7 +307,7 @@ class _ConsultFormState extends State<ConsultForm> {
                                             "${a.allergen} (${getSeverity(a.severity)})")
                                         .join(", "),
                                 isDisabled: true,
-                                useIcon: Icon(null),
+                                
                                 controller: TextEditingController(),
                                 inputType: TextInputType.multiline,
                               ),
@@ -329,7 +329,7 @@ class _ConsultFormState extends State<ConsultForm> {
                                     .map((c) => "${c.conditions}")
                                     .join(", "),
                             isDisabled: true,
-                            useIcon: Icon(null),
+                            
                             controller: TextEditingController(),
                             inputType: TextInputType.multiline,
                           ),
@@ -385,7 +385,7 @@ class _ConsultFormState extends State<ConsultForm> {
         header: "Symptoms",
         placeholder: "Your patient symptoms",
         isDisabled: false,
-        useIcon: Icon(null),
+        
         controller: symptomsController,
         inputType: TextInputType.multiline,
       ),
@@ -398,7 +398,7 @@ class _ConsultFormState extends State<ConsultForm> {
             header: "Diagnoses",
             placeholder: "Your patient diagnoses",
             isDisabled: false,
-            useIcon: Icon(null),
+            
             controller: diagnosesController,
             inputType: TextInputType.multiline,
           )),
@@ -472,7 +472,7 @@ class _ConsultFormState extends State<ConsultForm> {
           header: "Drug Name",
           placeholder: "Medicine for your patient",
           isDisabled: false,
-          useIcon: Icon(null),
+          
           controller: drugController,
           inputType: TextInputType.multiline,
         ),
@@ -485,7 +485,7 @@ class _ConsultFormState extends State<ConsultForm> {
                 header: "Doses (mg)",
                 placeholder: "Doses in mg",
                 isDisabled: false,
-                useIcon: Icon(null),
+                
                 controller: dosesController,
                 inputType: TextInputType.number,
               ),
@@ -495,7 +495,7 @@ class _ConsultFormState extends State<ConsultForm> {
                 header: "Daily Regimen",
                 placeholder: "Per day",
                 isDisabled: false,
-                useIcon: Icon(null),
+                
                 controller: regimenController,
                 inputType: TextInputType.number,
               ),
@@ -506,7 +506,7 @@ class _ConsultFormState extends State<ConsultForm> {
           header: "Quantity (/dose)",
           placeholder: "Per dose",
           isDisabled: false,
-          useIcon: Icon(null),
+          
           controller: quantityController,
           inputType: TextInputType.number,
         ),
@@ -514,7 +514,7 @@ class _ConsultFormState extends State<ConsultForm> {
           header: "Instruction",
           placeholder: "How to consume",
           isDisabled: false,
-          useIcon: Icon(null),
+          
           controller: instructionController,
           inputType: TextInputType.multiline,
         ),
