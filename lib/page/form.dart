@@ -216,7 +216,7 @@ class _ConsultFormState extends State<ConsultForm> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
-                      UserDetail user = snapshot.data!.userDetail;
+                      UserDetail user = snapshot.data!.userDetail!;
                       UserMeasurement userDetail =
                           snapshot.data!.userMeasurement;
                       List<Allergy> allergy = snapshot.data!.listAllergy;

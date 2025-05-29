@@ -31,27 +31,18 @@ class _EditProfileState extends State<EditProfile> {
   late Future<UserFull> userData;
   bool isPatient = true;
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController nikController = TextEditingController();
-  final TextEditingController dobController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController allergyController = TextEditingController();
   final TextEditingController conditionController = TextEditingController();
 
-  DateTime startDate = DateTime.now();
   String severitySelected = "Mild (M)";
-  String genderSelected = "";
 
   List<Allergy> listAllergy = [];
   List<MedicalConditions> listConditions = [];
   List<String> deletedAllergy = [];
   List<String> deletedCondition = [];
 
-  List<String> genderList = [
-    "Female (F)",
-    "Male (M)",
-  ];
   List<String> severityList = [
     "Mild (M)",
     "Moderate (MOD)",
@@ -120,12 +111,6 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  void genderController(String newValue) {
-    setState(() {
-      genderSelected = newValue;
-    });
-  }
-
   Future<void> getPatientStatus() async {
     bool response = await SharedPrefsHelper.getUserRole();
     setState(() {
@@ -134,19 +119,13 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<UserFull> fetchFullPatientData() async {
-    final userDetail = await getUserDetail();
     final userMeasure = await getUserMeasurement();
     final listAllergy = await getUserAllergy();
     final listCondition = await getUserConditions();
-    startDate = userDetail.dob;
-    dobController.text = DateFormat("dd MMMM yyyy").format(startDate);
-    nameController.text = userDetail.name;
-    nikController.text = userDetail.nik.toString();
     weightController.text = userMeasure.weightInKg.toString();
     heightController.text = userMeasure.heightInCm.toString();
 
     return UserFull(
-      userDetail: userDetail,
       userMeasurement: userMeasure,
       listAllergy: listAllergy,
       listConditions: listCondition,
@@ -176,15 +155,10 @@ class _EditProfileState extends State<EditProfile> {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else if (snapshot.hasData) {
-                          UserDetail user = snapshot.data!.userDetail;
                           UserMeasurement userDetail =
                               snapshot.data!.userMeasurement;
                           listAllergy = snapshot.data!.listAllergy;
                           listConditions = snapshot.data!.listConditions;
-                          if (genderSelected == "") {
-                            genderSelected =
-                                user.gender == "M" ? "Male (M)" : "Female (F)";
-                          }
                           return Column(
                             spacing: 15,
                             children: [
@@ -195,102 +169,19 @@ class _EditProfileState extends State<EditProfile> {
                                     initialIndex: 2,
                                   );
                                 }),
-                              ), isPatient ? "Edit Health Information" : "Edit Practice Information", true),
+                              ),
+                                  isPatient
+                                      ? "Edit Health Information"
+                                      : "Edit Practice Information",
+                                  true),
                               SizedBox(
                                 width: double.infinity,
-                                child:
-                                    Text("Personal Infomation", style: header2),
+                                child: Text(
+                                    isPatient
+                                        ? "Health Infomation"
+                                        : "Practice Information",
+                                    style: header2),
                               ),
-                              Input(
-                                header: "Name",
-                                placeholder: user.name,
-                                isDisabled: false,
-                                useIcon: Icon(null),
-                                controller: nameController,
-                                inputType: TextInputType.multiline,
-                              ),
-                              Input(
-                                header: "NIK",
-                                placeholder: user.nik.toString(),
-                                isDisabled: false,
-                                useIcon: Icon(null),
-                                controller: nikController,
-                                inputType: TextInputType.number,
-                              ),
-                              Row(
-                                spacing: 10,
-                                children: [
-                                  Expanded(
-                                    child: Input(
-                                      header: "Age",
-                                      placeholder: dobController.text,
-                                      isDisabled: false,
-                                      useIcon: Icon(null),
-                                      controller: TextEditingController(),
-                                      inputType: TextInputType.none,
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () => displayDatePicker(context),
-                                    style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(20),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    child: Row(spacing: 10, children: [
-                                      Icon(Icons.calendar_month,
-                                          color: Color(secondaryColor2)),
-                                      Text(
-                                        'Select Date',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ]),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: Color(secondaryColor1),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Gender",
-                                            style: GoogleFonts.poppins(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500)),
-                                        SizedBox(
-                                          child: DropdownButton(
-                                              isExpanded: true,
-                                              value: genderSelected,
-                                              items: genderList
-                                                  .map((String gender) {
-                                                return DropdownMenuItem(
-                                                    value: gender,
-                                                    child: Text(
-                                                      gender,
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ));
-                                              }).toList(),
-                                              onChanged: (String? newValue) =>
-                                                  genderController(newValue!)),
-                                        )
-                                      ])),
                               Input(
                                 header: "Height (cm)",
                                 placeholder: userDetail.heightInCm.toString(),
@@ -382,38 +273,32 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future saveProfile() async {
-    int nik = int.parse(nikController.text);
-    String name = nameController.text;
-    DateTime dob = startDate;
-    String gender = genderSelected.substring(0, 1).toUpperCase();
     double weight = double.parse(weightController.text);
     double height = double.parse(heightController.text);
 
-    final responseDetail =
-        await UserService().putOwnDetail(nik, name, dob, gender); 
-      debugPrint(responseDetail.body);
-      debugPrint(responseDetail.statusCode.toString());
-      debugPrint(responseDetail.request.toString());
+    final responseMeasurement =
+        await UserService().postOwnMeasurements(weight, height);
 
-    // final responseMeasurement =
-    //     await UserService().postOwnMeasurements(weight, height);
+    for (var allergyID in deletedAllergy) {
+      if (allergyID == "") continue;
+      final responseDelAllergy = await UserService().deleteAllergy(allergyID);
+    }
+    for (var conditionID in deletedCondition) {
+      if (conditionID == "") continue;
+      final responseDelCondition =
+          await UserService().deleteConditions(conditionID);
+    }
 
-    // for (var allergyID in deletedAllergy) {
-    //   final responseDelAllergy = await UserService().deleteAllergy(allergyID);
-    // }
-    // for (var conditionID in deletedCondition) {
-    //   final responseDelCondition =
-    //       await UserService().deleteConditions(conditionID);
-    // }
-
-    // for (var allergy in listAllergy) {
-    //   final responseAllergy = await UserService()
-    //       .postOwnAllergy(allergy.allergen, allergy.severity);
-    // }
-    // for (var condition in listConditions) {
-    //   final responseCondition =
-    //       await UserService().postOwnConditions(condition.conditions);
-    // }
+    for (var allergy in listAllergy) {
+      if (allergy.allergyID != "") continue;
+      final responseAllergy = await UserService()
+          .postOwnAllergy(allergy.allergen, allergy.severity);
+    }
+    for (var condition in listConditions) {
+      if (condition.conditionsID != "") continue;
+      final responseCondition =
+          await UserService().postOwnConditions(condition.conditions);
+    }
 
     return showDialog(
         context: context,
@@ -581,39 +466,6 @@ class _EditProfileState extends State<EditProfile> {
             );
           }))
     ]);
-  }
-
-  Future<void> displayDatePicker(BuildContext context) async {
-    var date = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1930),
-      lastDate: DateTime.now().add(Duration(days: 365)),
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Color(secondaryColor2), // Warna header & tombol OK
-              onPrimary: Colors.black, // Warna teks di header
-              onSurface: Colors.black, // Warna teks di tanggal
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor:
-                    Color(secondaryColor1), // Warna tombol CANCEL & OK
-              ),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (date != null) {
-      setState(() {
-        startDate = date;
-      });
-    }
   }
 
   Future<Doctor> getDoctor() async {

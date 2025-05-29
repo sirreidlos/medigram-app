@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/page/set_profile.dart';
 import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'dart:convert';
@@ -53,8 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
             if (loginResponse.statusCode == 200) {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const BottomNavigationMenu(true)),
+                MaterialPageRoute(builder: (context) => SetProfile()),
               );
             } else {
               if (mounted) {

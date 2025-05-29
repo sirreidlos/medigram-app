@@ -4,13 +4,13 @@ import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/models/user/user_measurement.dart';
 
 class UserFull {
-  final UserDetail userDetail;
+  final UserDetail? userDetail;
   final UserMeasurement userMeasurement;
   final List<Allergy> listAllergy;
   final List<MedicalConditions> listConditions;
 
   UserFull(
-      {required this.userDetail,
+      {this.userDetail,
       required this.userMeasurement,
       required this.listAllergy,
       required this.listConditions});

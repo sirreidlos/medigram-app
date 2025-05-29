@@ -11,6 +11,7 @@ import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/page/reminder.dart';
+import 'package:medigram_app/page/set_profile.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/user_service.dart';
@@ -150,7 +151,7 @@ class HomePage extends StatelessWidget {
                   } else {
                     return Center(child: Text("No data"));
                   }
-                })
+                }),
           ],
         ),
       ),
@@ -178,7 +179,7 @@ Widget mainFeature(BuildContext context, bool isPatient) {
                     } else if (snapshot.hasData) {
                       return Expanded(
                         child: Text(
-                          // snapshot.data!.practiceAddress, 
+                          // snapshot.data!.practiceAddress,
                           "PRACTICE ADDRESS", // TODO Get correct address
                           style: title,
                           overflow: TextOverflow.ellipsis,

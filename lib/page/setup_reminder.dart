@@ -297,7 +297,7 @@ class _SetupReminderState extends State<SetupReminder> {
           return AlertDialog(
             title: const Text('Setup Finished!'),
             content: Text(
-                'Don\'t forget to take your medicine regularly. Keep Healthy!'),
+                'Don\'t forget to take your medicine regularly. Stay Healthy!'),
             actions: <Widget>[
               TextButton(
                 child: const Text('Back to Home'),
