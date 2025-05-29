@@ -186,7 +186,6 @@ class _EditProfileState extends State<EditProfile> {
                                 header: "Height (cm)",
                                 placeholder: userDetail.heightInCm.toString(),
                                 isDisabled: false,
-                                
                                 controller: heightController,
                                 inputType: TextInputType.number,
                               ),
@@ -194,16 +193,15 @@ class _EditProfileState extends State<EditProfile> {
                                 header: "Weight (kg)",
                                 placeholder: userDetail.weightInKg.toString(),
                                 isDisabled: false,
-                                
                                 controller: weightController,
                                 inputType: TextInputType.number,
                               ),
                               Column(
-                                spacing: 20,
+                                spacing: screenPadding,
                                 children: [showAllergy(), allergyField()],
                               ),
                               Column(
-                                spacing: 20,
+                                spacing: screenPadding,
                                 children: [showCondition(), conditionField()],
                               ),
                             ],
@@ -212,52 +210,86 @@ class _EditProfileState extends State<EditProfile> {
                           return Center(child: Text("No data found"));
                         }
                       }))
-                  : FutureBuilder(
-                      future: getDoctor(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        } else if (snapshot.hasData) {
-                          Doctor doctor = snapshot.data!; // TODO Change to list
-                          List<PracticeLocation> listLocation =
-                              doctor.locations;
-                          return Column(
-                              children:
-                                  List.generate(listLocation.length, (index) {
-                            return Row(
-                              spacing: 5,
-                              children: [
-                                SizedBox(
-                                    child: listLocation[index].approvedAt ==
-                                            null
-                                        ? Icon(null)
-                                        : Icon(Icons.verified_user_rounded, color: Color(primaryColor1),)),
-                                Expanded(
-                                    child: RecordCard(
-                                  title: listLocation[index].practicePermit,
-                                  subtitle: listLocation[index].practiceAddress,
-                                  info1: "",
-                                  info2: "",
-                                  isMed: false,
-                                )),
-                                SizedBox(
-                                    child: IconButton(
-                                        onPressed: () => removeCondition(index),
-                                        padding: EdgeInsets.zero,
-                                        constraints: BoxConstraints(),
-                                        icon: Icon(Icons
-                                            .remove_circle_outline_rounded))),
-                              ],
-                            );
-                          }));
-                        } else {
-                          return Center(child: Text("No data found"));
-                        }
-                      }),
+                  : Column(spacing: 15, children: [
+                      FutureBuilder(
+                          future: getDoctor(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            } else if (snapshot.hasData) {
+                              Doctor doctor =
+                                  snapshot.data!; // TODO Change to list
+                              List<PracticeLocation> listLocation =
+                                  doctor.locations;
+                              return Column(
+                                  spacing: 10,
+                                  children: List.generate(listLocation.length,
+                                      (index) {
+                                    return Row(
+                                      spacing: 5,
+                                      children: [
+                                        SizedBox(
+                                            child: listLocation[index]
+                                                        .approvedAt ==
+                                                    null
+                                                ? Icon(Icons.pending_actions_rounded)
+                                                : Icon(
+                                                    Icons.verified_user_outlined,
+                                                    color: Color(primaryColor1),
+                                                  )),
+                                        Expanded(
+                                            child: RecordCard(
+                                          title: listLocation[index]
+                                              .practicePermit,
+                                          subtitle: listLocation[index]
+                                              .practiceAddress,
+                                          info1: "",
+                                          info2: "",
+                                          isMed: false,
+                                        )),
+                                        SizedBox(
+                                            child: IconButton(
+                                                onPressed: () =>
+                                                    removeCondition(index), // TODO Add confirmation dialog
+                                                padding: EdgeInsets.zero,
+                                                constraints: BoxConstraints(),
+                                                icon: Icon(Icons
+                                                    .remove_circle_outline_rounded))),
+                                      ],
+                                    );
+                                  }));
+                            } else {
+                              return Center(child: Text("No data found"));
+                            }
+                          }),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Text("Add new practice", style: header2),
+                      ),
+                      Column(
+                        spacing: 10,
+                        children: [
+                          Input(
+                            header: "Permit",
+                            placeholder: "The practice permit",
+                            isDisabled: false,
+                            controller: TextEditingController(),
+                            inputType: TextInputType.number,
+                          ),
+                          Input(
+                            header: "Address",
+                            placeholder: "The practice full address",
+                            isDisabled: false,
+                            controller: TextEditingController(),
+                            inputType: TextInputType.number,
+                          ),
+                        ],
+                      ),
+                    ]),
               Row(
                 spacing: 10,
                 children: [
@@ -279,14 +311,20 @@ class _EditProfileState extends State<EditProfile> {
                           true,
                           false)),
                   Expanded(
-                      child: Button("Save Changes", () => saveProfile(), true,
-                          true, false)),
+                      child: Button(
+                          "Save Changes",
+                          () => isPatient ? saveProfile() : savePractice(),
+                          true,
+                          true,
+                          false)),
                 ],
               ),
             ])),
       ),
     );
   }
+
+  Future savePractice() async {} // TODO Handle: delete doctor, post location
 
   Future saveProfile() async {
     double weight = double.parse(weightController.text);
@@ -352,7 +390,6 @@ class _EditProfileState extends State<EditProfile> {
           header: "Medical Conditions",
           placeholder: "Add new condition",
           isDisabled: false,
-          
           controller: conditionController,
           inputType: TextInputType.multiline,
         ),
@@ -412,7 +449,6 @@ class _EditProfileState extends State<EditProfile> {
               header: "Allergy",
               placeholder: "Add new allergy",
               isDisabled: false,
-              
               controller: allergyController,
               inputType: TextInputType.multiline,
             )),
