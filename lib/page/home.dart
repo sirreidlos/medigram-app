@@ -10,6 +10,7 @@ import 'package:medigram_app/models/nonce.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/page/medicine_claim.dart';
 import 'package:medigram_app/page/reminder.dart';
 import 'package:medigram_app/page/set_profile.dart';
 import 'package:medigram_app/services/doctor_service.dart';
@@ -251,19 +252,12 @@ Widget medsHandler(BuildContext context) {
     children: [
       Expanded(
         child: ElevatedButton(
-          onPressed: () async {
-            final response = await NonceService().requestNonce();
-            // TODO error handle, show toast or something if it's not 200 OK
-            Map<String, dynamic> data = jsonDecode(response.body);
-            Nonce nonce = Nonce.fromJson(data); // get code from data
+          onPressed: ()  {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: ((context) {
-                  return ShowQr(
-                    nonce,
-                    false,
-                  );
+                  return MedicineClaim();
                 }),
               ),
             );
