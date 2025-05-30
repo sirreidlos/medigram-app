@@ -263,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (snapshot.hasData) {
                         Doctor doctor = snapshot.data!;
-                        List<PracticeLocation> listLocation = doctor.locations;
+                        List<PracticeLocation> listLocation = doctor.locations!;
                         return Column(
                             children:
                                 List.generate(listLocation.length, (index) {
@@ -416,6 +416,7 @@ class _HomePageState extends State<HomePage> {
     String userID = user.userID;
 
     final response = await DoctorService().getDoctorByUserID(userID);
+    print(response.body);
     Map<String, dynamic> data = jsonDecode(response.body);
     Doctor doctor = Doctor.fromJson(data);
     return doctor;

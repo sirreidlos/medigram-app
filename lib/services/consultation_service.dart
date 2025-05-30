@@ -83,22 +83,6 @@ class ConsultationService {
     return response;
   }
 
-  // Future<http.Response> getSymptom(String userID, String consultationID) async {
-  //   final String url =
-  //       "${Api.API_BASE_URL}/consultations/$consultationID/symptoms";
-  //   final sessionID = await SecureStorageService().read('session_id');
-
-  //   final response = await http.get(
-  //     Uri.parse(url),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Authorization": "Bearer $sessionID",
-  //     },
-  //   );
-
-  //   return response;
-  // }
-
   Future<http.Response> getPrescription(String consultationID) async {
     final String url =
         "${Api.API_BASE_URL}/consultations/$consultationID/prescriptions";
@@ -115,7 +99,8 @@ class ConsultationService {
     return response;
   }
 
-  Future<http.Response> putReminder(String consultationID) async {
+  Future<http.Response> putReminder(
+      String consultationID, DateTime reminderDate, String reminderMsg) async {
     final String url =
         "${Api.API_BASE_URL}/consultations/$consultationID/reminder";
     final sessionID = await SecureStorageService().read('session_id');
@@ -126,7 +111,24 @@ class ConsultationService {
         "Content-Type": "application/json",
         "Authorization": "Bearer $sessionID",
       },
+      body: jsonEncode(
+          {"reminder_data": reminderDate.toUtc().toIso8601String(), "reminder_message": reminderMsg}),
     );
+
+    return response;
+  }
+
+  Future<http.Response> putPrescription(String prescriptionID) async {
+    final String url =
+        "${Api.API_BASE_URL}/prescriptions/$prescriptionID/purchase";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.patch(Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $sessionID",
+        },
+        body: jsonEncode({"purchased_at": DateTime.now().toUtc().toIso8601String()}));
 
     return response;
   }

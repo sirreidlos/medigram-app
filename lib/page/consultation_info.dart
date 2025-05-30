@@ -166,7 +166,7 @@ Future<Doctor> getDoctor(String doctorID) async {
 }
   Future<PracticeLocation> getLocation(Consultation consult) async {
     Doctor doctor = await getDoctor(consult.doctorID);
-    List<PracticeLocation> listLoc = doctor.locations;
+    List<PracticeLocation> listLoc = doctor.locations!;
     return listLoc.firstWhere((l) => l.locationID == consult.locationID);
   }
 

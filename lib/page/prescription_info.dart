@@ -6,6 +6,7 @@ import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/models/consultation/prescription.dart';
+import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/medicine_claim.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 
@@ -74,16 +75,22 @@ class _PrescriptionInfoState extends State<PrescriptionInfo> {
                             spacing: 10,
                             children: List.generate(listPres.length, (index) {
                               final p = listPres[index];
+                              if(p.purchasedAt != null) checkStatus[index] = false;
                               return Row(
                                 spacing: 10,
                                 children: [
                                   SizedBox(
                                       width: 20,
                                       child: Checkbox(
-                                        tristate: p.purchasedAt == null ? false : true,
-                                        isError: p.purchasedAt == null ? false : true,
+                                          tristate: p.purchasedAt == null
+                                              ? false
+                                              : true,
+                                          isError: p.purchasedAt == null
+                                              ? false
+                                              : true,
                                           value: p.purchasedAt == null
-                                              ? checkStatus[index] : null,
+                                              ? checkStatus[index]
+                                              : null,
                                           onChanged: p.purchasedAt != null
                                               ? null
                                               : (value) {
@@ -113,7 +120,8 @@ class _PrescriptionInfoState extends State<PrescriptionInfo> {
               SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => updatePrescription(widget.consultationID),
+                    onPressed: () async => updatePrescription(
+                        widget.consultationID, await listPres),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(secondaryColor2),
                       foregroundColor: Colors.white,
@@ -132,12 +140,48 @@ class _PrescriptionInfoState extends State<PrescriptionInfo> {
     );
   }
 
-  Future<void> updatePrescription(String consultationID) async {
+  Future<void> updatePrescription(
+      String consultationID, List<Prescription> listPres) async {
+    bool success = true;
     for (final (i, stat) in checkStatus.indexed) {
-      if (stat == true) {
-        // final response = await ConsultationService() // TODO: Put Prescription
+      if (stat) {
+        final pres = listPres[i];
+        final response =
+            await ConsultationService().putPrescription(pres.prescriptionID);
+        if (response.statusCode != 200) {
+          success = false;
+          break;
+        }
       }
     }
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(success
+                ? 'Prescription Purchased Successfully!'
+                : "Network Error!"),
+            content: Text(success
+                ? 'Stay Healthy!'
+                : 'We\'re sorry, there is some problem with the system. Try again later.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Back to Home'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) {
+                        return MedicineClaim();
+                      }),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Future<List<Prescription>> getPrescription(String consultationID) async {

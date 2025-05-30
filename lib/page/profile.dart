@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/constants/style.dart';
+import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/page/edit_profile.dart';
+import 'package:medigram_app/page/new_doctor.dart';
+import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/user_service.dart';
 import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/models/user/user.dart';
@@ -106,11 +109,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(0),
+                            padding: EdgeInsets.all(screenPadding),
                             child: Column(
+                              spacing: screenPadding,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 ListTile(
+                                  contentPadding: EdgeInsets.zero,
                                   leading: const CircleAvatar(
                                     child: Icon(Icons.person),
                                   ),
@@ -138,18 +143,33 @@ class _ProfilePageState extends State<ProfilePage> {
                                       : DateFormat("dd MMMM yyyy")
                                           .format(_userDetail!.dob),
                                 ),
-                                Container(
-                                    padding: EdgeInsets.all(16),
-                                    child: Button(
-                                        "Edit Profile",
+                                Column(
+                                  spacing: 0,
+                                  children: [
+                                    Container(
+                                        // padding: EdgeInsets.all(16),
+                                        child: Button(
+                                            "Edit Profile",
+                                            () => Navigator.push(context,
+                                                    MaterialPageRoute(builder:
+                                                        (BuildContext context) {
+                                                  return EditProfile();
+                                                })),
+                                            false,
+                                            false,
+                                            false)),
+                                    Button(
+                                        "Create Doctor Account",
                                         () => Navigator.push(context,
                                                 MaterialPageRoute(builder:
                                                     (BuildContext context) {
-                                              return EditProfile();
+                                              return NewDoctor();
                                             })),
+                                        true,
                                         false,
-                                        false,
-                                        false))
+                                        false),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -176,19 +196,23 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Future<UserDetail> getUser() async {
+    final response = await UserService().getOwnDetail();
+    Map<String, dynamic> data = jsonDecode(response.body);
+    UserDetail user = UserDetail.fromJson(data);
+    return user;
+  }
+
   Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: content,
-          ),
-          Text(value, style: body),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: content,
+        ),
+        Text(value, style: body),
+      ],
     );
   }
 }

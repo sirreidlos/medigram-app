@@ -87,7 +87,7 @@ Future<List<ConsultationDetail>> getConsultation(BuildContext context) async {
     String title = "Dr. ${doctor.name}";
     String address = "";
 
-    for (var loc in doctor.locations) {
+    for (var loc in doctor.locations!) {
       if (loc.locationID == consult.locationID) {
         address = loc.practiceAddress;
         break;

@@ -106,7 +106,7 @@ class RecordHistory extends StatelessWidget {
       String title = isPatient ? "Dr. ${doctor.name}" : patient.name;
       String address = "";
 
-      for (var loc in doctor.locations) {
+      for (var loc in doctor.locations!) {
         if (loc.locationID == consult.locationID) {
           address = loc.practiceAddress;
           break;

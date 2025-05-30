@@ -311,7 +311,7 @@ class _SetupReminderState extends State<SetupReminder> {
     final listPrescription = await getPrescription(consultationID);
     NotificationService().scheduleAllNotification(start, listPrescription);
 
-    final response = ConsultationService().putReminder(consultationID);
+    final response = ConsultationService().putReminder(consultationID, DateTime.now(), "Take your medication");
 
     return showDialog(
         context: context,
@@ -394,7 +394,7 @@ class _SetupReminderState extends State<SetupReminder> {
 
   Future<PracticeLocation> getLocation(Consultation consult) async {
     Doctor doctor = await getDoctor(consult.doctorID);
-    List<PracticeLocation> listLoc = doctor.locations;
+    List<PracticeLocation> listLoc = doctor.locations!;
     return listLoc.firstWhere((l) => l.locationID == consult.locationID);
   }
 

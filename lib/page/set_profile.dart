@@ -151,7 +151,6 @@ class _SetProfileState extends State<SetProfile> {
     String gender = genderSelected.substring(0, 1).toUpperCase();
 
     final response = await UserService().putOwnDetail(nik, name, dob, gender);
-    debugPrint(response.body);
 
     return showDialog(
         context: context,

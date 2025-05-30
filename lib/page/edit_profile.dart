@@ -36,6 +36,9 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController allergyController = TextEditingController();
   final TextEditingController conditionController = TextEditingController();
 
+  final TextEditingController permitController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+
   String severitySelected = "Mild (M)";
 
   List<Allergy> listAllergy = [];
@@ -219,10 +222,9 @@ class _EditProfileState extends State<EditProfile> {
                               return Center(
                                   child: Text('Error: ${snapshot.error}'));
                             } else if (snapshot.hasData) {
-                              Doctor doctor =
-                                  snapshot.data!;
+                              Doctor doctor = snapshot.data!;
                               List<PracticeLocation> listLocation =
-                                  doctor.locations;
+                                  doctor.locations!;
                               return Column(
                                   spacing: 10,
                                   children: List.generate(listLocation.length,
@@ -277,15 +279,15 @@ class _EditProfileState extends State<EditProfile> {
                             header: "Permit",
                             placeholder: "The practice permit",
                             isDisabled: false,
-                            controller: TextEditingController(),
-                            inputType: TextInputType.number,
+                            controller: permitController,
+                            inputType: TextInputType.multiline,
                           ),
                           Input(
                             header: "Address",
                             placeholder: "The practice full address",
                             isDisabled: false,
-                            controller: TextEditingController(),
-                            inputType: TextInputType.number,
+                            controller: addressController,
+                            inputType: TextInputType.multiline,
                           ),
                         ],
                       ),
@@ -361,7 +363,42 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Future savePractice() async {} // TODO Handle: delete doctor, post location
+  Future savePractice() async {
+    String permit = permitController.text;
+    String address = addressController.text;
+
+    final response = await DoctorService().postOwnPractice(permit, address);
+    final int code = response.statusCode;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+                code == 201 ? 'Changes saved successfully!' : "Network Error!"),
+            content: Text(code == 201
+                ? 'Stay Healthy!'
+                : 'We\'re sorry, there is some problem with the system. Try again later.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Back to Home'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) {
+                        return BottomNavigationMenu(
+                          isPatient,
+                          initialIndex: 2,
+                        );
+                      }),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        });
+  }
 
   Future saveProfile() async {
     double weight = double.parse(weightController.text);

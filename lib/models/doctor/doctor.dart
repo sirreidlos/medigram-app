@@ -5,14 +5,14 @@ class Doctor {
   final String userID;
   final String name;
   final DateTime createdAt;
-  final List<PracticeLocation> locations;
+  final List<PracticeLocation>? locations;
 
   Doctor({
     required this.doctorID,
     required this.userID,
     required this.name,
     required this.createdAt,
-    required this.locations,
+    this.locations,
   });
 
   factory Doctor.fromJson(Map<String, dynamic> json) {
