@@ -214,7 +214,7 @@ class UserService {
       body: jsonEncode({
         "height_in_cm": heightInCm,
         "weight_in_kg": weightInKg,
-        "measured_at": DateTime.now().toIso8601String(),
+        "measured_at": DateTime.now().toUtc().toIso8601String(),
       }),
     );
 
