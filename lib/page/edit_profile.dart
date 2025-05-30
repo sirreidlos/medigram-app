@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/components/input.dart';
 import 'package:medigram_app/components/popup_header.dart';
@@ -20,7 +19,6 @@ import 'package:medigram_app/models/user/user_measurement.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/user_service.dart';
-import 'package:timezone/standalone.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -236,9 +234,11 @@ class _EditProfileState extends State<EditProfile> {
                                             child: listLocation[index]
                                                         .approvedAt ==
                                                     null
-                                                ? Icon(Icons.pending_actions_rounded)
+                                                ? Icon(Icons
+                                                    .pending_actions_rounded)
                                                 : Icon(
-                                                    Icons.verified_user_outlined,
+                                                    Icons
+                                                        .verified_user_outlined,
                                                     color: Color(primaryColor1),
                                                   )),
                                         Expanded(
@@ -254,7 +254,7 @@ class _EditProfileState extends State<EditProfile> {
                                         SizedBox(
                                             child: IconButton(
                                                 onPressed: () =>
-                                                    removeCondition(index), // TODO Add confirmation dialog
+                                                    removePractice(index),
                                                 padding: EdgeInsets.zero,
                                                 constraints: BoxConstraints(),
                                                 icon: Icon(Icons
@@ -312,7 +312,7 @@ class _EditProfileState extends State<EditProfile> {
                           false)),
                   Expanded(
                       child: Button(
-                          "Save Changes",
+                          isPatient ? "Save Changes" : "Add Practice",
                           () => isPatient ? saveProfile() : savePractice(),
                           true,
                           true,
@@ -321,6 +321,25 @@ class _EditProfileState extends State<EditProfile> {
               ),
             ])),
       ),
+    );
+  }
+
+  Future<void> removePractice(int index) async {
+    AlertDialog(
+      title: const Text('Confirmation'),
+      content: Text('Are you sure want to delete this practice? This action can not be reversed.'),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('No'),
+          onPressed: () {},
+        ),
+        TextButton(
+          child: const Text('Yes'),
+          onPressed: () {
+            // final response = await DoctorService() //TODO Delete Doctor
+          },
+        ),
+      ],
     );
   }
 
