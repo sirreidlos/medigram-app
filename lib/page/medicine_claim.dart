@@ -87,11 +87,19 @@ Future<List<ConsultationDetail>> getConsultation(BuildContext context) async {
     Doctor doctor = await getDoctor(consult.doctorID);
     UserDetail patient = await getUserByID(consult.userID);
     String title = "Dr. ${doctor.name}";
+    String address = "";
+
+    for (var loc in doctor.locations) {
+      if (loc.locationID == consult.locationID) {
+        address = loc.practiceAddress;
+        break;
+      }
+    }
+
     listDetail.add(ConsultationDetail(
       consultation: consult,
       title: title,
-      // practiceAddress: doctor.practiceAddress,
-      practiceAddress: "PRACTICE ADDRESS", // TODO Get correct address
+      practiceAddress: address,
       onPressed: () {
         Navigator.push(
           context,

@@ -220,7 +220,7 @@ class _EditProfileState extends State<EditProfile> {
                                   child: Text('Error: ${snapshot.error}'));
                             } else if (snapshot.hasData) {
                               Doctor doctor =
-                                  snapshot.data!; // TODO Change to list
+                                  snapshot.data!;
                               List<PracticeLocation> listLocation =
                                   doctor.locations;
                               return Column(
@@ -294,22 +294,39 @@ class _EditProfileState extends State<EditProfile> {
                 spacing: 10,
                 children: [
                   Expanded(
-                      child: Button(
-                          "Cancel",
-                          () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: ((context) {
-                                    return BottomNavigationMenu(
-                                      isPatient,
-                                      initialIndex: 2,
-                                    );
-                                  }),
-                                ),
+                      child: Button("Cancel", () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Confirmation'),
+                            content: Text(
+                                'Are you sure to go back? Your changes will not be saved.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('No'),
+                                onPressed: () {},
                               ),
-                          false,
-                          true,
-                          false)),
+                              TextButton(
+                                child: const Text('Yes'),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: ((context) {
+                                        return BottomNavigationMenu(
+                                          isPatient,
+                                          initialIndex: 2,
+                                        );
+                                      }),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  }, false, true, false)),
                   Expanded(
                       child: Button(
                           isPatient ? "Save Changes" : "Add Practice",
@@ -327,7 +344,8 @@ class _EditProfileState extends State<EditProfile> {
   Future<void> removePractice(int index) async {
     AlertDialog(
       title: const Text('Confirmation'),
-      content: Text('Are you sure want to delete this practice? This action can not be reversed.'),
+      content: Text(
+          'Are you sure want to delete this practice? This action can not be reversed.'),
       actions: <Widget>[
         TextButton(
           child: const Text('No'),
@@ -545,7 +563,7 @@ class _EditProfileState extends State<EditProfile> {
 
     final response = await DoctorService().getDoctorByUserID(userID);
     Map<String, dynamic> data = jsonDecode(response.body);
-    Doctor doctor = Doctor.fromJson(data); // TODO Change to array of object
+    Doctor doctor = Doctor.fromJson(data);
     return doctor;
   }
 

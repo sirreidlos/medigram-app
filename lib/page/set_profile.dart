@@ -61,7 +61,6 @@ class _SetProfileState extends State<SetProfile> {
                 header: "Name",
                 placeholder: "Your full name",
                 isDisabled: false,
-                
                 controller: nameController,
                 inputType: TextInputType.multiline,
               ),
@@ -69,7 +68,6 @@ class _SetProfileState extends State<SetProfile> {
                 header: "NIK",
                 placeholder: "Your identity number must be 16 digits",
                 isDisabled: false,
-                
                 controller: nikController,
                 inputType: TextInputType.number,
               ),
@@ -81,7 +79,6 @@ class _SetProfileState extends State<SetProfile> {
                       header: "Age",
                       placeholder: DateFormat("dd MMMM yyyy").format(startDate),
                       isDisabled: false,
-                      
                       controller: TextEditingController(),
                       inputType: TextInputType.none,
                     ),
@@ -140,28 +137,9 @@ class _SetProfileState extends State<SetProfile> {
                                   genderController(newValue!)),
                         )
                       ])),
-              Row(
-                spacing: 10,
-                children: [
-                  Expanded(
-                      child: Button(
-                          "Cancel",
-                          () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: ((context) {
-                                    return BottomNavigationMenu(true);
-                                  }),
-                                ),
-                              ),
-                          false,
-                          true,
-                          false)),
-                  Expanded(
-                      child: Button("Save Changes", () => saveProfile(), true,
-                          true, false)),
-                ],
-              ),
+              Expanded(
+                  child: Button(
+                      "Save Changes", () => saveProfile(), true, true, false)),
             ],
           )),
     ));
