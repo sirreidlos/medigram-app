@@ -26,8 +26,9 @@ import 'package:medigram_app/utils/line.dart';
 import 'package:medigram_app/constants/style.dart';
 
 class ConsultForm extends StatefulWidget {
-  const ConsultForm(this.qrData, {super.key});
+  const ConsultForm(this.qrData, this.locationID, {super.key});
   final QrData qrData;
+  final String locationID;
 
   @override
   State<ConsultForm> createState() => _ConsultFormState();
@@ -141,6 +142,7 @@ class _ConsultFormState extends State<ConsultForm> {
     PostConsult consultData = PostConsult(
         consent: widget.qrData.consent,
         userID: userID,
+        locationID: widget.locationID,
         diagnosis: modifiedList,
         symptoms: symptomsController.text,
         prescription: listPrescription);
@@ -184,7 +186,7 @@ class _ConsultFormState extends State<ConsultForm> {
                       context,
                       MaterialPageRoute(
                         builder: ((context) {
-                          return ScanQR();
+                          return ScanQR(widget.locationID);
                         }),
                       ),
                     );

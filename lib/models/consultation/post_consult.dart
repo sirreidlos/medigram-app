@@ -41,6 +41,7 @@ class CPrescription {
 class PostConsult {
   final Consent consent;
   final String userID;
+  final String locationID;
   final List<CDiagnosis> diagnosis;
   final String symptoms;
   final List<CPrescription> prescription;
@@ -48,6 +49,7 @@ class PostConsult {
   PostConsult({
     required this.consent,
     required this.userID,
+    required this.locationID,
     required this.diagnosis,
     required this.symptoms,
     required this.prescription,
@@ -57,6 +59,7 @@ class PostConsult {
     return {
       'consent': consent,
       'user_id': userID,
+      'location_id': locationID,
       'diagnoses':  diagnosis,
       'symptoms': symptoms,
       'prescriptions': prescription

@@ -11,7 +11,8 @@ import 'package:medigram_app/services/secure_storage.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScanQR extends StatefulWidget {
-  const ScanQR({super.key});
+  const ScanQR(this.locationID, {super.key});
+  final String locationID;
 
   @override
   State<ScanQR> createState() => _ScanQRState();
@@ -114,7 +115,7 @@ class _ScanQRState extends State<ScanQR> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ConsultForm(qrData),
+                                      builder: (context) => ConsultForm(qrData, widget.locationID),
                                     ),
                                   );
                                 }
