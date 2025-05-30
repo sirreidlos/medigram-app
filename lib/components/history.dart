@@ -104,11 +104,19 @@ class RecordHistory extends StatelessWidget {
       Doctor doctor = await getDoctor(consult.doctorID);
       UserDetail patient = await getUserByID(consult.userID);
       String title = isPatient ? "Dr. ${doctor.name}" : patient.name;
+      String address = "";
+
+      for (var loc in doctor.locations) {
+        if (loc.locationID == consult.locationID) {
+          address = loc.practiceAddress;
+          break;
+        }
+      }
+
       listDetail.add(ConsultationDetail(
         consultation: consult,
         title: title,
-        // practiceAddress: doctor.practiceAddress,
-                          practiceAddress: "PRACTICE ADDRESS", // TODO Get correct address
+        practiceAddress: address,
         onPressed: () {
           Navigator.push(
             context,
