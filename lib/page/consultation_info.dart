@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
@@ -11,8 +10,8 @@ import 'package:medigram_app/models/consultation/consultation.dart';
 import 'package:medigram_app/models/consultation/diagnosis.dart';
 import 'package:medigram_app/models/consultation/prescription.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
+import 'package:medigram_app/models/doctor/location.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
-import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 
@@ -58,33 +57,37 @@ class ConsultationInfo extends StatelessWidget {
                 "Consultation Info",
                 style: header2,
               ),
-              FutureBuilder(future: () async {
-                return getDoctor(consultation.doctorID);
-              }(), builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (snapshot.hasData) {
-                  Doctor doctor = snapshot.data!;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 10,
-                    children: [
-                      RecordCard(
-                          title: doctor.name,
-                          subtitle: "PRACTICE ADDRESS", // TODO Get correct address
-                          info1: getDate(
-                              consultation.createdAt.add(Duration(hours: 7))),
-                          info2: DateFormat('HH:mm').format(
-                              consultation.createdAt.add(Duration(hours: 7))),
-                          isMed: false),
-                    ],
-                  );
-                } else {
-                  return Center(child: Text("No data found"));
-                }
-              }),
+              FutureBuilder(
+                  future: Future.wait([
+                    getDoctor(consultation.doctorID),
+                    getLocation(consultation)
+                  ]),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      Doctor doctor = snapshot.data![0] as Doctor;
+                      PracticeLocation loc = snapshot.data![1] as PracticeLocation;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 10,
+                        children: [
+                          RecordCard(
+                              title: "Dr. ${doctor.name}",
+                              subtitle: loc.practiceAddress,
+                              info1: getDate(consultation.createdAt
+                                  .add(Duration(hours: 7))),
+                              info2: DateFormat('HH:mm').format(consultation.createdAt
+                                  .add(Duration(hours: 7))),
+                              isMed: false),
+                        ],
+                      );
+                    } else {
+                      return Center(child: Text("No data found"));
+                    }
+                  }),
               Text(
                 "Diagnoses",
                 style: header2,
@@ -161,6 +164,11 @@ Future<Doctor> getDoctor(String doctorID) async {
   Doctor doctor = Doctor.fromJson(data);
   return doctor;
 }
+  Future<PracticeLocation> getLocation(Consultation consult) async {
+    Doctor doctor = await getDoctor(consult.doctorID);
+    List<PracticeLocation> listLoc = doctor.locations;
+    return listLoc.firstWhere((l) => l.locationID == consult.locationID);
+  }
 
 Future<List<Prescription>> getPrescription(String consultationID) async {
   final response = await ConsultationService().getPrescription(consultationID);

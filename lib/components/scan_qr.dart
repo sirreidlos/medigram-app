@@ -6,7 +6,6 @@ import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/form.dart';
 import 'package:medigram_app/constants/style.dart';
-import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 

@@ -10,7 +10,6 @@ import 'package:medigram_app/models/consultation/consultation_card.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
-import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/page/prescription_info.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/doctor_service.dart';
@@ -85,7 +84,6 @@ Future<List<ConsultationDetail>> getConsultation(BuildContext context) async {
   List<ConsultationDetail> listDetail = [];
   for (var consult in listConsult) {
     Doctor doctor = await getDoctor(consult.doctorID);
-    UserDetail patient = await getUserByID(consult.userID);
     String title = "Dr. ${doctor.name}";
     String address = "";
 

@@ -3,7 +3,6 @@ import 'package:medigram_app/components/history.dart';
 import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
-import 'package:medigram_app/page/home.dart';
 
 class ReminderPage extends StatefulWidget {
   const ReminderPage({super.key});

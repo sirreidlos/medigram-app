@@ -13,7 +13,6 @@ import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/page/medicine_claim.dart';
 import 'package:medigram_app/page/reminder.dart';
-import 'package:medigram_app/page/set_profile.dart';
 import 'package:medigram_app/services/doctor_service.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/user_service.dart';

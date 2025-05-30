@@ -4,7 +4,6 @@ import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/page/set_profile.dart';
 import 'package:medigram_app/services/auth_service.dart';
-import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {

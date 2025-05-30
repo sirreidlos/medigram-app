@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,12 +8,10 @@ import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/scan_qr.dart';
 import 'package:medigram_app/components/warning.dart';
-import 'package:medigram_app/models/consultation/diagnosis.dart';
 import 'package:medigram_app/models/consultation/post_consult.dart';
 import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/models/user/allery.dart';
 import 'package:medigram_app/models/user/medical_conditions.dart';
-import 'package:medigram_app/models/user/user.dart';
 import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/models/user/user_full.dart';
 import 'package:medigram_app/models/user/user_measurement.dart';

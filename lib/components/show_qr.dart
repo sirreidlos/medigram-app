@@ -9,7 +9,6 @@ import 'package:medigram_app/models/consultation/consent.dart';
 import 'package:medigram_app/models/nonce.dart';
 import 'package:medigram_app/models/qr_data.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
-import 'package:medigram_app/page/home.dart';
 import 'package:medigram_app/services/nonce_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
 import 'package:medigram_app/utils/qr_image.dart';

@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:medigram_app/components/button.dart';
 import 'package:medigram_app/components/input.dart';
-import 'package:medigram_app/components/popup_header.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/services/user_service.dart';
