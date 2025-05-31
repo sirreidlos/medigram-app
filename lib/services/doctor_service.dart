@@ -60,10 +60,26 @@ class DoctorService {
         "Content-Type": "application/json",
         "Authorization": "Bearer $sessionID",
       },
-      body: jsonEncode({"practice_permit": permit, "practice_address": address}),
+      body:
+          jsonEncode({"practice_permit": permit, "practice_address": address}),
     );
 
     return response;
   }
 
+  Future<http.Response> deleteOwnPractice(String locationID) async {
+    final String url =
+        "${Api.API_BASE_URL}/doctor/practice-location/$locationID";
+    final sessionID = await SecureStorageService().read('session_id');
+
+    final response = await http.delete(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $sessionID",
+      },
+    );
+
+    return response;
+  }
 }

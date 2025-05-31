@@ -43,6 +43,7 @@ class _EditProfileState extends State<EditProfile> {
 
   List<Allergy> listAllergy = [];
   List<MedicalConditions> listConditions = [];
+  List<PracticeLocation> listPractice = [];
   List<String> deletedAllergy = [];
   List<String> deletedCondition = [];
 
@@ -223,17 +224,16 @@ class _EditProfileState extends State<EditProfile> {
                                   child: Text('Error: ${snapshot.error}'));
                             } else if (snapshot.hasData) {
                               Doctor doctor = snapshot.data!;
-                              List<PracticeLocation> listLocation =
-                                  doctor.locations!;
+                              listPractice = doctor.locations!;
                               return Column(
                                   spacing: 10,
-                                  children: List.generate(listLocation.length,
+                                  children: List.generate(listPractice.length,
                                       (index) {
                                     return Row(
                                       spacing: 5,
                                       children: [
                                         SizedBox(
-                                            child: listLocation[index]
+                                            child: listPractice[index]
                                                         .approvedAt ==
                                                     null
                                                 ? Icon(Icons
@@ -245,9 +245,9 @@ class _EditProfileState extends State<EditProfile> {
                                                   )),
                                         Expanded(
                                             child: RecordCard(
-                                          title: listLocation[index]
+                                          title: listPractice[index]
                                               .practicePermit,
-                                          subtitle: listLocation[index]
+                                          subtitle: listPractice[index]
                                               .practiceAddress,
                                           info1: "",
                                           info2: "",
@@ -343,24 +343,57 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Future<void> removePractice(int index) async {
-    AlertDialog(
-      title: const Text('Confirmation'),
-      content: Text(
-          'Are you sure want to delete this practice? This action can not be reversed.'),
-      actions: <Widget>[
-        TextButton(
-          child: const Text('No'),
-          onPressed: () {},
-        ),
-        TextButton(
-          child: const Text('Yes'),
-          onPressed: () {
-            // final response = await DoctorService() //TODO Delete Doctor
-          },
-        ),
-      ],
-    );
+  void removePractice(int index) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirmation'),
+            content: Text(
+                'Are you sure want to delete this practice? This action can not be reversed.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('No'),
+                onPressed: () {},
+              ),
+              TextButton(
+                child: const Text('Yes'),
+                onPressed: () async {
+                  final response = await DoctorService()
+                      .deleteOwnPractice(listPractice[index].locationID);
+                  final code = response.statusCode;
+
+                  AlertDialog(
+                    title: Text(code == 200
+                        ? 'Practice removed successfully!'
+                        : "Network Error!"),
+                    content: Text(code == 200
+                        ? 'Stay Healthy!'
+                        : 'We\'re sorry, there is some problem with the system. Try again later.'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Back to Home'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) {
+                                return BottomNavigationMenu(
+                                  isPatient,
+                                  initialIndex: 2,
+                                );
+                              }),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Future savePractice() async {
