@@ -180,11 +180,10 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: screenPadding),
                 SizedBox(
                   width: double.infinity,
-                  child: Button("Login", () => _login(), true, true, false),
+                  child: Button(_isLoading ? "Logging in..." : "Login", () => _login(), true, true, false),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  // spacing: -8,
                   children: [
                     Text(
                       "Don\'t have an account?",

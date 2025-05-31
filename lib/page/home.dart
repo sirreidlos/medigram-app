@@ -197,9 +197,34 @@ class _HomePageState extends State<HomePage> {
             onPressed: () async {
               if (isPatient) {
                 final response = await NonceService().requestNonce();
-                // TODO error handle, show toast or something if it's not 200 OK
+                if (response.statusCode != 200) {
+                  return showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Network Error!'),
+                          content: Text(
+                              'We\'re sorry, there is some problem with the system. Try again later.'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Back to Home'),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: ((context) {
+                                      return BottomNavigationMenu(true);
+                                    }),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      });
+                }
                 Map<String, dynamic> data = jsonDecode(response.body);
-                Nonce nonce = Nonce.fromJson(data); // get code from data
+                Nonce nonce = Nonce.fromJson(data); 
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -416,7 +441,6 @@ class _HomePageState extends State<HomePage> {
     String userID = user.userID;
 
     final response = await DoctorService().getDoctorByUserID(userID);
-    print(response.body);
     Map<String, dynamic> data = jsonDecode(response.body);
     Doctor doctor = Doctor.fromJson(data);
     return doctor;

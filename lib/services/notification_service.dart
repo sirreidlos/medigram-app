@@ -86,8 +86,6 @@ class NotificationService {
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.time,
       );
-
-      debugPrint('Notification scheduled successfully');
     } catch (e) {
       debugPrint('Error scheduling notification: $e');
     }
@@ -99,7 +97,6 @@ class NotificationService {
     for (final prescription in prescriptions) {
       final schedule = generateReminderSchedule(startTime, prescription);
       for (var time in schedule) {
-        debugPrint(time.toString());
         if (time.isBefore(DateTime.now())) {
           time = time.add(const Duration(minutes: 1));
         }

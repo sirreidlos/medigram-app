@@ -151,22 +151,27 @@ class _SetProfileState extends State<SetProfile> {
     String gender = genderSelected.substring(0, 1).toUpperCase();
 
     final response = await UserService().putOwnDetail(nik, name, dob, gender);
+    final code = response.statusCode;
 
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Profile set successfully!'),
-            content: Text('Stay Healthy!'),
+            title: Text(
+                code == 201 ? 'Profile Set Successfully!' : "Network Error!"),
+            content: Text(code == 201
+                ? 'Stay Healthy!'
+                : 'We\'re sorry, there is some problem with the system. Try again later.'),
             actions: <Widget>[
               TextButton(
-                child: const Text('Go to app'),
+                child: const Text('Okay'),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: ((context) {
-                        return BottomNavigationMenu(true);
+                        if (code == 201) return BottomNavigationMenu(true);
+                        return SetProfile();
                       }),
                     ),
                   );

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -57,7 +58,39 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    userData = fetchFullPatientData();
+    fetchFullPatientData().then((data) {
+      setState(() {
+        userData = Future.value(data);
+      });
+    }).catchError((e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Network Error!'),
+              content: Text(
+                  'We\'re sorry, there is some problem with the system. Try again later.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Back to Home'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) {
+                          return BottomNavigationMenu(
+                            isPatient,
+                            initialIndex: 2,
+                          );
+                        }),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            );
+          });
+    });
     getPatientStatus();
   }
 
@@ -126,6 +159,7 @@ class _EditProfileState extends State<EditProfile> {
     final userMeasure = await getUserMeasurement();
     final listAllergy = await getUserAllergy();
     final listCondition = await getUserConditions();
+
     weightController.text = userMeasure.weightInKg.toString();
     heightController.text = userMeasure.heightInCm.toString();
 
@@ -437,56 +471,82 @@ class _EditProfileState extends State<EditProfile> {
     double weight = double.parse(weightController.text);
     double height = double.parse(heightController.text);
 
-    final responseMeasurement =
-        await UserService().postOwnMeasurements(weight, height);
+    try {
+      await UserService().postOwnMeasurements(weight, height);
 
-    for (var allergyID in deletedAllergy) {
-      if (allergyID == "") continue;
-      final responseDelAllergy = await UserService().deleteAllergy(allergyID);
-    }
-    for (var conditionID in deletedCondition) {
-      if (conditionID == "") continue;
-      final responseDelCondition =
-          await UserService().deleteConditions(conditionID);
-    }
+      for (var allergyID in deletedAllergy) {
+        if (allergyID == "") continue;
+        await UserService().deleteAllergy(allergyID);
+      }
 
-    for (var allergy in listAllergy) {
-      if (allergy.allergyID != "") continue;
-      final responseAllergy = await UserService()
-          .postOwnAllergy(allergy.allergen, allergy.severity);
-    }
-    for (var condition in listConditions) {
-      if (condition.conditionsID != "") continue;
-      final responseCondition =
-          await UserService().postOwnConditions(condition.conditions);
-    }
+      for (var conditionID in deletedCondition) {
+        if (conditionID == "") continue;
+        await UserService().deleteConditions(conditionID);
+      }
 
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Changes saved successfully!'),
-            content: Text('Stay Healthy!'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Back to Home'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: ((context) {
-                        return BottomNavigationMenu(
-                          isPatient,
-                          initialIndex: 2,
-                        );
-                      }),
-                    ),
-                  );
-                },
-              ),
-            ],
-          );
-        });
+      for (var allergy in listAllergy) {
+        if (allergy.allergyID != "") continue;
+        await UserService().postOwnAllergy(allergy.allergen, allergy.severity);
+      }
+      for (var condition in listConditions) {
+        if (condition.conditionsID != "") continue;
+        await UserService().postOwnConditions(condition.conditions);
+      }
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Changes saved successfully!'),
+              content: Text('Stay Healthy!'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Back to Home'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) {
+                          return BottomNavigationMenu(
+                            isPatient,
+                            initialIndex: 2,
+                          );
+                        }),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            );
+          });
+    } catch (e) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Network Error!'),
+              content: Text(
+                  'We\'re sorry, there is some problem with the system. Try again later.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Back to Home'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) {
+                          return BottomNavigationMenu(
+                            isPatient,
+                            initialIndex: 2,
+                          );
+                        }),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            );
+          });
+    }
   }
 
   Widget conditionField() {

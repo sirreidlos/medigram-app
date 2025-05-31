@@ -6,7 +6,6 @@ import 'package:medigram_app/components/record_card.dart';
 import 'package:medigram_app/components/warning.dart';
 import 'package:medigram_app/constants/style.dart';
 import 'package:medigram_app/models/consultation/prescription.dart';
-import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/medicine_claim.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 

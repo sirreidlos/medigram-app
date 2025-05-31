@@ -44,7 +44,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
         if (response.statusCode == 200) {
           if (mounted) {
-            // After successful registration, log in the user
             final loginResponse = await AuthService().login(
               _emailController.text,
               _passwordController.text,
@@ -64,7 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     backgroundColor: Colors.orange,
                   ),
                 );
-                Navigator.pop(context); // Go back to login page
+                Navigator.pop(context); 
               }
             }
           }
@@ -222,10 +221,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(
                     width: double.infinity,
                     child: Button(
-                        "Register", () => _register(), true, true, false)),
+                        _isLoading ? "Registering..." : "Register", () => _register(), true, true, false)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  // spacing: -6,
                   children: [
                     Text(
                       "Already have an account?",
