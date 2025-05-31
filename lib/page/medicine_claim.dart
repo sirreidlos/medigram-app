@@ -48,6 +48,14 @@ class MedicineClaim extends StatelessWidget {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
                       List<ConsultationDetail> listConsult = snapshot.data!;
+                      if (listConsult.isEmpty) {
+                        return SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              "No consultations yet!",
+                              style: body,
+                            ));
+                      }
                       return Column(
                           spacing: 10,
                           children: List.generate(listConsult.length, (index) {
@@ -76,6 +84,7 @@ class MedicineClaim extends StatelessWidget {
 
 Future<List<ConsultationDetail>> getConsultation(BuildContext context) async {
   final response = await ConsultationService().getOwnConsultation();
+  if (response.statusCode != 200) return [];
   final List data = jsonDecode(response.body);
   List<Consultation> listConsult =
       data.map((e) => Consultation.fromJson(e)).toList();

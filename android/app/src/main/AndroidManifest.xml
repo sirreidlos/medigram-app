@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <application
-        android:label="medigram_app"
+        android:label="Medigram"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

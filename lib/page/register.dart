@@ -42,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
         final responseData = jsonDecode(response.body);
 
-        if (response.statusCode == 200) {
+        if (response.statusCode == 201) {
           if (mounted) {
             final loginResponse = await AuthService().login(
               _emailController.text,

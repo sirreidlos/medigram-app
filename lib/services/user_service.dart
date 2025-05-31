@@ -162,7 +162,7 @@ class UserService {
         "Content-Type": "application/json",
         "Authorization": "Bearer $sessionID",
       },
-      body: jsonEncode({"conditions": conditions}),
+      body: jsonEncode({"condition": conditions}),
     );
 
     return response;

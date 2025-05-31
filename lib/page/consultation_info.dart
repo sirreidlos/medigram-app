@@ -11,13 +11,16 @@ import 'package:medigram_app/models/consultation/diagnosis.dart';
 import 'package:medigram_app/models/consultation/prescription.dart';
 import 'package:medigram_app/models/doctor/doctor.dart';
 import 'package:medigram_app/models/doctor/location.dart';
+import 'package:medigram_app/models/user/user_detail.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/services/consultation_service.dart';
 import 'package:medigram_app/services/doctor_service.dart';
+import 'package:medigram_app/services/user_service.dart';
 
 class ConsultationInfo extends StatelessWidget {
-  const ConsultationInfo(this.consultation, {super.key});
+  const ConsultationInfo(this.consultation, this.isPatient, {super.key});
   final Consultation consultation;
+  final bool isPatient;
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +62,9 @@ class ConsultationInfo extends StatelessWidget {
               ),
               FutureBuilder(
                   future: Future.wait([
+                    getUser(consultation.userID),
                     getDoctor(consultation.doctorID),
-                    getLocation(consultation)
+                    getLocation(consultation),
                   ]),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -68,18 +72,23 @@ class ConsultationInfo extends StatelessWidget {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
-                      Doctor doctor = snapshot.data![0] as Doctor;
-                      PracticeLocation loc = snapshot.data![1] as PracticeLocation;
+                      UserDetail user = snapshot.data![0] as UserDetail;
+                      Doctor doctor = snapshot.data![1] as Doctor;
+                      PracticeLocation loc =
+                          snapshot.data![2] as PracticeLocation;
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         spacing: 10,
                         children: [
                           RecordCard(
-                              title: "Dr. ${doctor.name}",
+                              title: isPatient
+                                  ? "Dr. ${doctor.name}"
+                                  : user.name,
                               subtitle: loc.practiceAddress,
                               info1: getDate(consultation.createdAt
                                   .add(Duration(hours: 7))),
-                              info2: DateFormat('HH:mm').format(consultation.createdAt
+                              info2: DateFormat('HH:mm').format(consultation
+                                  .createdAt
                                   .add(Duration(hours: 7))),
                               isMed: false),
                         ],
@@ -164,11 +173,19 @@ Future<Doctor> getDoctor(String doctorID) async {
   Doctor doctor = Doctor.fromJson(data);
   return doctor;
 }
-  Future<PracticeLocation> getLocation(Consultation consult) async {
-    Doctor doctor = await getDoctor(consult.doctorID);
-    List<PracticeLocation> listLoc = doctor.locations!;
-    return listLoc.firstWhere((l) => l.locationID == consult.locationID);
-  }
+
+Future<UserDetail> getUser(String userID) async {
+  final response = await UserService().getUserDetail(userID);
+  Map<String, dynamic> data = jsonDecode(response.body);
+  UserDetail user = UserDetail.fromJson(data);
+  return user;
+}
+
+Future<PracticeLocation> getLocation(Consultation consult) async {
+  Doctor doctor = await getDoctor(consult.doctorID);
+  List<PracticeLocation> listLoc = doctor.locations!;
+  return listLoc.firstWhere((l) => l.locationID == consult.locationID);
+}
 
 Future<List<Prescription>> getPrescription(String consultationID) async {
   final response = await ConsultationService().getPrescription(consultationID);

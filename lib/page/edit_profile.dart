@@ -29,7 +29,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  late Future<UserFull> userData;
+  Future<UserFull>? userData;
   bool isPatient = true;
 
   final TextEditingController heightController = TextEditingController();
@@ -100,7 +100,7 @@ class _EditProfileState extends State<EditProfile> {
           allergyID: "",
           userID: "",
           allergen: allergyController.text,
-          severity: severitySelected));
+          severity: severitySelected.split(" ")[0].toUpperCase()));
     });
     resetAllergy();
   }
@@ -172,6 +172,11 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    if (userData == null) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -717,7 +722,7 @@ class _EditProfileState extends State<EditProfile> {
     dataList.sort((a, b) => DateTime.parse(b['measured_at'])
         .compareTo(DateTime.parse(a['measured_at'])));
 
-    Map<String, dynamic> lastData = dataList.last;
+    Map<String, dynamic> lastData = dataList.first;
     UserMeasurement userDetail = UserMeasurement.fromJson(lastData);
     return userDetail;
   }

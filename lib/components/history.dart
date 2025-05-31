@@ -125,7 +125,7 @@ class RecordHistory extends StatelessWidget {
                 if (isReminder != null) {
                   return SetupReminder(consult);
                 }
-                return ConsultationInfo(consult);
+                return ConsultationInfo(consult, isPatient);
               }),
             ),
           );

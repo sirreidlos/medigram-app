@@ -571,7 +571,7 @@ Future<UserMeasurement> getUserMeasurement(String userID) async {
   dataList.sort((a, b) => DateTime.parse(b['measured_at'])
       .compareTo(DateTime.parse(a['measured_at'])));
 
-  Map<String, dynamic> lastData = dataList.last;
+  Map<String, dynamic> lastData = dataList.first;
   UserMeasurement userDetail = UserMeasurement.fromJson(lastData);
   return userDetail;
 }

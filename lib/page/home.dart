@@ -113,7 +113,6 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 },
                               ),
-                              Icon(Icons.notifications),
                             ],
                           ),
                           mainFeature(context, isPatient),
