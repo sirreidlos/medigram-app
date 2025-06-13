@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:medigram_app/constants/dev_config.dart';
 import 'package:medigram_app/navigation/layout_navbar.dart';
 import 'package:medigram_app/page/login.dart';
+import 'package:medigram_app/page/set_profile.dart';
 import 'package:medigram_app/services/auth_service.dart';
 import 'package:medigram_app/services/secure_storage.dart';
+import 'package:medigram_app/services/user_service.dart';
 
 /// The initial screen shown when the app starts.
 ///
@@ -36,17 +38,25 @@ class _SplashScreenState extends State<SplashScreen> {
 
             if (response.statusCode == 200) {
               if (mounted) {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        const BottomNavigationMenu(true),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(opacity: animation, child: child);
-                    },
-                  ),
-                );
+                final responseDetail = await UserService().getOwnDetail();
+                if (responseDetail.statusCode == 200) {
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const BottomNavigationMenu(true),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                    ),
+                  );
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => SetProfile()),
+                  );
+                }
               }
             } else {
               // If auto-login fails, go to login page
@@ -100,18 +110,27 @@ class _SplashScreenState extends State<SplashScreen> {
 
                 if (response.statusCode == 200) {
                   if (mounted) {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const BottomNavigationMenu(true),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          return FadeTransition(
-                              opacity: animation, child: child);
-                        },
-                      ),
-                    );
+                    final responseDetail = await UserService().getOwnDetail();
+                    if (responseDetail.statusCode == 200) {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const BottomNavigationMenu(true),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                                opacity: animation, child: child);
+                          },
+                        ),
+                      );
+                    } else {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => SetProfile()),
+                      );
+                    }
                   }
                 } else {
                   // If validation fails, clear stored credentials and go to login page
