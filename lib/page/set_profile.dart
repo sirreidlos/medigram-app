@@ -46,7 +46,7 @@ class _SetProfileState extends State<SetProfile> {
     "Mild (M)",
     "Moderate (MOD)",
     "Severe (S)",
-    "Critical (C)"
+    "Anaphylactic Shock (AS)"
   ];
 
   void genderController(String newValue) {

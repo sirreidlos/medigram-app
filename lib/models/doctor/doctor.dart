@@ -21,9 +21,11 @@ class Doctor {
         userID: json["user_id"],
         name: json["name"],
         createdAt: DateTime.parse(json["created_at"]),
-        locations: (json["locations"] as List)
-        .map((loc) => PracticeLocation.fromJson(loc as Map<String, dynamic>))
-        .toList()
-        );
+        locations: json["locations"] == null
+            ? null
+            : ((json["locations"] as List)
+                .map((loc) =>
+                    PracticeLocation.fromJson(loc as Map<String, dynamic>))
+                .toList()));
   }
 }

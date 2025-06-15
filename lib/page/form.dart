@@ -57,7 +57,7 @@ class _ConsultFormState extends State<ConsultForm> {
     "Mild (M)",
     "Moderate (MOD)",
     "Severe (S)",
-    "Critical (C)"
+    "Anaphylactic Shock (AS)"
   ];
   String severitySelected = "Mild (M)";
 
@@ -307,7 +307,7 @@ class _ConsultFormState extends State<ConsultForm> {
                               SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  "*M = Mild, MOD = Moderate, S = Severe, C = Critical",
+                                  "*M = Mild, MOD = Moderate, S = Severe, AS = Anaphylactic Shock",
                                   style: content,
                                   maxLines: 2,
                                 ),
@@ -601,5 +601,5 @@ String getSeverity(String severity) {
     return "S";
   }
 
-  return "C";
+  return "AS";
 }

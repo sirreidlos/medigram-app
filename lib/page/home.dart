@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                       });
                 }
                 Map<String, dynamic> data = jsonDecode(response.body);
-                Nonce nonce = Nonce.fromJson(data); 
+                Nonce nonce = Nonce.fromJson(data);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -233,6 +233,25 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               } else {
+                if (selectedLocationID.isEmpty) {
+                  return showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Select Location!'),
+                          content: Text(
+                              'You have to select your current practice location first to start consultation.'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Ok'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      });
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -276,7 +295,7 @@ class _HomePageState extends State<HomePage> {
           return AlertDialog(
               title: Text("Select Location"),
               contentPadding: EdgeInsets.zero,
-              content: Container(
+              content: SizedBox(
                 width: double.maxFinite,
                 child: FutureBuilder(
                     future: getDoctor(),
@@ -292,21 +311,24 @@ class _HomePageState extends State<HomePage> {
                             children:
                                 List.generate(listLocation.length, (index) {
                           final loc = listLocation[index];
-                          return RadioListTile(
-                              title: Text(
-                                loc.practiceAddress,
-                                style: body,
-                                maxLines: null,
+                          if (loc.approvedAt != null) {
+                            return Builder(
+                              builder: (dialogContext) => RadioListTile(
+                                title: Text(loc.practiceAddress,
+                                    style: body, maxLines: null),
+                                value: loc.locationID,
+                                groupValue: selectedLocationID,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedLocationID = loc.locationID;
+                                    selectedLocationName = loc.practiceAddress;
+                                  });
+                                  Navigator.pop(dialogContext); // aman
+                                },
                               ),
-                              value: loc.locationID,
-                              groupValue: selectedLocationID,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedLocationID = loc.locationID;
-                                  selectedLocationName = loc.practiceAddress;
-                                });
-                                Navigator.pop(context);
-                              });
+                            );
+                          }
+                          return Container();
                         }));
                       } else {
                         return Center(child: Text("No data found"));

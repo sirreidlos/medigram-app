@@ -31,6 +31,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   Future<UserFull>? userData;
   bool isPatient = true;
+  bool isSaving = false;
 
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
@@ -52,7 +53,7 @@ class _EditProfileState extends State<EditProfile> {
     "Mild (M)",
     "Moderate (MOD)",
     "Severe (S)",
-    "Critical (C)"
+    "Anaphylactic Shock (AS)"
   ];
 
   @override
@@ -95,12 +96,21 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void addAllergy() {
+    if (allergyController.text.isEmpty) {
+      return;
+    }
+
+    var severity = severitySelected.split(" ")[0].toUpperCase();
+    if(severitySelected.contains('y')){
+      severity = "${severity}_SHOCK";
+    }
+
     setState(() {
       listAllergy.add(Allergy(
           allergyID: "",
           userID: "",
           allergen: allergyController.text,
-          severity: severitySelected.split(" ")[0].toUpperCase()));
+          severity: severity));
     });
     resetAllergy();
   }
@@ -122,6 +132,9 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void addCondition() {
+    if(conditionController.text.isEmpty){
+      return;
+    }
     setState(() {
       listConditions.add(MedicalConditions(
           conditionsID: "", userID: "", conditions: conditionController.text));
@@ -369,12 +382,20 @@ class _EditProfileState extends State<EditProfile> {
                         });
                   }, false, true, false)),
                   Expanded(
-                      child: Button(
-                          isPatient ? "Save Changes" : "Add Practice",
-                          () => isPatient ? saveProfile() : savePractice(),
-                          true,
-                          true,
-                          false)),
+                      child: Button(isSaving ? "Saving..." : (isPatient ? "Save Changes" : "Add Practice"),
+                          () {
+                    if (isSaving) {
+                      return;
+                    }
+                    if (isPatient) {
+                      setState(() {
+                        isSaving = true;
+                      });
+                      saveProfile();
+                    } else {
+                      savePractice();
+                    }
+                  }, true, true, false)),
                 ],
               ),
             ])),
@@ -678,7 +699,7 @@ class _EditProfileState extends State<EditProfile> {
                 Expanded(
                     child: RecordCard(
                   title: listAllergy[index].allergen,
-                  subtitle: listAllergy[index].severity,
+                  subtitle: listAllergy[index].severity.replaceAll("_", " "),
                   info1: "",
                   info2: "",
                   isMed: true,
@@ -752,6 +773,6 @@ class _EditProfileState extends State<EditProfile> {
       return "S";
     }
 
-    return "C";
+    return "AS";
   }
 }
